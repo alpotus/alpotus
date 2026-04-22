@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>Habit Tracker Pro | Daily Goal & Streak Optimizer | Alpotus</title>
+    <meta name="description" content="The most powerful browser-based habit tracker. Monitor daily goals, calculate streaks, and export data to Excel. 100% private and offline-ready via Alpotus 4.0.">
+    <meta name="keywords" content="habit tracker online, daily goal tracker, streak builder, productivity tool, free habit planner, Alpotus tools, export habits to excel">
+    <link rel="canonical" href="https://www.alpotus.com/content/tools/habit-tracker/index.html" />
+
+    <!-- JSON-LD FOR GOOGLE RANKING -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Habit Tracker Pro",
+      "description": "An advanced productivity utility for tracking long-term habits with integrated data visualization and Excel export capabilities.",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <h1>HABIT<span>TRACKER</span> PRO</h1>
+            </div>
+            <div class="header-right">
+                <button onclick="toggleDark()" class="icon-btn">🌙</button>
+                <button onclick="exportExcel()" class="action-btn">📊 Export Excel</button>
+                <button onclick="backup()" class="action-btn secondary">💾 Backup</button>
+                <label class="file-label">
+                    📂 Restore
+                    <input type="file" id="restore-input" onchange="restore(event)" style="display:none">
+                </label>
+            </div>
+        </header>
+
+        <section class="controls">
+            <div class="date-selectors">
+                <select id="month-select"></select>
+                <select id="year-select"></select>
+            </div>
+            <div class="add-habit-box">
+                <input id="new-habit-input" placeholder="What's your next goal?">
+                <button onclick="addHabit()">ADD HABIT</button>
+            </div>
+        </section>
+
+        <div class="table-wrapper">
+            <table id="habit-table">
+                <thead>
+                    <tr id="days-row">
+                        <th class="sticky-col">Habit List</th>
+                        <!-- Days injected by JS -->
+                    </tr>
+                </thead>
+                <tbody id="habit-body">
+                    <!-- Habits injected by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <section class="analytics">
+            <div class="analytics-card">
+                <h3>Weekly Completion Rings</h3>
+                <div class="rings-container" id="weekly-rings"></div>
+            </div>
+            <div class="analytics-card">
+                <h3>Daily Activity Trend</h3>
+                <canvas id="daily-chart"></canvas>
+            </div>
+        </section>
+
+        <section class="global-progress">
+            <div class="prog-item">
+                <div class="label">Monthly Mastery</div>
+                <div class="progress-bar"><div id="month-fill" class="progress-fill">0%</div></div>
+            </div>
+            <div class="prog-item">
+                <div class="label">Yearly Consistency</div>
+                <div class="progress-bar"><div id="year-fill" class="progress-fill">0%</div></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
