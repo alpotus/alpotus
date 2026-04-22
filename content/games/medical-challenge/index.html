@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 5.0 -->
+    <title>Universal Medical Classification Challenge | Active Recall Hub | Alpotus</title>
+    <meta name="description" content="Master all 19 MBBS subjects with the Alpotus Classification Challenge. Interactive tap-to-assign games for Pathology, Microbiology, and Pharmacology. Features mnemonics and clinical MCQ notes.">
+    <meta name="keywords" content="medical education games, active recall pharmacology, microbiology classification quiz, NEET PG prep games, USMLE step 1 active recall, Alpotus clinical hub">
+    <link rel="canonical" href="https://www.alpotus.com/content/games/medical-challenge/index.html" />
+
+    <!-- JSON-LD FOR GOOGLE RANKING -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Universal Medical Challenge",
+      "description": "A high-performance medical learning platform using classification games, mnemonics, and clinical pearls.",
+      "applicationCategory": "EducationApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+    <!-- 2. DATA BRAIN (Required for Search to work) -->
+    <script src="../../../data/masterdata.js"></script>
+
+    <!-- 3. SEARCH ENGINE (This fixes your error) -->
+    <script src="../../../search-engine.js"></script>
+
+    <!-- 4. APP SHELL (Injects the Navbar/BottomNav) -->
+    <script src="../../../app.js" defer></script>
+
+ 
+
+    <style>
+        :root { --subject-color: #facc15; }
+        body { padding-top: 80px; background: var(--bg-body); transition: 0.3s; }
+        .challenge-container { max-width: 1100px; margin: 0 auto; padding: 0 15px 100px 15px; }
+
+        /* SUBJECT FILTER BUTTONS */
+        .subject-filter-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .subject-filter-row::-webkit-scrollbar { display: none; }
+        .sub-btn { 
+            padding: 10px 20px; border-radius: 50px; background: var(--card); border: 1px solid var(--border);
+            white-space: nowrap; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
+        }
+        .sub-btn.active { background: var(--subject-color); color: #000; border-color: var(--subject-color); }
+
+        /* CHAPTER DROPDOWN */
+        #chapter-filter-wrap { margin: 20px 0; }
+        .chapter-select { 
+            width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--border);
+            background: var(--card); color: var(--text-main); font-weight: 700; outline: none;
+        }
+
+        /* GAME LISTING */
+        #game-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .game-card { 
+            background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--border);
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: space-between; align-items: center;
+        }
+        .game-card:hover { border-color: var(--subject-color); transform: translateY(-3px); }
+        .game-card.completed { border-left: 5px solid #22c55e; }
+        .mastery-badge { color: #22c55e; font-size: 1.2rem; }
+
+        /* GAMEPLAY INTERFACE */
+        #play-screen { display: none; grid-template-columns: 280px 1fr; gap: 20px; }
+        .drug-pool { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 15px; height: 65vh; overflow-y: auto; position: sticky; top: 90px; }
+        .item-card { 
+            background: var(--bg-body); padding: 12px; border-radius: 10px; border: 1px solid var(--border);
+            margin-bottom: 8px; cursor: pointer; font-weight: 700; text-align: center; transition: 0.2s;
+        }
+        .item-card.selected { border: 2px solid var(--subject-color); background: #fffbeb; transform: scale(1.05); }
+        
+        .bucket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .bucket { 
+            background: var(--card); border: 2px dashed var(--border); border-radius: 20px;
+            padding: 15px; min-height: 140px; transition: 0.3s;
+        }
+        .bucket.highlight { border-color: var(--subject-color); background: rgba(250, 204, 21, 0.05); }
+        .bucket h4 { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .placed-pill { background: var(--bg-body); font-size: 0.8rem; font-weight: 800; padding: 4px 8px; border-radius: 5px; margin: 2px; border: 1px solid var(--border); display: inline-block; animation: pop 0.3s ease; }
+
+        /* MNEMONIC & NOTES PANEL */
+        .learning-console { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff;
+            padding: 15px 5%; z-index: 2000; display: none; animation: slideUp 0.4s ease;
+        }
+        .console-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 8px; }
+        .note-text { font-size: 0.9rem; color: #ccc; line-height: 1.4; }
+
+        .mnemonic-btn { background: var(--primary); color: #000; border: none; padding: 8px 15px; border-radius: 5px; font-weight: 900; cursor: pointer; }
+        
+        @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            #play-screen { grid-template-columns: 1fr; }
+            .drug-pool { height: auto; max-height: 200px; position: relative; top: 0; }
+            .bucket-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="challenge-container">
+        
+        <!-- UI: TOP STATS -->
+        <div id="game-header" style="display:none; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <button onclick="exitGame()" style="background:none; border:none; color:var(--text-muted); font-weight:900; cursor:pointer;">✕ CLOSE GAME</button>
+            <div style="font-weight:900; color:var(--subject-color);">ACCURACY: <span id="accuracy-val">100%</span></div>
+        </div>
+
+        <!-- UI: FILTERS (Home Only) -->
+        <div id="home-filters">
+            <h1 style="font-weight: 950; margin-bottom: 15px;">Challenge <span>Hub</span></h1>
+            <div class="subject-filter-row" id="sub-filter-row">
+                <!-- JS Renders Subject Buttons -->
+            </div>
+            <div id="chapter-filter-wrap">
+                <select class="chapter-select" id="chapter-dropdown" onchange="renderGameList()">
+                    <option value="All">All Chapters</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- VIEW: HOME (List of Games) -->
+        <div id="home-view">
+            <div id="game-list"></div>
+        </div>
+
+        <!-- VIEW: PLAY (The Game) -->
+        <div id="play-screen">
+            <aside class="drug-pool">
+                <div style="font-size:0.6rem; font-weight:900; margin-bottom:10px; color:var(--text-muted);">SELECT AN ITEM</div>
+                <div id="pool-container"></div>
+            </aside>
+            <main class="bucket-grid" id="bucket-container"></main>
+        </div>
+
+        <!-- ACTIVE LEARNING CONSOLE -->
+        <div class="learning-console" id="learning-console">
+            <div class="console-header">
+                <div style="color:var(--primary); font-weight:900; font-size: 0.7rem; text-transform: uppercase;">Correct Match Evidence</div>
+                <button class="mnemonic-btn" id="mnem-btn" onclick="toggleMnemonic()">💡 SHOW MNEMONIC</button>
+            </div>
+            <div id="note-display" class="note-text">Select a drug to begin matching...</div>
+            <div id="mnemonic-display" style="display:none; background:rgba(250,204,21,0.2); padding:10px; border-radius:8px; margin-top:10px; font-weight:bold; color:var(--primary);"></div>
+        </div>
+
+        <!-- SEO TEXT (Bot Only) -->
+        <article style="display:none">
+            <h2>High-Yield Medical Classification Logic</h2>
+            <p>Mastering subjects like Pharmacology, Microbiology, and Pathology requires categorizing huge datasets. This tool uses the Tap-to-Assign method to build muscle memory for medical exams like NEET PG and USMLE.</p>
+        </article>
+    </div>
+
+    <script src="challenge-data.js"></script>
+    <script src="challenge-engine.js"></script>
+</body>
+</html>
+
