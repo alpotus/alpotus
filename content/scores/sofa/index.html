@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>SOFA Score Calculator | Sequential Organ Failure Assessment | Alpotus Clinical</title>
+    <meta name="description" content="Calculate SOFA score for sepsis and organ dysfunction. Professional ICU tool for mortality prediction and clinical triage based on Sepsis-3 guidelines. PubMed cited.">
+    <meta name="keywords" content="SOFA score calculator, Sepsis-3 criteria, organ failure assessment, ICU clinical scores, mortality predictor, PaO2 FiO2 ratio, Alpotus medical tools">
+    <link rel="canonical" href="https://www.alpotus.com/content/scores/sofa/index.html" />
+
+    <!-- JSON-LD MEDICAL SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Clinical SOFA Suite",
+      "description": "High-precision ICU diagnostic tool for assessing organ system failure and predicting mortality in critically ill patients.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+
+        .sofa-card {
+            background: var(--bg-card); border-radius: 30px; padding: 40px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        .sofa-card::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 8px; background: var(--primary); }
+
+        .sofa-section { margin-bottom: 30px; }
+        .sofa-section h3 { font-size: 0.85rem; font-weight: 900; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        
+        .option-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .sofa-opt { 
+            padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-body); cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; transition: 0.3s; font-weight: 600; font-size: 0.9rem;
+        }
+        .sofa-opt:hover { border-color: var(--primary); background: #fff; }
+        .sofa-opt.active { background: var(--primary); border-color: var(--primary); color: #000; }
+        .pt-badge { background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 5px; font-size: 0.75rem; }
+
+        /* Dashboard Results */
+        #result-area { display: none; margin-top: 40px; animation: fadeInUp 0.6s ease; }
+        .res-main { text-align: center; background: #000; color: #fff; padding: 35px; border-radius: 25px; border: 2px solid var(--primary); }
+        .score-val { font-size: 5rem; font-weight: 950; color: var(--primary); line-height: 1; }
+        .score-label { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .mortality-card { background: var(--bg-body); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); margin-top: 20px; text-align: center; }
+        .mortality-card h4 { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        .mortality-card div { font-size: 1.8rem; font-weight: 900; color: #e74c3c; }
+
+        /* AUTHORITY CONTENT */
+        .authority-content { margin-top: 80px; padding-bottom: 100px; line-height: 2; color: var(--text-muted); }
+        .authority-content h2 { font-size: 2.4rem; font-weight: 950; color: var(--text-main); margin: 50px 0 25px; border-left: 10px solid var(--primary); padding-left: 25px; }
+        .authority-content h3 { font-size: 1.7rem; font-weight: 800; color: var(--text-main); margin: 35px 0 15px; }
+        .authority-content p { font-size: 1.1rem; margin-bottom: 25px; text-align: justify; }
+        .clinical-quote { background: #fffbeb; border-left: 5px solid var(--primary); padding: 30px; border-radius: 0 20px 20px 0; margin: 40px 0; font-style: italic; color: #000; }
+
+        @media (max-width: 600px) { .score-val { font-size: 3.5rem; } .sofa-opt { font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="ad-slot">ADVERTISEMENT</div>
+
+        <section class="sofa-card">
+            <h1 style="text-align:center; font-weight:950; font-size: 2.2rem;">SOFA <span style="color:var(--primary)">Clinical Suite</span></h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 40px;">Sequential Organ Failure Assessment</p>
+
+            <!-- 1. RESPIRATORY -->
+            <div class="sofa-section">
+                <h3>1. Respiration (PaO2/FiO2 ratio)</h3>
+                <div class="option-grid" data-cat="res">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">≥ 400 <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">&lt; 400 <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">&lt; 300 <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">&lt; 200 with respiratory support <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">&lt; 100 with respiratory support <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- 2. COAGULATION -->
+            <div class="sofa-section">
+                <h3>2. Coagulation (Platelets ×10³/μL)</h3>
+                <div class="option-grid" data-cat="coa">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">≥ 150 <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">&lt; 150 <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">&lt; 100 <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">&lt; 50 <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">&lt; 20 <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- 3. LIVER -->
+            <div class="sofa-section">
+                <h3>3. Liver (Bilirubin mg/dL)</h3>
+                <div class="option-grid" data-cat="liv">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">&lt; 1.2 <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">1.2 – 1.9 <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">2.0 – 5.9 <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">6.0 – 11.9 <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">≥ 12.0 <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- 4. CARDIOVASCULAR -->
+            <div class="sofa-section">
+                <h3>4. Cardiovascular (Blood Pressure / Inotropes)</h3>
+                <div class="option-grid" data-cat="cvs">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">MAP ≥ 70 mmHg <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">MAP &lt; 70 mmHg <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">Dopamine ≤ 5 or any Dobutamine <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">Dopamine > 5 OR Epi/Norepi ≤ 0.1 <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">Dopamine > 15 OR Epi/Norepi > 0.1 <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- 5. CNS -->
+            <div class="sofa-section">
+                <h3>5. CNS (Glasgow Coma Scale)</h3>
+                <div class="option-grid" data-cat="cns">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">15 (Normal) <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">13 – 14 <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">10 – 12 <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">6 – 9 <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">&lt; 6 <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- 6. RENAL -->
+            <div class="sofa-section">
+                <h3>6. Renal (Creatinine mg/dL or Urine Output)</h3>
+                <div class="option-grid" data-cat="ren">
+                    <div class="sofa-opt" data-val="0" onclick="selectOpt(this)">&lt; 1.2 <span class="pt-badge">0</span></div>
+                    <div class="sofa-opt" data-val="1" onclick="selectOpt(this)">1.2 – 1.9 <span class="pt-badge">1</span></div>
+                    <div class="sofa-opt" data-val="2" onclick="selectOpt(this)">2.0 – 3.4 <span class="pt-badge">2</span></div>
+                    <div class="sofa-opt" data-val="3" onclick="selectOpt(this)">3.5 – 4.9 or UO &lt; 500 mL/d <span class="pt-badge">3</span></div>
+                    <div class="sofa-opt" data-val="4" onclick="selectOpt(this)">≥ 5.0 or UO &lt; 200 mL/d <span class="pt-badge">4</span></div>
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="result-area">
+                <div class="res-main">
+                    <div class="score-label">Total SOFA Score</div>
+                    <div class="score-val" id="total-val">0</div>
+                </div>
+                <div class="mortality-card">
+                    <h4>Estimated In-Hospital Mortality</h4>
+                    <div id="mort-val">-</div>
+                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:10px;">*Mortality rates based on initial presentation SOFA score.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLINICAL CONTENT -->
+        <article class="authority-content">
+            <h2>What is the SOFA Score?</h2>
+            <p>The <strong>Sequential Organ Failure Assessment (SOFA) score</strong> is a clinical mortality prediction tool used to track a patient's status during their stay in an intensive care unit (ICU). Originally known as the Sepsis-related Organ Failure Assessment score, it was developed by a task force from the European Society of Intensive Care Medicine in 1994. Its primary utility lies in its ability to quantify the degree of dysfunction across six organ systems: respiratory, cardiovascular, hepatic, coagulation, renal, and neurological.</p>
+
+            <h2>Significance and Clinical Use</h2>
+            <p>In modern medicine, the SOFA score gained renewed global significance with the release of the **Sepsis-3 consensus definitions** in 2016. According to the Third International Consensus Definitions for Sepsis and Septic Shock, sepsis is now defined as a life-threatening organ dysfunction caused by a dysregulated host response to infection, clinically characterized by an increase in the SOFA score of **2 points or more** from the patient's baseline.</p>
+            
+            <div class="clinical-quote">
+                "The Sequential Organ Failure Assessment (SOFA) score is more than a one-time calculation; it is a dynamic monitoring tool. Trends in SOFA scores over the first 48 hours of admission are highly predictive of a patient's ultimate prognosis."
+            </div>
+
+            <h3>How to Use the Alpotus SOFA Engine</h3>
+            <p>To perform a comprehensive assessment, enter the worst values recorded within the last 24 hours for each system:</p>
+            <ul>
+                <li><strong>Respiration:</strong> Based on the PaO2/FiO2 ratio. If the patient is on mechanical ventilation, higher scores are assigned for lower ratios.</li>
+                <li><strong>Coagulation:</strong> Evaluated using the platelet count. Thrombocytopenia is a hallmark of severe sepsis and DIC.</li>
+                <li><strong>Liver:</strong> Measured by serum bilirubin levels.</li>
+                <li><strong>Cardiovascular:</strong> Assesses hypotension and the requirement for vasopressors (Dopamine, Epinephrine, Norepinephrine) to maintain MAP.</li>
+                <li><strong>CNS:</strong> Utilizes the Glasgow Coma Scale (GCS).</li>
+                <li><strong>Renal:</strong> Measured by serum creatinine or daily urine output.</li>
+            </ul>
+
+            <h2>PubMed Studies and Clinical Evidence</h2>
+            <p>The validity of the SOFA score is supported by decades of multi-center clinical research. A landmark study published in <strong>JAMA</strong> (PubMed ID: 26903338) demonstrated that for patients with suspected infection, the predictive validity of the SOFA score for in-hospital mortality was significantly superior to that of the SIRS criteria.</p>
+            
+            <p>Further research published in the <em>Critical Care Medicine</em> journal indicates that the change in SOFA score (Delta-SOFA) during the first week of ICU stay is an independent predictor of survival. Patients whose scores increase by more than 2 points have a mortality rate exceeding 50%, whereas those with decreasing scores show significantly improved outcomes.</p>
+
+            <h3>Mortality Correlation Table</h3>
+            <p>Based on initial SOFA scores at the time of ICU admission, the predicted mortality ranges are as follows:</p>
+            <table style="width:100%; border-collapse: collapse; margin: 20px 0; border: 1px solid var(--border-color);">
+                <tr style="background:var(--bg-card);">
+                    <th style="padding:10px; border:1px solid var(--border-color);">SOFA Score</th>
+                    <th style="padding:10px; border:1px solid var(--border-color);">Mortality Risk</th>
+                </tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">0 - 1</td><td style="padding:10px; border:1px solid var(--border-color);">~ 0.0%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">2 - 3</td><td style="padding:10px; border:1px solid var(--border-color);">~ 6.4%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">4 - 5</td><td style="padding:10px; border:1px solid var(--border-color);">~ 20.2%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">6 - 7</td><td style="padding:10px; border:1px solid var(--border-color);">~ 21.5%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">8 - 9</td><td style="padding:10px; border:1px solid var(--border-color);">~ 33.3%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">10 - 11</td><td style="padding:10px; border:1px solid var(--border-color);">~ 44.4%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">12 - 14</td><td style="padding:10px; border:1px solid var(--border-color);">~ 50.0%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">> 15</td><td style="padding:10px; border:1px solid var(--border-color);">> 95.2%</td></tr>
+            </table>
+
+            <h3>Scientific References:</h3>
+            <p style="font-size:0.85rem; background:#eee; padding:20px; border-radius:15px;">
+                1. Vincent JL, et al. "The SOFA (Sepsis-related Organ Failure Assessment) score to describe organ dysfunction/failure." Intensive Care Med, 1996.<br>
+                2. PubMed ID: 26903338 - "Fatal Outcome in Patients With Sepsis and Septic Shock." (Sepsis-3 Task Force).<br>
+                3. Singer M, et al. "The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)." JAMA, 2016.<br>
+                4. Ferreira AM, et al. "Serial evaluation of the SOFA score to predict outcome in critically ill patients." JAMA, 2001.
+            </p>
+        </article>
+    </div>
+
+    <script>
+        let sofaScores = { res: null, coa: null, liv: null, cvs: null, cns: null, ren: null };
+
+        function selectOpt(el) {
+            const cat = el.parentElement.dataset.cat;
+            const val = parseInt(el.dataset.val);
+            
+            el.parentElement.querySelectorAll('.sofa-opt').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            sofaScores[cat] = val;
+
+            if (Object.values(sofaScores).every(v => v !== null)) {
+                calculateSOFA();
+            }
+        }
+
+        function calculateSOFA() {
+            const total = Object.values(sofaScores).reduce((a, b) => a + b, 0);
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('total-val').innerText = total;
+
+            const mort = document.getElementById('mort-val');
+            
+            let mortality = "";
+            if (total <= 1) mortality = "< 1%";
+            else if (total <= 3) mortality = "6.4%";
+            else if (total <= 5) mortality = "20.2%";
+            else if (total <= 7) mortality = "21.5%";
+            else if (total <= 9) mortality = "33.3%";
+            else if (total <= 11) mortality = "44.4%";
+            else if (total <= 14) mortality = "50.0%";
+            else mortality = "> 95%";
+
+            mort.innerText = mortality;
+
+            window.scrollTo({ top: 500, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
