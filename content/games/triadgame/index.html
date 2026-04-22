@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO -->
+    <title>Medical Triads Master | Interactive Med-School Quiz - Alpotus</title>
+    <meta name="description" content="Master 190+ Medical Triads including Virchow's, Beck's, and Charcot's. Dynamic quiz modes for medical students (USMLE, NEET PG, PLAB).">
+    
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+    <script src="triadsdata.js"></script>
+
+    <style>
+        body { padding-top: 80px; text-align: center; }
+        .game-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        .score-board { display: flex; justify-content: space-around; background: var(--bg-card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--primary); }
+        .stat-val { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .mode-select { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; }
+        .mode-btn { padding: 10px 20px; border-radius: 30px; border: 1px solid var(--border-color); background: var(--bg-card); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .mode-btn.active { background: var(--primary); color: #000; }
+
+        .question-card { background: var(--bg-card); padding: 40px; border-radius: 20px; border: 1px solid var(--border-color); min-height: 300px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .feature-item { font-size: 1.2rem; font-weight: bold; margin: 10px 0; color: var(--text-main); }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; display: none; }
+        .option-btn { padding: 15px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: 0.2s; font-weight: 600; }
+        .option-btn:hover { border-color: var(--primary); background: rgba(250, 204, 21, 0.1); }
+        .option-btn.correct { background: #2ecc71 !important; color: white; }
+        .option-btn.wrong { background: #e74c3c !important; color: white; }
+
+        .show-btn { padding: 15px 40px; background: var(--primary); border: none; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 20px; }
+
+        /* Subject List Section */
+        .subject-list { margin-top: 50px; text-align: left; background: var(--bg-card); padding: 30px; border-radius: 20px; }
+        .subject-group { margin-bottom: 20px; }
+        .subject-title { color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-board">
+            <div>Points: <div id="points" class="stat-val">0</div></div>
+            <div>Accuracy: <div id="accuracy" class="stat-val">100%</div></div>
+        </div>
+
+        <div class="mode-select">
+            <button class="mode-btn active" onclick="changeMode(1)">Mode 1: Features → Name</button>
+            <button class="mode-btn" onclick="changeMode(2)">Mode 2: Name → 3 Features</button>
+        </div>
+
+        <div class="question-card">
+            <div id="question-text">
+                <!-- Question content here -->
+            </div>
+            
+            <button class="show-btn" id="show-opt-btn" onclick="showOptions()">SHOW OPTIONS</button>
+
+            <div class="options-grid" id="options-container">
+                <!-- Options here -->
+            </div>
+        </div>
+
+        <button class="show-btn" style="background:#000; color:#fff; margin-top:20px;" onclick="nextQuestion()">NEXT TRIAD →</button>
+
+        <!-- Dynamic Subject Wise Triads List -->
+        <div class="subject-list">
+            <h2 style="text-align:center;">📚 Triad Encyclopedia</h2>
+            <div id="triad-directory"></div>
+        </div>
+    </div>
+<script>
+    let currentMode = 1;
+    let currentTriad = null;
+    let points = 0;
+    let totalAttempts = 0;
+    let correctAttempts = 0;
+    let selectedInMode2 = [];
+
+    // 1. Change Game Mode
+    function changeMode(m) {
+        currentMode = m;
+        document.querySelectorAll('.mode-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === m));
+        nextQuestion();
+    }
+
+    // 2. Load New Question
+    function nextQuestion() {
+        // Pick random triad from triadsdata.js
+        currentTriad = medicalTriads[Math.floor(Math.random() * medicalTriads.length)];
+        
+        const qText = document.getElementById('question-text');
+        const optCont = document.getElementById('options-container');
+        const showBtn = document.getElementById('show-opt-btn');
+        
+        optCont.style.display = 'none';
+        showBtn.style.display = 'inline-block';
+        selectedInMode2 = [];
+
+        if (currentMode === 1) {
+            // Mode 1: Features -> Name
+            qText.innerHTML = `<h3>Identify the Triad:</h3>` + 
+                currentTriad.features.map(f => `<div class="feature-item">✔ ${f}</div>`).join('');
+            generateOptionsMode1();
+        } else {
+            // Mode 2: Name -> 3 Features
+            qText.innerHTML = `<h3>Select 3 components of:</h3><h1 style="color:var(--primary); font-size:2.5rem; margin-top:10px;">${currentTriad.name}</h1>`;
+            generateOptionsMode2();
+        }
+    }
+
+    // 3. Reveal Options
+    function showOptions() {
+        document.getElementById('options-container').style.display = 'grid';
+        document.getElementById('show-opt-btn').style.display = 'none';
+    }
+
+    // 4. Generate Options for Mode 1 (Triad Names)
+    function generateOptionsMode1() {
+        const container = document.getElementById('options-container');
+        let options = [currentTriad.name];
+        
+        // Add 3 random distractors
+        while(options.length < 4) {
+            let r = medicalTriads[Math.floor(Math.random() * medicalTriads.length)].name;
+            if(!options.includes(r)) options.push(r);
+        }
+        options.sort(() => Math.random() - 0.5);
+        
+        container.innerHTML = options.map(o => {
+            // Escape apostrophes for the onclick string
+            const escapedName = o.replace(/'/g, "\\'");
+            return `<button class="option-btn" onclick="checkAnswerMode1('${escapedName}', this)">${o}</button>`;
+        }).join('');
+    }
+
+    // 5. Check Answer for Mode 1
+    function checkAnswerMode1(ans, btn) {
+        if (btn.disabled) return;
+        totalAttempts++;
+        
+        if (ans === currentTriad.name) {
+            btn.classList.add('correct');
+            points += 10;
+            correctAttempts++;
+            disableAllOptions();
+            setTimeout(nextQuestion, 1500); // Auto-next on success
+        } else {
+            btn.classList.add('wrong');
+            points = Math.max(0, points - 5);
+        }
+        updateStats();
+    }
+
+    // 6. Generate Options for Mode 2 (Feature List)
+    function generateOptionsMode2() {
+        const container = document.getElementById('options-container');
+        // 3 Correct + 3 Wrong distractors
+        let options = [...currentTriad.features, ...currentTriad.distractors].sort(() => Math.random() - 0.5);
+        
+        container.innerHTML = options.map(o => {
+            const escapedFeat = o.replace(/'/g, "\\'");
+            return `<button class="option-btn" onclick="checkAnswerMode2('${escapedFeat}', this)">${o}</button>`;
+        }).join('');
+    }
+
+    // 7. Check Answer for Mode 2 (User needs 3 correct)
+    function checkAnswerMode2(ans, btn) {
+        if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+
+        if (currentTriad.features.includes(ans)) {
+            btn.classList.add('correct');
+            selectedInMode2.push(ans);
+            
+            // If all 3 found
+            if (selectedInMode2.length === 3) {
+                points += 20;
+                correctAttempts++;
+                totalAttempts++;
+                setTimeout(nextQuestion, 1500);
+            }
+        } else {
+            btn.classList.add('wrong');
+            totalAttempts++;
+        }
+        updateStats();
+    }
+
+    // 8. Stats & Accuracy Engine
+    function updateStats() {
+        const acc = totalAttempts === 0 ? 100 : Math.round((correctAttempts / totalAttempts) * 100);
+        document.getElementById('points').innerText = points;
+        document.getElementById('accuracy').innerText = acc + "%";
+    }
+
+    function disableAllOptions() {
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    }
+
+    // 9. Subject Directory / Encyclopedia (SEO Content)
+    function renderDirectory() {
+        const dir = document.getElementById('triad-directory');
+        if (!dir) return;
+
+        // Group data by subject
+        const grouped = medicalTriads.reduce((acc, triad) => {
+            acc[triad.subject] = acc[triad.subject] || [];
+            acc[triad.subject].push(triad);
+            return acc;
+        }, {});
+
+        dir.innerHTML = Object.keys(grouped).map(sub => `
+            <div class="subject-group">
+                <h3 class="subject-title">${sub}</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">
+                ${grouped[sub].map(t => `
+                    <details style="background:var(--bg-body); padding:10px; border-radius:8px; border:1px solid var(--border-color);">
+                        <summary style="cursor:pointer; font-weight:bold; color:var(--text-main);">${t.name}</summary>
+                        <p style="font-size:0.8rem; margin-top:10px; color:var(--text-muted); line-height:1.4;">
+                            ${t.features.join('<br> • ')}
+                        </p>
+                    </details>
+                `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Initialize Game
+    window.addEventListener('load', () => {
+        if (typeof medicalTriads !== 'undefined') {
+            nextQuestion();
+            renderDirectory();
+        } else {
+            document.getElementById('question-text').innerHTML = "Error: Data not found.";
+        }
+    });
+</script>
+    
+</body>
+</html>
+
