@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- POWERFUL SEO -->
+    <title>Advanced Human Anthropometry Analyzer | Clinical Body Composition Tool</title>
+    <meta name="description" content="Professional-grade anthropometry analyzer. Calculate BMI, Body Fat %, Muscle Symmetry, BMR, and metabolic risks with detailed clinical reports and reference ranges.">
+    <meta name="keywords" content="anthropometry analyzer, body symmetry tool, muscle imbalance calculator, body fat navy method, BMR calculator, sarcopenia screening">
+    
+    <!-- ALPOTUS BRIDGE -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        :root {
+            /* Alpotus Branding Overrides for this tool */
+            --primary: #facc15;
+            --primary-dark: #eab308;
+            --bg-card: #ffffff;
+            --bg-body: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body { padding-top: 80px; background-color: var(--bg-body); font-family: 'Inter', sans-serif; }
+
+        .analyzer-container {
+            max-width: 950px;
+            margin: 20px auto;
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Progress Header */
+        .wizard-header { background: #f1f5f9; border-bottom: 1px solid var(--border-color); }
+        .progress-bar-bg { background: #e2e8f0; height: 8px; width: 100%; }
+        #progress-fill { 
+            height: 100%; width: 16.6%; background: var(--primary); 
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .step-label { padding: 15px; text-align: center; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Form Content */
+        .step-content { padding: 40px; display: none; min-height: 500px; }
+        .step-content.active { display: block; }
+
+        h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 30px; display: flex; align-items: center; gap: 12px; }
+        .section-desc { color: var(--text-muted); margin-top: -20px; margin-bottom: 30px; font-size: 0.95rem; }
+
+        /* Input Grid */
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .field-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; color: var(--text-main); }
+        input, select {
+            width: 100%; padding: 12px 15px; border-radius: 12px; border: 2px solid var(--border-color);
+            background: #fff; color: var(--text-main); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.1); }
+
+        /* Buttons */
+        .button-footer { padding: 20px 40px; background: #f8fafc; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; }
+        .btn { padding: 12px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; transition: 0.3s; border: none; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+        .btn-next { background: var(--primary); color: #000; }
+        .btn-prev { background: #fff; border: 1px solid var(--border-color); color: var(--text-muted); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* Report Styling */
+        .report-card { background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .report-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .report-row:last-child { border: none; }
+        .label-stack { display: flex; flex-direction: column; }
+        .label-text { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+        .ref-text { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+        
+        .status-pill { padding: 4px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
+        .st-normal { background: #dcfce7; color: #166534; }
+        .st-warning { background: #fef9c3; color: #854d0e; }
+        .st-danger { background: #fee2e2; color: #991b1b; }
+
+        .summary-banner { background: var(--primary); color: #000; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 30px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { .input-grid { grid-template-columns: 1fr; } .step-content { padding: 20px; } }
+    </style>
+</head>
+<body>
+
+    <div class="analyzer-container">
+        <div class="wizard-header">
+            <div class="progress-bar-bg"><div id="progress-fill"></div></div>
+            <div class="step-label" id="step-label">Step 1 of 6: Profile</div>
+        </div>
+
+        <form id="anthroForm">
+            <!-- STEP 1: BASIC INFO -->
+            <div class="step-content active" id="step1">
+                <h2>👤 Patient Profile</h2>
+                <p class="section-desc">Enter core demographic and physical metrics for baseline analysis.</p>
+                <div class="input-grid">
+                    <div class="field-group"><label>Age</label><input type="number" id="age" required></div>
+                    <div class="field-group"><label>Sex</label><select id="sex"><option value="male">Male</option><option value="female">Female</option></select></div>
+                    <div class="field-group"><label>Weight (kg)</label><input type="number" id="weight" step="0.1" required></div>
+                    <div class="field-group"><label>Height (cm)</label><input type="number" id="height" step="0.1" required></div>
+                </div>
+            </div>
+
+            <!-- STEP 2: TORSO -->
+            <div class="step-content" id="step2">
+                <h2>👕 Torso Measurements</h2>
+                <p class="section-desc">Critical for metabolic risk and body fat percentage (Navy Method).</p>
+                <div class="input-grid">
+                    <div class="field-group"><label>Neck Circ (cm)</label><input type="number" id="neck" step="0.1"></div>
+                    <div class="field-group"><label>Head Circ (cm)</label><input type="number" id="head" step="0.1"></div>
+                    <div class="field-group"><label>Chest (Mid) (cm)</label><input type="number" id="chest" step="0.1"></div>
+                    <div class="field-group"><label>Waist (Narrowest) (cm)</label><input type="number" id="waist" step="0.1"></div>
+                    <div class="field-group"><label>Abdominal (Navel) (cm)</label><input type="number" id="abdomen" step="0.1"></div>
+                    <div class="field-group"><label>Hip (Widest) (cm)</label><input type="number" id="hip" step="0.1"></div>
+                </div>
+            </div>
+
+            <!-- STEP 3: UPPER LIMBS -->
+            <div class="step-content" id="step3">
+                <h2>💪 Upper Limb Symmetry</h2>
+                <p class="section-desc">Measure both sides to analyze muscular imbalances and functional symmetry.</p>
+                <div class="input-grid">
+                    <div class="field-group"><label>Right Upper Arm (cm)</label><input type="number" id="r_arm" step="0.1"></div>
+                    <div class="field-group"><label>Left Upper Arm (cm)</label><input type="number" id="l_arm" step="0.1"></div>
+                    <div class="field-group"><label>Right Forearm (cm)</label><input type="number" id="r_forearm" step="0.1"></div>
+                    <div class="field-group"><label>Left Forearm (cm)</label><input type="number" id="l_forearm" step="0.1"></div>
+                    <div class="field-group"><label>Right Wrist (cm)</label><input type="number" id="r_wrist" step="0.1"></div>
+                    <div class="field-group"><label>Left Wrist (cm)</label><input type="number" id="l_wrist" step="0.1"></div>
+                </div>
+            </div>
+
+            <!-- STEP 4: LOWER LIMBS -->
+            <div class="step-content" id="step4">
+                <h2>🦵 Lower Limb Symmetry</h2>
+                <p class="section-desc">Evaluation of lower body mass and Sarcopenia (muscle wasting) markers.</p>
+                <div class="input-grid">
+                    <div class="field-group"><label>Right Thigh (Mid) (cm)</label><input type="number" id="r_thigh" step="0.1"></div>
+                    <div class="field-group"><label>Left Thigh (Mid) (cm)</label><input type="number" id="l_thigh" step="0.1"></div>
+                    <div class="field-group"><label>Right Calf (cm)</label><input type="number" id="r_calf" step="0.1"></div>
+                    <div class="field-group"><label>Left Calf (cm)</label><input type="number" id="l_calf" step="0.1"></div>
+                    <div class="field-group"><label>Right Ankle (cm)</label><input type="number" id="r_ankle" step="0.1"></div>
+                    <div class="field-group"><label>Left Ankle (cm)</label><input type="number" id="l_ankle" step="0.1"></div>
+                </div>
+            </div>
+
+            <!-- STEP 5: SKINFOLDS -->
+            <div class="step-content" id="step5">
+                <h2>📏 Skinfold Thickness</h2>
+                <p class="section-desc">Optional: Use calipers for a secondary fat distribution analysis.</p>
+                <div class="input-grid">
+                    <div class="field-group"><label>Triceps (mm)</label><input type="number" id="sk_triceps" step="0.1"></div>
+                    <div class="field-group"><label>Biceps (mm)</label><input type="number" id="sk_biceps" step="0.1"></div>
+                    <div class="field-group"><label>Subscapular (mm)</label><input type="number" id="sk_subscap" step="0.1"></div>
+                    <div class="field-group"><label>Abdominal (mm)</label><input type="number" id="sk_abdominal" step="0.1"></div>
+                </div>
+            </div>
+
+            <!-- STEP 6: FINAL REPORT -->
+            <div class="step-content" id="step6">
+                <div id="report-output">
+                    <!-- JS Injects Report Here -->
+                </div>
+            </div>
+
+            <div class="button-footer">
+                <button type="button" class="btn btn-prev" id="prevBtn" onclick="changeStep(-1)">← Back</button>
+                <button type="button" class="btn btn-next" id="nextBtn" onclick="changeStep(1)">Next Step →</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function changeStep(n) {
+            if (n === 1 && !validate()) return;
+            
+            const steps = document.querySelectorAll('.step-content');
+            steps[currentStep-1].classList.remove('active');
+            
+            currentStep += n;
+
+            if (currentStep > 6) {
+                currentStep = 6;
+            } else if (currentStep < 1) {
+                currentStep = 1;
+            }
+
+            steps[currentStep-1].classList.add('active');
+            updateUI();
+            
+            if (currentStep === 6) runAnalysis();
+        }
+
+        function validate() {
+            if (currentStep === 1) {
+                const age = document.getElementById('age').value;
+                const weight = document.getElementById('weight').value;
+                const height = document.getElementById('height').value;
+                if (!age || !weight || !height) { alert("Please fill in basic profile data."); return false; }
+            }
+            return true;
+        }
+
+        function updateUI() {
+            document.getElementById('progress-fill').style.width = (currentStep * 16.66) + '%';
+            document.getElementById('step-label').innerText = `Step ${currentStep} of 6: ${getStepTitle()}`;
+            document.getElementById('prevBtn').style.visibility = (currentStep === 1 || currentStep === 6) ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').innerText = (currentStep === 5) ? 'Generate Analysis →' : (currentStep === 6) ? 'Start New' : 'Next Step →';
+            if(currentStep === 6) document.getElementById('nextBtn').onclick = () => location.reload();
+        }
+
+        function getStepTitle() {
+            const titles = ["Profile", "Torso", "Upper Limbs", "Lower Limbs", "Skinfolds", "Detailed Report"];
+            return titles[currentStep-1];
+        }
+
+        function runAnalysis() {
+            const val = (id) => parseFloat(document.getElementById(id).value) || 0;
+            const sex = document.getElementById('sex').value;
+            const h = val('height'), w = val('weight'), age = val('age');
+            const neck = val('neck'), waist = val('waist'), hip = val('hip');
+            
+            // 1. Calculations
+            const bmi = w / ((h/100) ** 2);
+            const whr = waist / hip;
+            const whtr = waist / h;
+            const bsa = 0.007184 * (w ** 0.425) * (h ** 0.725);
+            let bmr = (10 * w) + (6.25 * h) - (5 * age) + (sex === 'male' ? 5 : -161);
+            
+            // Navy Body Fat
+            let bfp = (sex === 'male') 
+                ? (495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h)) - 450)
+                : (495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(h)) - 450);
+
+            // 2. Status Helper
+            const getStatus = (v, min, max) => {
+                if (v < min) return { c: 'st-warning', t: 'Low' };
+                if (v > max) return { c: 'st-danger', t: 'High' };
+                return { c: 'st-normal', t: 'Normal' };
+            };
+
+            // 3. Render Output
+            let html = `
+                <div class="summary-banner">
+                    <h2 style="margin:0; justify-content:center;">${bmi < 25 && bfp < 25 ? '✅ Healthy Profile' : '⚠️ Health Warning'}</h2>
+                    <p>Report Date: ${new Date().toLocaleDateString()}</p>
+                </div>
+
+                <div class="report-card">
+                    <div class="label-text" style="border-bottom:2px solid var(--primary); padding-bottom:10px; margin-bottom:15px;">🏥 Clinical Composition</div>
+                    ${row("BMI (Body Mass Index)", bmi.toFixed(1), "[18.5 - 24.9]", getStatus(bmi, 18.5, 24.9))}
+                    ${row("Body Fat Percentage", bfp.toFixed(1) + "%", (sex=='male'?"[10-20%]":"[18-28%]"), getStatus(bfp, (sex=='male'?10:18), (sex=='male'?20:28)))}
+                    ${row("Body Surface Area", bsa.toFixed(2) + " m²", "[1.7 - 2.0]", {c:'st-normal', t:'N/A'})}
+                </div>
+
+                <div class="report-card">
+                    <div class="label-text" style="border-bottom:2px solid var(--primary); padding-bottom:10px; margin-bottom:15px;">⚠️ Metabolic Risk</div>
+                    ${row("Waist-to-Hip Ratio", whr.toFixed(2), (sex=='male'?"[< 0.90]":"[< 0.85]"), getStatus(whr, 0, (sex=='male'?0.9:0.85)))}
+                    ${row("Waist-to-Height Ratio", whtr.toFixed(2), "[< 0.50]", getStatus(whtr, 0, 0.5))}
+                    ${row("Neck Circumference", neck + " cm", (sex=='male'?"[< 37]":"[< 34]"), getStatus(neck, 0, (sex=='male'?37:34)))}
+                </div>
+
+                <div class="report-card">
+                    <div class="label-text" style="border-bottom:2px solid var(--primary); padding-bottom:10px; margin-bottom:15px;">⚖️ Symmetry & Muscle Mass</div>
+                    ${row("Arm Symmetry", sym(val('r_arm'), val('l_arm')) + "% Diff", "[< 5%]", (sym(val('r_arm'), val('l_arm')) > 5 ? {c:'st-danger',t:'Imbalance'}:{c:'st-normal',t:'Normal'}))}
+                    ${row("Leg Symmetry", sym(val('r_thigh'), val('l_thigh')) + "% Diff", "[< 5%]", (sym(val('r_thigh'), val('l_thigh')) > 5 ? {c:'st-danger',t:'Imbalance'}:{c:'st-normal',t:'Normal'}))}
+                    ${row("Sarcopenia Screen (Calf)", val('r_calf') + " cm", "[> 31 cm]", (val('r_calf') < 31 ? {c:'st-danger',t:'Low Mass'}:{c:'st-normal',t:'Normal'}))}
+                </div>
+
+                <div class="report-card" style="background:#000; color:#fff;">
+                    <div class="label-text" style="color:var(--primary);">🔥 Energy Expenditure</div>
+                    <div class="report-row"><span>BMR (Basal Rate)</span> <b>${bmr.toFixed(0)} kcal</b></div>
+                    <div class="report-row"><span>TDEE (Maintenance)</span> <b>${(bmr * 1.2).toFixed(0)} kcal</b></div>
+                </div>
+            `;
+            document.getElementById('report-output').innerHTML = html;
+        }
+
+        function row(label, val, ref, status) {
+            return `
+                <div class="report-row">
+                    <div class="label-stack"><span class="label-text">${label}</span><span class="ref-text">Normal: ${ref}</span></div>
+                    <span class="status-pill ${status.c}">${val} (${status.t})</span>
+                </div>
+            `;
+        }
+
+        function sym(r, l) {
+            if(!r || !l) return 0;
+            return (Math.abs(r - l) / Math.max(r, l) * 100).toFixed(1);
+        }
+    </script>
+</body>
+</html>
+
