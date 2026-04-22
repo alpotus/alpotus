@@ -1,0 +1,312 @@
+/* 
+ * ============================================================
+ * ALPOTUS MEDEDGE: TITAN MEDICAL ELEMENTS v19.5
+ * Professional Component Library for Clinical Notes
+ * Optimized for Desktop Ultra-Wide & High-Precision Mobile
+ * ============================================================
+ */
+
+/* --- 1. THE NOTE PAGE (Centered Document Canvas) --- */
+.note-page {
+    width: 100% !important; /* Forces full width */
+    max-width: 100% !important; /* Removes the 900px limit */
+    margin: 0 !important; /* Removes side gaps */
+    background: var(--page);
+    padding: 60px 5% !important; /* 5% padding keeps text readable but edge-to-edge */
+    border-radius: 0 !important; /* Removes rounded corners */
+    border: none !important; /* Removes the grey/white border */
+    box-shadow: none !important; /* Removes the shadow border */
+    min-height: 100vh;
+    transition: background 0.3s ease;
+}
+
+@keyframes titanEntrance {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 2. TITAN SIGNATURE HEADERS (Red Bar Logic) --- */
+.note-header, h2 {
+    display: inline-block !important;
+    color: var(--primary-red) !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    position: relative !important;
+    margin: 45px 0 25px 0 !important;
+    max-width: 100%;
+}
+
+.note-header:first-child, h2:first-child { margin-top: 0 !important; }
+
+/* The signature gradient red bar - Fixed width for Desktop */
+.note-header::after, h2::after {
+    content: "";
+    display: block;
+    width: 100%; 
+    height: 8px;
+    background: linear-gradient(90deg, rgba(190, 18, 60, 0.25) 0%, rgba(190, 18, 60, 0) 100%);
+    border-radius: 12px;
+    margin-top: 8px;
+}
+
+/* --- 3. FIXED BULLET POINTS (Strictly Dots •) --- */
+ul { list-style: none !important; padding-left: 25px !important; margin: 20px 0 !important; }
+ul li { 
+    position: relative !important; 
+    margin-bottom: 12px !important; 
+    font-weight: 500 !important; 
+    font-size: 1.05rem !important; 
+    line-height: 1.7 !important;
+    display: block !important;
+    color: var(--text-main);
+}
+ul li::before { 
+    content: "•" !important; 
+    position: absolute !important; 
+    left: -25px; 
+    font-weight: 900; 
+    color: var(--primary-red); 
+}
+
+/* --- 4. MONOSPACE TEXTBOOK TREE SYSTEM --- */
+.med-tree {
+    font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+    white-space: pre !important;
+    line-height: 1.8 !important;
+    background-color: rgba(0,0,0,0.03) !important;
+    padding: 30px !important;
+    border-radius: 18px !important;
+    margin: 35px 0 !important;
+    overflow-x: auto !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-main) !important;
+    font-size: 0.95rem !important;
+}
+.med-tree .definition { color: #1a73e8; font-weight: bold; background-color: #d0e3fd; padding: 2px 8px; border-radius: 6px; }
+.med-tree .manifestation { color: #e91e63; font-weight: bold; background-color: #fdd0eb; padding: 2px 8px; border-radius: 6px; }
+.med-tree .step { color: #2e7d32; font-weight: bold; background-color: #d0f0d0; padding: 2px 8px; border-radius: 6px; }
+.med-tree .substep { color: #6a1b9a; font-weight: bold; background-color: #ecd0f5; padding: 2px 8px; border-radius: 6px; }
+.med-tree .highlight { background-color: #fff9c4; font-weight: bold; padding: 2px 6px; border-radius: 4px; border-bottom: 2px solid #fbc02d; }
+.med-tree .arrow { color: #ff9800; font-weight: 900; }
+
+/* --- 5. TITAN MULTI-COLOR HIGHLIGHTERS --- */
+.hl-yellow { background: var(--hl-yellow) !important; padding: 2px 6px !important; border-radius: 5px !important; color: #000 !important; font-weight: 700 !important; }
+.hl-red { background: var(--hl-red) !important; padding: 2px 6px !important; border-radius: 5px !important; color: #991b1b !important; font-weight: 700 !important; }
+.hl-blue { background: var(--hl-blue) !important; padding: 2px 6px !important; border-radius: 5px !important; color: #1e40af !important; font-weight: 700 !important; }
+.hl-green { background: var(--hl-green) !important; padding: 2px 6px !important; border-radius: 5px !important; color: #166534 !important; font-weight: 700 !important; }
+
+/* --- 6. TITAN MEDICAL TABLES (4px Master Weight) --- */
+.medical-table-wrap { 
+    overflow-x: auto !important; 
+    margin: 45px 0 !important; 
+    border-radius: 18px !important; 
+    border: 4px solid var(--primary-red) !important; 
+}
+.medical-table { width: 100% !important; border-collapse: collapse !important; background: var(--page) !important; }
+.medical-table th { 
+    background: rgba(190, 18, 60, 0.07) !important; 
+    color: var(--primary-red) !important; 
+    padding: 20px !important; 
+    font-size: 0.9rem; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    border-bottom: 4px solid var(--primary-red) !important; 
+    text-align: left;
+}
+.medical-table td { 
+    padding: 18px !important; 
+    border-bottom: 1px solid #fee2e2 !important; 
+    border-right: 2.5px solid var(--primary-red); 
+    font-size: 1.05rem; 
+    font-weight: 500;
+    color: var(--text-main);
+}
+.medical-table td:last-child { border-right: none !important; }
+
+/* --- 7. ADVANCED FLOWCHART SYSTEM --- */
+.v-flow { display: flex !important; flex-direction: column !important; align-items: center !important; margin: 60px 0 !important; width: 100% !important; clear: both !important; }
+.flow-node { 
+    border: 3.5px solid var(--text-main) !important; 
+    padding: 8px 25px !important; 
+    border-radius: 8px !important; 
+    font-size: 0.8rem !important; 
+    font-weight: 800 !important; 
+    background: var(--page) !important; 
+    text-align: center; 
+    min-width: 220px; 
+    max-width: 450px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important; 
+    transition: 0.3s ease;
+}
+.flow-node:hover { transform: translateY(-5px); border-color: var(--primary-red) !important; }
+
+.arrow { 
+    font-size: 2.8rem !important; 
+    color: var(--primary-red) !important; 
+    margin: 12px 0 !important; 
+    font-weight: 900 !important; 
+    line-height: 0.6;
+    display: block;
+    text-align: center;
+}
+
+.branch-container { display: flex !important; justify-content: center !important; width: 100% !important; gap: 60px !important; margin-top: 20px !important; }
+.branch-col { display: flex !important; flex-direction: column !important; align-items: center !important; flex: 1 !important; }
+
+/* --- 8. TITAN OUTLINE CALLOUTS (3.5px Thickness) --- */
+.callout { 
+    background: transparent !important; 
+    border: 3.5px solid var(--accent-blue) !important; 
+    padding: 35px; 
+    border-radius: 22px; 
+    margin: 55px 0; 
+    display: flex; 
+    gap: 25px; 
+    font-size: 1.15rem;
+    font-weight: 600;
+    position: relative;
+    line-height: 1.7;
+}
+
+.callout.def { border-color: var(--accent-blue) !important; }
+.callout.def::before { content: "DEFINITION"; position: absolute; top: -14px; left: 25px; background: var(--page); padding: 0 15px; font-size: 0.75rem; font-weight: 900; color: var(--accent-blue); letter-spacing: 1.5px; }
+
+.callout.pearl { border-color: var(--primary-yellow) !important; }
+.callout.pearl::before { content: "CLINICAL PEARL"; position: absolute; top: -14px; left: 25px; background: var(--page); padding: 0 15px; font-size: 0.75rem; font-weight: 900; color: var(--primary-yellow); letter-spacing: 1.5px; }
+
+.callout.risk { border-color: var(--primary-red) !important; }
+.callout.risk::before { content: "HIGH RISK / ALERT"; position: absolute; top: -14px; left: 25px; background: var(--page); padding: 0 15px; font-size: 0.75rem; font-weight: 900; color: var(--primary-red); letter-spacing: 1.5px; }
+
+/* --- 9. TITAN PREMIUM INDEX SYSTEM (Desktop Centered) --- */
+.index-wrapper {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 20px 20px 100px;
+}
+
+.note-header-index {
+    display: block;
+    color: var(--text-main);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 50px;
+    letter-spacing: -2px;
+    line-height: 1.1;
+}
+
+.list-card { 
+    background: var(--page); 
+    padding: 30px 35px; 
+    border-radius: 22px; 
+    margin-bottom: 18px; 
+    border: 3px solid var(--border) !important; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    cursor: pointer; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.list-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: var(--primary-red); opacity: 0.8;
+}
+.topic-card::before { background: var(--accent-blue); }
+
+.list-card:hover { 
+    transform: translateX(15px) scale(1.01); 
+    border-color: var(--primary-red) !important; 
+    background: var(--bg); 
+    box-shadow: 0 20px 40px rgba(190, 18, 60, 0.1);
+}
+.topic-card:hover { border-color: var(--accent-blue) !important; }
+
+.card-info { display: flex; flex-direction: column; gap: 5px; text-align: left; }
+.card-title { font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+.card-meta { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1.5px; }
+
+.card-arrow { 
+    width: 50px; height: 50px; background: var(--bg); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary-red); font-size: 1.5rem; transition: 0.3s; border: 2.5px solid var(--border);
+}
+.list-card:hover .card-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); transform: rotate(-45deg); }
+
+/* --- 10. HORIZONTAL SCROLL TREE CANVAS --- */
+.scroll-canvas { 
+    width: 100% !important; 
+    overflow-x: auto !important; 
+    padding: 40px 0 !important; 
+    margin: 35px 0 !important; 
+    cursor: grab; 
+    -webkit-overflow-scrolling: touch; 
+    border-bottom: 2px solid var(--border);
+}
+.tree-wrapper { 
+    display: inline-flex !important; 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    width: max-content !important; 
+    min-width: 100% !important; 
+    padding: 0 50px !important; 
+}
+
+/* --- 11. MEDIA & DARK MODE OVERRIDES --- */
+.sticker-img { width: 100%; border-radius: 28px; border: 1px solid var(--border); box-shadow: var(--shadow-lg); }
+.img-caption { font-size: 0.9rem; opacity: 0.7; margin-top: 18px; font-weight: 800; text-align: center; color: var(--text-main); }
+
+.link-pill {
+    background: var(--page); color: var(--accent-blue); border: 2.5px solid var(--accent-blue); padding: 12px 26px; border-radius: 16px; text-decoration: none; font-weight: 800; font-size: 1rem; margin: 10px; display: inline-block; transition: 0.3s;
+}
+.link-pill:hover { background: var(--accent-blue); color: #fff !important; transform: translateY(-5px); }
+
+body.dark-mode .med-tree { background-color: rgba(255,255,255,0.04) !important; border-color: #334155 !important; }
+body.dark-mode .med-tree .definition { background-color: #1e3a8a; color: #bfdbfe; }
+body.dark-mode .med-tree .highlight { background-color: #422006; color: #fef08a; border-bottom-color: #ca8a04; }
+body.dark-mode .callout::before { background: #0f172a !important; }
+body.dark-mode .flow-node { background: #1e293b !important; border-color: #334155 !important; }
+body.dark-mode .list-card { background: #111827; border-color: #1f2937 !important; }
+
+/* --- 12. RESPONSIVE MOBILE FIXES --- */
+@media (max-width: 768px) {
+    .note-page { padding: 45px 25px; border: none; border-radius: 0; }
+    .note-header, h2 { font-size: 1.15rem !important; }
+    .topic-title-main { font-size: 2.2rem !important; margin-bottom: 35px; }
+    .list-card { padding: 22px; border-radius: 18px; }
+    .index-wrapper { padding: 0 10px 100px; }
+}
+
+
+.mnemonic-box{
+    margin:16px 0;
+    padding:14px 18px;
+    border-left:6px solid #a855f7;
+    background:linear-gradient(135deg,#f5ecff 0%,#ede9fe 100%);
+    border-radius:14px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+.mnemonic-title{
+    font-weight:700;
+    font-size:0.95rem;
+    color:#6b21a8;
+    margin-bottom:8px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+}
+.mnemonic-text{
+    font-size:1rem;
+    font-weight:600;
+    color:#4c1d95;
+    margin-bottom:10px;
+}
+.mnemonic-list{
+    margin:0;
+    padding-left:18px;
+}
+.mnemonic-list li{
+    margin:4px 0;
+}
