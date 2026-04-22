@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 5.0 -->
+    <title>Medical Sequence & Flowchart Master | Clinical Procedure Hub | Alpotus</title>
+    <meta name="description" content="Master clinical protocols, surgical procedures, and WHO guidelines with Alpotus 5.0. Interactive tap-to-order clinical flowchart game with real-time accuracy and clinical reports.">
+    <meta name="keywords" content="medical sequence master, clinical flowchart game, WHO hand wash, ACLS algorithm quiz, medical student games, NEET PG prep, Alpotus hub">
+    <link rel="canonical" href="https://www.alpotus.com/content/games/sequence-master/index.html" />
+
+    <!-- JSON-LD MEDICAL SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Sequence Master 5.0",
+      "applicationCategory": "EducationApplication",
+      "operatingSystem": "All",
+      "author": { "@type": "Person", "name": "Sukkannagari Karthik Reddy" }
+    }
+    </script>
+
+    <!-- ALPOTUS 5.0 ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../data/masterData.js"></script>
+    <script src="../../../search-engine.js"></script>
+    <script src="../../../app.js" defer></script>
+
+    <!-- LOCAL STYLE -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <!-- SCREEN 1: THE HUB (Navigation & Selection) -->
+        <main id="hub-screen">
+            <header class="hero-app">
+                <h1>Sequence <span>Master</span></h1>
+                <p>Build your clinical intuition through ordered recall.</p>
+            </header>
+
+            <!-- SEARCH HUB -->
+            <div class="search-box-v5">
+                <input type="text" id="global-search" placeholder="🔍 Search any procedure (e.g. Hand Wash)..." onkeyup="globalSearch(this.value)">
+                <div id="search-dropdown" class="search-results-v5"></div>
+            </div>
+
+            <!-- SUBJECT NAVIGATION -->
+            <label class="label-tiny">Clinical Subjects</label>
+            <div class="sub-scroll-v5" id="subject-nav"></div>
+
+            <!-- CHAPTER FILTER -->
+            <label class="label-tiny">Filter by Chapter</label>
+            <select id="chapter-dropdown" class="select-v5" onchange="renderGrid()">
+                <option value="All">All Chapters</option>
+            </select>
+
+            <!-- TOPIC GRID (List Style) -->
+            <div id="topic-grid" class="topic-list-container">
+                <!-- JS will render List Items here -->
+            </div>
+        </main>
+
+        <!-- SCREEN 2: THE ARENA (Gameplay) -->
+        <div id="game-arena" style="display:none;">
+            <div class="arena-nav">
+                <button onclick="location.reload()" class="btn-exit-v5">✕ EXIT</button>
+                <div class="live-stats">
+                    <span>ACCURACY: <b id="acc-val">100%</b></span>
+                    <span id="timer-display">00:00</span>
+                </div>
+            </div>
+
+            <h2 id="task-title" class="arena-title">-</h2>
+            
+            <div class="arena-layout">
+                <div class="zone pool">
+                    <label class="zone-label">Tap the next logical step:</label>
+                    <div id="steps-pool" class="pill-container"></div>
+                </div>
+
+                <div class="zone tracker">
+                    <label class="zone-label">Your Clinical Sequence:</label>
+                    <div id="user-order" class="flow-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: ANALYSIS REPORT -->
+        <div id="report-view" class="v5-report" style="display:none;">
+            <div class="report-header">
+                <div class="icon-circle">✅</div>
+                <h2>Procedure <span>Mastered</span></h2>
+            </div>
+            
+            <div class="metric-row">
+                <div class="m-card"><span>Final Accuracy</span><div id="rep-acc">0%</div></div>
+                <div class="m-card"><span>Total Time</span><div id="rep-time">0s</div></div>
+            </div>
+
+            <div class="analysis-content">
+                <h3>Clinical Sequence Verification</h3>
+                <div id="final-flowchart" class="vertical-flow"></div>
+
+                <div class="clinical-note-box">
+                    <h4>Clinical Significance & Evidence</h4>
+                    <p id="rep-note"></p>
+                </div>
+            </div>
+
+            <button class="btn-primary-v5" onclick="location.reload()">RETURN TO HUB</button>
+        </div>
+    </div>
+
+    <!-- LOCAL ENGINE -->
+    <script src="sequence-data.js"></script>
+    <script src="sequence-engine.js"></script>
+</body>
+</html>
+
