@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Flowchart Generator - Alpotus</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Base App Shell Styles --- */
+        :root {
+            --primary-color: #f59e0b; --primary-hover: #fbbf24;
+            --bg-color: #f8f9fa; --content-bg: #ffffff; --sidebar-bg: #111827;
+            --text-color: #111827; --text-secondary: #4b5563; --border-color: #e5e7eb;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05); --sidebar-width: 260px;
+            --topbar-height: 60px; --border-radius: 12px;
+        }
+        body.dark-mode {
+            --bg-color: #121212; --content-bg: #1e1e1e; --sidebar-bg: #1e1e1e;
+            --text-color: #e5e5e5; --text-secondary: #888888; --border-color: #2e2e2e;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; overflow-x: hidden; display: flex; flex-direction: column; }
+        .sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: var(--sidebar-width); background-color: var(--sidebar-bg); color: #e5e5e5; padding: 20px; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 1000; }
+        .sidebar.active { transform: translateX(0); }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: 600; }
+        #close-sidebar-btn { background: none; border: none; color: #9ca3af; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+        #close-sidebar-btn:hover { color: white; }
+        .sidebar-nav ul { list-style: none; }
+        .sidebar-nav li a { display: block; color: #d1d5db; text-decoration: none; padding: 15px; border-radius: 8px; font-weight: 500; transition: background-color 0.2s, color 0.2s; cursor: pointer; }
+        .sidebar-nav li a:hover { background-color: rgba(255, 255, 255, 0.1); color: white; }
+        .main-content { padding-top: var(--topbar-height); transition: margin-left 0.3s ease-in-out; flex-grow: 1; display: flex; flex-direction: column; }
+        body.sidebar-active .main-content { margin-left: var(--sidebar-width); }
+        .top-bar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-height); background-color: var(--content-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 20px; z-index: 900; transition: background-color 0.3s, border-color 0.3s; box-shadow: var(--shadow); }
+        #menu-btn { background: none; border: none; cursor: pointer; padding: 5px; z-index: 2; }
+        #menu-btn svg { width: 24px; height: 24px; stroke: var(--text-color); }
+        .app-title { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 600; color: var(--text-color); }
+        .app-title svg { width: 28px; height: 28px; color: var(--primary-color); }
+        .page-container { padding: 30px; flex-grow: 1; }
+        h1 { font-size: 2.5rem; margin-bottom: 30px; }
+        .donate-footer { padding: 25px; text-align: center; background-color: var(--content-bg); border-top: 1px solid var(--border-color); transition: background-color 0.3s, border-color 0.3s; }
+        .donate-footer p { color: var(--text-secondary); margin-bottom: 15px; }
+        .btn { display: inline-block; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: transform 0.2s ease, background-color 0.2s ease; background-color: var(--primary-color); color: white; border: none; cursor: pointer; }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn.processing { cursor: wait; opacity: 0.7; }
+        .btn-secondary { background-color: var(--content-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background-color: var(--bg-color); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* --- Tool-Specific Styles --- */
+        #tool-workspace { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+        #input-panel, #preview-panel { background-color: var(--content-bg); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow); display: flex; flex-direction: column; }
+        #mermaid-input { width: 100%; flex-grow: 1; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; font-family: monospace; font-size: 1rem; background-color: var(--bg-color); color: var(--text-color); resize: none; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .panel-header h3 { font-size: 1.2rem; margin: 0; }
+        #mermaid-preview { display: flex; align-items: center; justify-content: center; flex-grow: 1; min-height: 400px; overflow: auto; background-color: var(--bg-color); border-radius: 8px; padding: 20px; }
+        #mermaid-preview svg { max-width: 100%; height: auto; }
+        #error-message { color: #ef4444; font-family: monospace; white-space: pre-wrap; }
+        .tool-actions { margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        details { background-color: var(--content-bg); border-radius: var(--border-radius); box-shadow: var(--shadow); margin-top: 30px; border: 1px solid var(--border-color); }
+        summary { font-weight: 600; padding: 15px; cursor: pointer; }
+        .panel-content { padding: 0 20px 20px 20px; border-top: 1px solid var(--border-color); }
+        .syntax-guide-code { background-color: var(--bg-color); padding: 15px; margin-top: 10px; border-radius: 8px; white-space: pre-wrap; font-family: monospace; }
+        .theme-selector { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
+        #theme-select { padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); font-weight: 500; }
+        
+        @media (max-width: 1024px) { #tool-workspace { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="light-mode">
+
+    <!-- App Shell: Sidebar, Top Bar -->
+    <aside class="sidebar" id="sidebar"> <div class="sidebar-header"><span class="sidebar-logo">Alpotus Menu</span><button id="close-sidebar-btn">&times;</button></div><nav class="sidebar-nav"><ul><li><a href="prompt.html">Prompt</a></li></ul></nav></aside>
+    <div class="main-content" id="main-content">
+        <header class="top-bar"><button id="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /<span>Alpotus</span></div></header>
+
+        <!-- Tool Page Content -->
+        <main class="page-container" id="page-container">
+            <h1>Advanced Flowchart Generator</h1>
+            <div id="tool-workspace">
+                <div id="input-panel">
+                    <div class="panel-header"><h3>Flowchart Definition</h3><button id="copy-code-btn" class="btn btn-secondary">Copy Code</button></div>
+                    <textarea id="mermaid-input" spellcheck="false" placeholder="Start typing your flowchart here...">graph TD;
+    %% Main Title
+    A["Classification of Immunity"]
+
+    %% First Level Split
+    A --> B[Innate Immunity];
+    A --> C[Acquired / Adaptive Immunity];
+
+    %% Innate Immunity Branch
+    subgraph Innate ["Non-specific"]
+        B --> B1(First line of defense);
+        B1 --> B2(Rapid response);
+        B2 --> B3["Components: Physical Barriers, Phagocytes, NK Cells"];
+    end
+
+    %% Acquired Immunity Branch
+    subgraph Acquired ["Specific"]
+        C --> C1(Develops after exposure);
+        C1 --> C2(Has immunological memory);
+        
+        %% Second Level Split: Active vs Passive
+        C2 --> D{Does the body produce its own antibodies?};
+        D -->|"Yes"| E[Active Immunity];
+        D -->|"No"| F[Passive Immunity];
+    end
+
+    %% Active Immunity Sub-Branch
+    subgraph Active
+        E --> E1{How is exposure acquired?};
+        E1 -->|"Natural Infection"| E2(Natural Active Immunity);
+        E1 -->|"Vaccination"| E3(Artificial Active Immunity);
+    end
+
+    %% Passive Immunity Sub-Branch
+    subgraph Passive
+        F --> F1{How are antibodies received?};
+        F1 -->|"From Mother (placenta, milk)"| F2(Natural Passive Immunity);
+        F1 -->|"Injection of antiserum"| F3(Artificial Passive Immunity);
+    end
+    
+    %% Mechanisms of Acquired Immunity
+    subgraph Mechanisms
+        C --> G{{Mediated by:}};
+        G --> H((Humoral Immunity));
+        G --> I((Cell-Mediated Immunity));
+    end
+    
+    subgraph Humoral
+        H -.-> J["B-Lymphocytes & Antibodies"];
+    end
+    
+    subgraph Cell-Mediated
+        I -.-> K["T-Lymphocytes (Helper, Cytotoxic)"];
+    end</textarea>
+                </div>
+                <div id="preview-panel">
+                    <div class="panel-header"><h3>Live Preview</h3></div>
+                    <div id="mermaid-preview"><p style="color: var(--text-secondary)">Your diagram will appear here</p></div>
+                    <div class="tool-actions">
+                        <button id="export-png-btn" class="btn">Export as PNG</button>
+                        <button id="export-svg-btn" class="btn">Export as SVG</button>
+                    </div>
+                </div>
+            </div>
+
+            <details>
+                <summary>⚙️ Theme & Syntax Guide</summary>
+                <div class="panel-content">
+                    <div class="theme-selector">
+                        <label for="theme-select" style="font-weight: 500;">Chart Theme:</label>
+                        <select id="theme-select">
+                            <option value="default">Default</option>
+                            <option value="forest">Forest</option>
+                            <option value="dark">Dark</option>
+                            <option value="neutral">Neutral</option>
+                        </select>
+                    </div>
+                    <h4 style="margin-top: 20px; margin-bottom: 10px;">Quick Syntax Guide:</h4>
+                    <p style="color: var(--text-secondary); margin: 0;"><strong>Direction:</strong> `graph TD` (Top to Bottom), `graph LR` (Left to Right)</p>
+                    <p style="color: var(--text-secondary); margin: 0; margin-top: 10px;"><strong>Nodes (Shapes):</strong></p>
+                    <div class="syntax-guide-code">A["Rectangle with text"]
+B("Rounded text")
+C(("Circle text"))
+D{"Diamond text"}
+E>"Asymmetric text"]
+F{{"Hexagon text"}}</div>
+                    <p style="color: var(--text-secondary); margin: 0; margin-top: 10px;"><strong>Links (Arrows):</strong></p>
+                    <div class="syntax-guide-code">A --> B;       (Arrow head)
+A --- B;       (No head)
+A -- "text" --> B; (With text, use quotes)
+A -.- B;       (Dotted line)
+A ==> B;       (Thick line)</div>
+                </div>
+            </details>
+        </main>
+
+        
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- The actual Mermaid library -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- App Shell Logic ---
+            const body = document.body;
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.getElementById('menu-btn');
+            const closeBtn = document.getElementById('close-sidebar-btn');
+            const overlay = document.getElementById('overlay');
+            const openSidebar = () => { sidebar.classList.add('active'); overlay.classList.add('active'); body.classList.add('sidebar-active'); };
+            const closeSidebar = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); body.classList.remove('sidebar-active'); };
+            menuBtn.addEventListener('click', openSidebar);
+            closeBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            const applyTheme = (theme) => { body.classList.remove('light-mode', 'dark-mode'); body.classList.add(`${theme}-mode`); };
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+
+            // --- Flowchart Tool Logic ---
+            const inputArea = document.getElementById('mermaid-input');
+            const previewArea = document.getElementById('mermaid-preview');
+            const copyCodeBtn = document.getElementById('copy-code-btn');
+            const exportPngBtn = document.getElementById('export-png-btn');
+            const exportSvgBtn = document.getElementById('export-svg-btn');
+            const themeSelect = document.getElementById('theme-select');
+            
+            let currentTheme = 'default';
+
+            mermaid.initialize({ startOnLoad: false, theme: currentTheme });
+
+            const renderFlowchart = async () => {
+                const definition = inputArea.value;
+                if (definition.trim() === '') {
+                    previewArea.innerHTML = '<p style="color: var(--text-secondary)">Your diagram will appear here</p>';
+                    return;
+                }
+                try {
+                    const { svg } = await mermaid.render('mermaid-svg', definition);
+                    previewArea.innerHTML = svg;
+                } catch (error) {
+                    previewArea.innerHTML = `<pre id="error-message">${error.message}</pre>`;
+                }
+            };
+            
+            // Debounce for live rendering to avoid performance issues
+            let debounceTimer;
+            inputArea.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(renderFlowchart, 500);
+            });
+
+            themeSelect.addEventListener('change', () => {
+                currentTheme = themeSelect.value;
+                mermaid.initialize({ startOnLoad: false, theme: currentTheme });
+                renderFlowchart();
+            });
+
+            copyCodeBtn.addEventListener('click', () => {
+                const textToCopy = inputArea.value;
+                const tempTextarea = document.createElement('textarea');
+                tempTextarea.value = textToCopy;
+                document.body.appendChild(tempTextarea);
+                tempTextarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextarea);
+                copyCodeBtn.textContent = 'Copied!';
+                setTimeout(() => { copyCodeBtn.textContent = 'Copy Code'; }, 2000);
+            });
+
+            exportSvgBtn.addEventListener('click', () => {
+                const svgElement = previewArea.querySelector('svg');
+                if (!svgElement) { alert('Please generate a flowchart first.'); return; }
+
+                const svgData = new XMLSerializer().serializeToString(svgElement);
+                const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'flowchart.svg';
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+
+            exportPngBtn.addEventListener('click', () => {
+                const svgElement = previewArea.querySelector('svg');
+                if (!svgElement) { alert('Please generate a flowchart first.'); return; }
+                
+                exportPngBtn.textContent = 'Processing...';
+                exportPngBtn.classList.add('processing');
+                exportPngBtn.disabled = true;
+
+                const scale = 2; // For higher resolution
+                const { width, height } = svgElement.getBBox();
+
+                const canvas = document.createElement('canvas');
+                canvas.width = (width + 40) * scale; // Add some padding
+                canvas.height = (height + 40) * scale;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = getComputedStyle(previewArea).backgroundColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                const svgData = new XMLSerializer().serializeToString(svgElement);
+                const img = new Image();
+
+                img.onload = () => {
+                    ctx.drawImage(img, 20 * scale, 20 * scale, width * scale, height * scale);
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = 'flowchart.png';
+                    link.click();
+                    
+                    exportPngBtn.textContent = 'Export as PNG';
+                    exportPngBtn.classList.remove('processing');
+                    exportPngBtn.disabled = false;
+                };
+                
+                img.onerror = () => {
+                     alert('Error exporting PNG. Please try again.');
+                     exportPngBtn.textContent = 'Export as PNG';
+                     exportPngBtn.classList.remove('processing');
+                     exportPngBtn.disabled = false;
+                }
+
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            });
+
+            // Initial render
+            renderFlowchart();
+        });
+    </script>
+</body>
+  </html>
+          
