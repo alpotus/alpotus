@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>GCS Calculator & GCS-P Score | Glasgow Coma Scale | Alpotus Clinical</title>
+    <meta name="description" content="Calculate Glasgow Coma Scale (GCS) and the new GCS-Pupil (GCS-P) score. Professional neurological tool for TBI assessment. PubMed-backed clinical guide.">
+    <meta name="keywords" content="GCS calculator, Glasgow Coma Scale, GCS-P score, pupillary reactivity, traumatic brain injury triage, neurology tools, USMLE clinical scores">
+    <link rel="canonical" href="https://www.alpotus.com/content/scores/gcs/index.html" />
+
+    <!-- JSON-LD MEDICAL SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Clinical GCS-P Suite",
+      "description": "A high-precision neurological assessment tool implementing the latest Glasgow Coma Scale and Pupillary Reactivity guidelines.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+
+        /* Calculator UI */
+        .gcs-card {
+            background: var(--bg-card); border-radius: 30px; padding: 40px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        .gcs-card::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 8px; background: var(--primary); }
+
+        .gcs-section { margin-bottom: 30px; }
+        .gcs-section h3 { font-size: 0.85rem; font-weight: 900; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        
+        .option-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .gcs-opt { 
+            padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-body); cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; transition: 0.3s; font-weight: 600;
+        }
+        .gcs-opt:hover { border-color: var(--primary); background: #fff; }
+        .gcs-opt.active { background: var(--primary); border-color: var(--primary); color: #000; }
+        .val-circle { width: 25px; height: 25px; background: rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+
+        /* Dashboard Results */
+        #result-area { display: none; margin-top: 40px; animation: fadeInUp 0.6s ease; }
+        .res-main { text-align: center; background: #000; color: #fff; padding: 35px; border-radius: 25px; margin-bottom: 25px; }
+        .score-val { font-size: 5rem; font-weight: 950; color: var(--primary); line-height: 1; }
+        .score-label { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .severity-badge { display: inline-block; padding: 8px 25px; border-radius: 50px; font-weight: 900; margin-top: 15px; text-transform: uppercase; }
+
+        /* AUTHORITY CONTENT */
+        .authority-content { margin-top: 80px; padding-bottom: 100px; line-height: 2; color: var(--text-muted); }
+        .authority-content h2 { font-size: 2.4rem; font-weight: 950; color: var(--text-main); margin: 50px 0 25px; border-left: 10px solid var(--primary); padding-left: 25px; }
+        .authority-content h3 { font-size: 1.7rem; font-weight: 800; color: var(--text-main); margin: 30px 0 15px; }
+        .authority-content p { font-size: 1.1rem; margin-bottom: 25px; text-align: justify; }
+        .clinical-quote { background: #fffbeb; border-left: 5px solid var(--primary); padding: 30px; border-radius: 0 20px 20px 0; margin: 40px 0; font-style: italic; color: #000; }
+
+        @media (max-width: 600px) { .score-val { font-size: 3.5rem; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="ad-slot">ADVERTISEMENT</div>
+
+        <section class="gcs-card">
+            <h1 style="text-align:center; font-weight:950; font-size: 2.2rem;">GCS & GCS-P <span style="color:var(--primary)">Calculator</span></h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 40px;">Standard Glasgow Coma Scale + Pupillary Reactivity Score</p>
+
+            <!-- EYE OPENING -->
+            <div class="gcs-section">
+                <h3>1. Eye Opening (E)</h3>
+                <div class="option-grid" id="eye-opts">
+                    <div class="gcs-opt" data-val="4" onclick="selectOpt(this, 'eye')">Spontaneous <span class="val-circle">4</span></div>
+                    <div class="gcs-opt" data-val="3" onclick="selectOpt(this, 'eye')">To Sound <span class="val-circle">3</span></div>
+                    <div class="gcs-opt" data-val="2" onclick="selectOpt(this, 'eye')">To Pressure <span class="val-circle">2</span></div>
+                    <div class="gcs-opt" data-val="1" onclick="selectOpt(this, 'eye')">None <span class="val-circle">1</span></div>
+                </div>
+            </div>
+
+            <!-- VERBAL RESPONSE -->
+            <div class="gcs-section">
+                <h3>2. Verbal Response (V)</h3>
+                <div class="option-grid" id="verbal-opts">
+                    <div class="gcs-opt" data-val="5" onclick="selectOpt(this, 'verbal')">Oriented <span class="val-circle">5</span></div>
+                    <div class="gcs-opt" data-val="4" onclick="selectOpt(this, 'verbal')">Confused <span class="val-circle">4</span></div>
+                    <div class="gcs-opt" data-val="3" onclick="selectOpt(this, 'verbal')">Inappropriate Words <span class="val-circle">3</span></div>
+                    <div class="gcs-opt" data-val="2" onclick="selectOpt(this, 'verbal')">Incomprehensible Sounds <span class="val-circle">2</span></div>
+                    <div class="gcs-opt" data-val="1" onclick="selectOpt(this, 'verbal')">None <span class="val-circle">1</span></div>
+                </div>
+            </div>
+
+            <!-- MOTOR RESPONSE -->
+            <div class="gcs-section">
+                <h3>3. Motor Response (M)</h3>
+                <div class="option-grid" id="motor-opts">
+                    <div class="gcs-opt" data-val="6" onclick="selectOpt(this, 'motor')">Obeys Commands <span class="val-circle">6</span></div>
+                    <div class="gcs-opt" data-val="5" onclick="selectOpt(this, 'motor')">Localizes Pain <span class="val-circle">5</span></div>
+                    <div class="gcs-opt" data-val="4" onclick="selectOpt(this, 'motor')">Normal Flexion (Withdrawal) <span class="val-circle">4</span></div>
+                    <div class="gcs-opt" data-val="3" onclick="selectOpt(this, 'motor')">Abnormal Flexion (Decorticate) <span class="val-circle">3</span></div>
+                    <div class="gcs-opt" data-val="2" onclick="selectOpt(this, 'motor')">Extension (Decerebrate) <span class="val-circle">2</span></div>
+                    <div class="gcs-opt" data-val="1" onclick="selectOpt(this, 'motor')">None <span class="val-circle">1</span></div>
+                </div>
+            </div>
+
+            <!-- PUPILLARY REACTIVITY -->
+            <div class="gcs-section">
+                <h3>4. Pupillary Reactivity (P) - For GCS-P Score</h3>
+                <div class="option-grid" id="pupil-opts">
+                    <div class="gcs-opt" data-val="0" onclick="selectOpt(this, 'pupil')">Both Pupils Reactive <span class="val-circle">0</span></div>
+                    <div class="gcs-opt" data-val="1" onclick="selectOpt(this, 'pupil')">One Pupil Non-Reactive <span class="val-circle">-1</span></div>
+                    <div class="gcs-opt" data-val="2" onclick="selectOpt(this, 'pupil')">Both Pupils Non-Reactive <span class="val-circle">-2</span></div>
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="result-area">
+                <div class="res-main">
+                    <div class="score-label">Final GCS-P Score</div>
+                    <div class="score-val" id="total-score">15</div>
+                    <div id="severity" class="severity-badge">MILD TBI</div>
+                    <p style="margin-top:20px; font-size:0.8rem; color:#aaa;" id="score-breakdown">E4 V5 M6 | P0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLINICAL CONTENT (PubMed Citations & Analysis) -->
+        <article class="authority-content">
+            <h2>The Evolution of the Glasgow Coma Scale (GCS)</h2>
+            <p>The Glasgow Coma Scale was first described by **Graham Teasdale and Bryan Jennett** in 1974 (*The Lancet*) as a method for assessing the level of consciousness in patients with acute brain injury. Over the last four decades, it has become the gold standard for clinical assessment in emergency medicine, neurosurgery, and critical care. The scale is designed to be simple, reproducible, and highly predictive of patient outcomes.</p>
+
+            <div class="clinical-quote">
+                <strong>PubMed Clinical Highlight:</strong> A landmark study published in the <em>Journal of Neurosurgery</em> (ID: PMC3143405) confirmed that the GCS is the single most powerful predictor of outcomes in Traumatic Brain Injury (TBI), directly influencing clinical guidelines for intubation and surgical intervention.
+            </div>
+
+            <h3>Understanding the Components: E, V, and M</h3>
+            <p>The GCS is composed of three behavioral responses: Eye Opening (E), Verbal Response (V), and Motor Response (M). Each component is scored based on the patient's best response. The total score ranges from a minimum of 3 (deep coma or death) to a maximum of 15 (fully awake and oriented).</p>
+            <ul>
+                <li><strong>Eye Opening:</strong> Assesses the arousal system of the brainstem.</li>
+                <li><strong>Verbal Response:</strong> Evaluates the integration of higher cortical function and cognitive awareness.</li>
+                <li><strong>Motor Response:</strong> The most important prognostic indicator, assessing the integrity of the central nervous system.</li>
+            </ul>
+
+            <h2>The New Era: GCS-Pupil (GCS-P) Score</h2>
+            <p>In 2018, the Glasgow team introduced an enhancement to the scale known as the <strong>GCS-P</strong>. According to research published in <em>The Lancet Neurology</em>, combining GCS with pupillary reactivity provides a more nuanced assessment of the patient’s neurological state. The pupillary response is a direct reflection of brainstem function and intracranial pressure. In the GCS-P model, the "Pupil Score" (0, 1, or 2) is subtracted from the total GCS, creating a scale from 1 to 15. A lower GCS-P indicates a significantly higher risk of mortality and poor functional recovery.</p>
+
+            <h3>The "Rule of 8" in Clinical Triage</h3>
+            <p>One of the most famous clinical dictums in emergency medicine is: <strong>"GCS of 8, Intubate."</strong> This refers to the fact that patients with a GCS score of 8 or less typically cannot protect their own airway and are at high risk for aspiration and secondary brain injury due to hypoxia. The Alpotus calculator provides immediate severity classification to help clinicians make these rapid-fire decisions.</p>
+
+            <h2>Prognostic Value and Limitations</h2>
+            <p>While the GCS is a powerhouse of clinical data, it has limitations. In patients who are intubated, sedated, or have significant orbital trauma, the verbal or eye components may be "Not Testable" (NT). In these cases, the score should be reported as individual components (e.g., E1 Vnt M5). Furthermore, GCS should always be assessed **after** initial resuscitation to avoid falsely low scores due to shock or hypoxia.</p>
+
+            <h3>References & Clinical Studies:</h3>
+            <p style="font-size:0.85rem; background:#eee; padding:25px; border-radius:15px;">
+                1. Teasdale G, Jennett B. "Assessment of coma and impaired consciousness. A practical scale." The Lancet, 1974.<br>
+                2. Teasdale G, et al. "The Glasgow Coma Scale: 40 years on." The Lancet Neurology, 2014.<br>
+                3. PubMed ID: 29606112 - "Glasgow Coma Scale with pupillary response (GCS-P)."<br>
+                4. Brain Trauma Foundation. "Guidelines for the Management of Severe Traumatic Brain Injury."
+            </p>
+        </article>
+    </div>
+
+    <script>
+        let scores = { eye: 0, verbal: 0, motor: 0, pupil: 0 };
+
+        function selectOpt(el, type) {
+            // Remove active from siblings
+            const parent = el.parentElement;
+            parent.querySelectorAll('.gcs-opt').forEach(opt => opt.classList.remove('active'));
+            
+            // Set active
+            el.classList.add('active');
+            scores[type] = parseInt(el.dataset.val);
+
+            // If E, V, M are all selected, show result
+            if(scores.eye > 0 && scores.verbal > 0 && scores.motor > 0) {
+                calculateTotal();
+            }
+        }
+
+        function calculateTotal() {
+            const gcs = scores.eye + scores.verbal + scores.motor;
+            const gcsp = gcs - scores.pupil;
+
+            const resArea = document.getElementById('result-area');
+            const totalEl = document.getElementById('total-score');
+            const sevEl = document.getElementById('severity');
+            const breakEl = document.getElementById('score-breakdown');
+
+            resArea.style.display = 'block';
+            totalEl.innerText = gcsp;
+            breakEl.innerText = `E${scores.eye} V${scores.verbal} M${scores.motor} | Pupil Deduction: -${scores.pupil}`;
+
+            // Severity Classification (based on GCS part)
+            if (gcs >= 13) {
+                sevEl.innerText = "MILD BRAIN INJURY";
+                sevEl.style.background = "#dcfce7";
+                sevEl.style.color = "#166534";
+            } else if (gcs >= 9) {
+                sevEl.innerText = "MODERATE BRAIN INJURY";
+                sevEl.style.background = "#fef9c3";
+                sevEl.style.color = "#854d0e";
+            } else {
+                sevEl.innerText = "SEVERE (COMA) - PROTECT AIRWAY";
+                sevEl.style.background = "#fee2e2";
+                sevEl.style.color = "#991b1b";
+            }
+
+            window.scrollTo({ top: 500, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
