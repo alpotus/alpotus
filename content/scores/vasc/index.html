@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>CHA2DS2-VASc Score Calculator | Stroke Risk in Atrial Fibrillation | Alpotus</title>
+    <meta name="description" content="Calculate CHA2DS2-VASc score for Atrial Fibrillation (AF) stroke risk. Accurate clinical tool for anticoagulation guidance and annual stroke risk prediction. PubMed cited.">
+    <meta name="keywords" content="CHA2DS2-VASc calculator, atrial fibrillation stroke risk, CHADS2 vs CHA2DS2-VASc, anticoagulation guidelines, Cardiology clinical scores, Alpotus medical">
+    <link rel="canonical" href="https://www.alpotus.com/content/scores/vasc/index.html" />
+
+    <!-- JSON-LD MEDICAL SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Clinical CHA2DS2-VASc Suite",
+      "description": "Professional cardiology tool for stratifying stroke risk in patients with non-valvular atrial fibrillation.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+
+        .vasc-card {
+            background: var(--bg-card); border-radius: 30px; padding: 40px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        .vasc-card::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 8px; background: var(--primary); }
+
+        .vasc-section { margin-bottom: 20px; }
+        .vasc-section h3 { font-size: 0.8rem; font-weight: 950; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .opt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .vasc-opt { 
+            padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-body); cursor: pointer; text-align: center;
+            transition: 0.3s; font-size: 0.95rem; font-weight: 700;
+        }
+        .vasc-opt:hover { border-color: var(--primary); }
+        .vasc-opt.active { background: var(--primary); border-color: var(--primary); color: #000; }
+
+        /* Result Display */
+        #result-area { display: none; margin-top: 40px; animation: fadeInUp 0.6s ease; }
+        .res-main { text-align: center; background: #000; color: #fff; padding: 40px; border-radius: 25px; border: 2px solid var(--primary); }
+        .score-val { font-size: 5rem; font-weight: 950; color: var(--primary); line-height: 1; }
+        
+        .risk-box { background: var(--bg-body); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); margin-top: 20px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: center; }
+        .risk-stat { text-align: center; }
+        .risk-stat div { font-size: 2rem; font-weight: 900; color: #e74c3c; }
+        .risk-stat h4 { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+        
+        .recom-card { padding-left: 20px; border-left: 3px solid var(--primary); }
+        .recom-card h4 { font-size: 0.8rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 5px; }
+        .recom-card p { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+
+        /* AUTHORITY CONTENT */
+        .authority-content { margin-top: 80px; padding-bottom: 100px; line-height: 2; color: var(--text-muted); }
+        .authority-content h2 { font-size: 2.4rem; font-weight: 950; color: var(--text-main); margin: 50px 0 25px; border-left: 10px solid var(--primary); padding-left: 25px; }
+        .authority-content h3 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 40px 0 20px; }
+        .authority-content p { font-size: 1.1rem; margin-bottom: 25px; text-align: justify; }
+        .cite-box { background: #f1f5f9; padding: 30px; border-radius: 20px; border: 1px solid var(--border-color); margin: 40px 0; color: #334155; }
+
+        @media (max-width: 600px) { .score-val { font-size: 3.5rem; } .risk-box { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="ad-slot">ADVERTISEMENT</div>
+
+        <section class="vasc-card">
+            <h1 style="text-align:center; font-weight:950; font-size: 2.2rem;">CHA₂DS₂-VASc <span style="color:var(--primary)">Calculator</span></h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 40px;">Stroke Risk Stratification in Atrial Fibrillation</p>
+
+            <div id="criteria-box">
+                <!-- C -->
+                <div class="vasc-section">
+                    <h3><span>C</span> - Congestive Heart Failure</h3>
+                    <div class="opt-row" data-cat="c">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">No</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">Yes (+1)</div>
+                    </div>
+                </div>
+                <!-- H -->
+                <div class="vasc-section">
+                    <h3><span>H</span> - Hypertension (BP >140/90 or Treated)</h3>
+                    <div class="opt-row" data-cat="h">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">No</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">Yes (+1)</div>
+                    </div>
+                </div>
+                <!-- A2 -->
+                <div class="vasc-section">
+                    <h3><span>A₂</span> - Age (≥ 75 years)</h3>
+                    <div class="opt-row" data-cat="a2">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">Under 75</div>
+                        <div class="vasc-opt" data-val="2" onclick="selectScore(this)">75 or Older (+2)</div>
+                    </div>
+                </div>
+                <!-- D -->
+                <div class="vasc-section">
+                    <h3><span>D</span> - Diabetes Mellitus</h3>
+                    <div class="opt-row" data-cat="d">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">No</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">Yes (+1)</div>
+                    </div>
+                </div>
+                <!-- S2 -->
+                <div class="vasc-section">
+                    <h3><span>S₂</span> - Stroke / TIA / Thromboembolism</h3>
+                    <div class="opt-row" data-cat="s2">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">No</div>
+                        <div class="vasc-opt" data-val="2" onclick="selectScore(this)">Yes (+2)</div>
+                    </div>
+                </div>
+                <!-- V -->
+                <div class="vasc-section">
+                    <h3><span>V</span> - Vascular Disease (Prior MI, PAD, or Aortic Plaque)</h3>
+                    <div class="opt-row" data-cat="v">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">No</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">Yes (+1)</div>
+                    </div>
+                </div>
+                <!-- A -->
+                <div class="vasc-section">
+                    <h3><span>A</span> - Age (65 - 74 years)</h3>
+                    <div class="opt-row" data-cat="a1">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">Other</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">65 - 74 (+1)</div>
+                    </div>
+                </div>
+                <!-- Sc -->
+                <div class="vasc-section">
+                    <h3><span>S</span>ex Category</h3>
+                    <div class="opt-row" data-cat="sex">
+                        <div class="vasc-opt" data-val="0" onclick="selectScore(this)">Male</div>
+                        <div class="vasc-opt" data-val="1" onclick="selectScore(this)">Female (+1)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="result-area">
+                <div class="res-main">
+                    <div style="text-transform:uppercase; font-weight:800; color:#aaa; font-size:0.8rem;">Total CHA₂DS₂-VASc Score</div>
+                    <div class="score-val" id="total-val">0</div>
+                </div>
+                
+                <div class="risk-box">
+                    <div class="risk-stat">
+                        <h4>Annual Stroke Risk</h4>
+                        <div id="risk-perc">0%</div>
+                    </div>
+                    <div class="recom-card">
+                        <h4>Recommendation</h4>
+                        <p id="recom-text">Incomplete selection.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLINICAL CONTENT -->
+        <article class="authority-content">
+            <h2>What is the CHA₂DS₂-VASc Score?</h2>
+            <p>The <strong>CHA₂DS₂-VASc score</strong> is a clinical prediction rule for estimating the risk of stroke in patients with non-valvular atrial fibrillation (AF). It is an enhancement of the older CHADS₂ score, designed to better identify "truly low-risk" patients. In modern cardiology, this score is the primary tool used by clinicians to determine whether a patient requires oral anticoagulation (OAC) to prevent thromboembolic events. Non-valvular AF carries a five-fold increase in stroke risk, and this tool helps quantify that risk based on individual comorbidities.</p>
+
+            <div class="cite-box">
+                <strong>PubMed Research Highlight (Lip et al., 2010):</strong> A landmark study published in <em>Chest</em> (PubMed ID: 20410244) demonstrated that the CHA₂DS₂-VASc score outperformed the CHADS₂ score in predicting thromboembolism, especially in patients previously categorized as "low to moderate risk."
+            </div>
+
+            <h2>Significance and Scoring Components</h2>
+            <p>The significance of the CHA₂DS₂-VASc score lies in its inclusivity of "minor" risk factors that were missing in previous models. The acronym stands for:</p>
+            <ul>
+                <li><strong>C:</strong> Congestive Heart Failure (or Left Ventricular Dysfunction).</li>
+                <li><strong>H:</strong> Hypertension (even if controlled with medication).</li>
+                <li><strong>A₂:</strong> Age ≥ 75 years (Weight: 2 points).</li>
+                <li><strong>D:</strong> Diabetes Mellitus.</li>
+                <li><strong>S₂:</strong> Prior Stroke, TIA, or Thromboembolism (Weight: 2 points).</li>
+                <li><strong>V:</strong> Vascular disease (Prior MI, Peripheral Artery Disease, or Aortic Plaque).</li>
+                <li><strong>A:</strong> Age 65–74 years (Weight: 1 point).</li>
+                <li><strong>Sc:</strong> Sex category (Female gender).</li>
+            </ul>
+
+            <h3>Interpretation and Treatment Algorithms</h3>
+            <p>The **European Society of Cardiology (ESC)** and the **AHA/ACC** guidelines use this score to provide treatment pathways. Generally, a score of 0 in males or 1 in females is considered low risk, and no anticoagulation is recommended. For males with a score of 1 and females with a score of 2, anticoagulation should be "considered." For higher scores, anticoagulation is strongly recommended (Level of Evidence: IA).</p>
+
+            <h2>PubMed Studies and Clinical Evidence</h2>
+            <p>The validity of this score has been tested in millions of patients globally. A study published in <strong>The BMJ</strong> involving over 120,000 patients confirmed that the CHA₂DS₂-VASc score has a high c-index for predicting ischemic stroke. Research in <em>The Lancet</em> has also highlighted the importance of using **Direct Oral Anticoagulants (DOACs)** over Warfarin in high-scoring patients due to a better safety profile and lower risk of intracranial hemorrhage.</p>
+
+            <h3>Annual Ischemic Stroke Risk Correlation</h3>
+            <table style="width:100%; border-collapse: collapse; margin: 20px 0; border: 1px solid var(--border-color);">
+                <tr style="background:var(--bg-card);">
+                    <th style="padding:10px; border:1px solid var(--border-color);">Score</th>
+                    <th style="padding:10px; border:1px solid var(--border-color);">Adjusted Stroke Risk (%/year)</th>
+                </tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">0</td><td style="padding:10px; border:1px solid var(--border-color);">0%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">1</td><td style="padding:10px; border:1px solid var(--border-color);">1.3%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">2</td><td style="padding:10px; border:1px solid var(--border-color);">2.2%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">3</td><td style="padding:10px; border:1px solid var(--border-color);">3.2%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">4</td><td style="padding:10px; border:1px solid var(--border-color);">4.0%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">5</td><td style="padding:10px; border:1px solid var(--border-color);">6.7%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">6</td><td style="padding:10px; border:1px solid var(--border-color);">9.8%</td></tr>
+                <tr><td style="padding:10px; border:1px solid var(--border-color);">>7</td><td style="padding:10px; border:1px solid var(--border-color);">9.6% - 15.2%</td></tr>
+            </table>
+
+            <h3>Scientific References:</h3>
+            <p style="font-size:0.85rem; background:#eee; padding:20px; border-radius:15px;">
+                1. Lip GY, et al. "Refining clinical risk stratification for predicting stroke and thromboembolism in atrial fibrillation." Chest, 2010.<br>
+                2. PubMed ID: 20410244 - Original validation study of the CHA2DS2-VASc score.<br>
+                3. January CT, et al. "AHA/ACC/HRS Guideline for the Management of Patients With Atrial Fibrillation." Circulation, 2019.<br>
+                4. PubMed ID: 25446538 - "Comparison of the CHADS2 and CHA2DS2-VASc scores."
+            </p>
+        </article>
+    </div>
+
+    <script>
+        let vascScore = { c: 0, h: 0, a2: 0, d: 0, s2: 0, v: 0, a1: 0, sex: 0 };
+        let selections = { c: false, h: false, a2: false, d: false, s2: false, v: false, a1: false, sex: false };
+
+        function selectScore(el) {
+            const cat = el.parentElement.dataset.cat;
+            const val = parseInt(el.dataset.val);
+            
+            el.parentElement.querySelectorAll('.vasc-opt').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            
+            vascScore[cat] = val;
+            selections[cat] = true;
+
+            // Update result real-time
+            calculateVASC();
+        }
+
+        function calculateVASC() {
+            const total = Object.values(vascScore).reduce((a, b) => a + b, 0);
+            const isFinished = Object.values(selections).every(v => v === true);
+
+            if (!isFinished) return;
+
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('total-val').innerText = total;
+
+            const riskEl = document.getElementById('risk-perc');
+            const recomEl = document.getElementById('recom-text');
+
+            // Risk Percentages (Lip et al., 2010 data)
+            const risks = ["0%", "1.3%", "2.2%", "3.2%", "4.0%", "6.7%", "9.8%", "9.6%", "6.7%", "15.2%"];
+            riskEl.innerText = risks[total] || "15.2%";
+
+            // Recommendations (ESC Guidelines)
+            let recom = "";
+            const isFemale = vascScore.sex === 1;
+
+            if ((!isFemale && total === 0) || (isFemale && total === 1)) {
+                recom = "Low risk. No anticoagulation recommended.";
+            } else if ((!isFemale && total === 1) || (isFemale && total === 2)) {
+                recom = "Moderate risk. Oral anticoagulation should be considered.";
+            } else {
+                recom = "High risk. Oral anticoagulation (DOACs preferred) is strongly recommended.";
+            }
+            recomEl.innerText = recom;
+
+            window.scrollTo({ top: 500, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
