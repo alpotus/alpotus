@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PRIMARY SEO -->
+    <title>BMI Calculator - Accurate Body Mass Index Utility | Alpotus</title>
+    <meta name="description" content="Calculate your Body Mass Index (BMI) instantly with the Alpotus BMI Calculator. Supports Metric and Imperial units with professional health advice and classification.">
+    <meta name="keywords" content="BMI calculator, Body Mass Index, health calculator, weight checker, Alpotus calculators, free online BMI tool">
+    
+    <!-- STRUCTURED DATA (Google Rich Results) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Alpotus BMI Calculator",
+      "description": "A professional tool to calculate Body Mass Index based on height and weight.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ALPOTUS BRIDGE -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; } /* Space for fixed navbar */
+
+        .calc-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .calc-header { text-align: center; margin-bottom: 30px; }
+        .calc-header h1 { font-size: 2rem; color: var(--text-main); }
+
+        .unit-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .unit-btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .unit-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .calc-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .calc-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(250, 204, 21, 0.3); }
+
+        /* Results Area */
+        #result-area {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border-color);
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .bmi-value { font-size: 3.5rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .bmi-status { font-size: 1.2rem; font-weight: bold; margin: 10px 0; }
+        .bmi-tip { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* SEO Content Section */
+        .seo-content {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 5%;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+        .seo-content h2 { color: var(--text-main); margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP AD UNIT -->
+    <div class="ad-slot" style="max-width: 600px; margin: 0 auto 20px auto;">ADVERTISEMENT</div>
+
+    <main class="calc-container">
+        <div class="calc-header">
+            <h1>BMI Calculator</h1>
+            <p>Body Mass Index Health Tool</p>
+        </div>
+
+        <div class="unit-toggle">
+            <button class="unit-btn active" onclick="setUnits('metric')">Metric (kg/cm)</button>
+            <button class="unit-btn" onclick="setUnits('imperial')">Imperial (lbs/in)</button>
+        </div>
+
+        <div id="metric-inputs">
+            <div class="input-group">
+                <label>Weight (kg)</label>
+                <input type="number" id="weight-metric" placeholder="e.g. 70">
+            </div>
+            <div class="input-group">
+                <label>Height (cm)</label>
+                <input type="number" id="height-metric" placeholder="e.g. 175">
+            </div>
+        </div>
+
+        <div id="imperial-inputs" style="display: none;">
+            <div class="input-group">
+                <label>Weight (lbs)</label>
+                <input type="number" id="weight-imperial" placeholder="e.g. 154">
+            </div>
+            <div class="input-group">
+                <label>Height (inches)</label>
+                <input type="number" id="height-imperial" placeholder="e.g. 68">
+            </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculateBMI()">CALCULATE BMI</button>
+
+        <div id="result-area">
+            <div class="bmi-value" id="bmi-num">24.5</div>
+            <div class="bmi-status" id="bmi-stat">Normal Weight</div>
+            <p class="bmi-tip" id="bmi-tip">You have a healthy body weight. Maintain a balanced diet!</p>
+        </div>
+    </main>
+
+    <!-- SEO CONTENT SECTION (Crucial for Ranking) -->
+    <article class="seo-content">
+        <h2>What is BMI?</h2>
+        <p>Body Mass Index (BMI) is a measurement of a person's leanness or corpulence based on their height and weight, and is intended to quantify tissue mass. It is widely used as a general indicator of whether a person has a healthy body weight for their height.</p>
+        
+        <h2>How to read BMI Results?</h2>
+        <ul>
+            <li><b>Underweight:</b> BMI is less than 18.5</li>
+            <li><b>Normal weight:</b> BMI is 18.5 to 24.9</li>
+            <li><b>Overweight:</b> BMI is 25 to 29.9</li>
+            <li><b>Obese:</b> BMI is 30 or more</li>
+        </ul>
+        <p>Use the Alpotus BMI Calculator to monitor your health status. Remember, BMI is a useful tool but does not directly measure body fat or overall health.</p>
+    </article>
+
+    <div class="ad-slot" style="max-width: 800px; margin: 20px auto;">ADVERTISEMENT</div>
+
+    <script>
+        let currentUnit = 'metric';
+
+        function setUnits(unit) {
+            currentUnit = unit;
+            document.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if(unit === 'metric') {
+                document.getElementById('metric-inputs').style.display = 'block';
+                document.getElementById('imperial-inputs').style.display = 'none';
+            } else {
+                document.getElementById('metric-inputs').style.display = 'none';
+                document.getElementById('imperial-inputs').style.display = 'block';
+            }
+        }
+
+        function calculateBMI() {
+            let bmi = 0;
+            if(currentUnit === 'metric') {
+                let w = document.getElementById('weight-metric').value;
+                let h = document.getElementById('height-metric').value / 100;
+                if(w > 0 && h > 0) bmi = w / (h * h);
+            } else {
+                let w = document.getElementById('weight-imperial').value;
+                let h = document.getElementById('height-imperial').value;
+                if(w > 0 && h > 0) bmi = (w / (h * h)) * 703;
+            }
+
+            if(bmi > 0) {
+                showResult(bmi.toFixed(1));
+            } else {
+                alert("Please enter valid numbers");
+            }
+        }
+
+        function showResult(val) {
+            const res = document.getElementById('result-area');
+            const num = document.getElementById('bmi-num');
+            const stat = document.getElementById('bmi-stat');
+            const tip = document.getElementById('bmi-tip');
+
+            res.style.display = 'block';
+            num.innerText = val;
+
+            if(val < 18.5) {
+                stat.innerText = "Underweight";
+                stat.style.color = "#3498db";
+                tip.innerText = "You may need to eat more frequently and choose nutrient-rich foods.";
+            } else if(val < 25) {
+                stat.innerText = "Normal Weight";
+                stat.style.color = "#2ecc71";
+                tip.innerText = "Great job! Your weight is in the healthy range for your height.";
+            } else if(val < 30) {
+                stat.innerText = "Overweight";
+                stat.style.color = "#f1c40f";
+                tip.innerText = "Consider increasing physical activity and monitoring portion sizes.";
+            } else {
+                stat.innerText = "Obese";
+                stat.style.color = "#e74c3c";
+                tip.innerText = "It is recommended to consult with a healthcare provider for personalized advice.";
+            }
+            
+            // Scroll to result smoothly
+            res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
+
