@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 5.0 -->
+    <title>Medical Classification Challenge 5.0 | High-Yield Active Recall | Alpotus</title>
+    <meta name="description" content="Master 19 MBBS subjects with the Alpotus 5.0 Classification Engine. Active Recall clinical notes, mnemonics, and real-time mastery tracking. The gold standard for NEET PG and USMLE preparation.">
+    <meta name="keywords" content="pharmacology classification, microbiology quiz, pathology recall, medical student games, NEET PG, USMLE step 1, Alpotus 5.0 hub">
+    <link rel="canonical" href="https://www.alpotus.com/content/games/medical-challenge/index.html" />
+
+    <!-- JSON-LD FOR GOOGLE SEARCH RANKING -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Medical Challenge 5.0",
+      "description": "Advanced medical education classification game for active recall and clinical mastery.",
+      "applicationCategory": "EducationApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- GLOBAL ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../data/masterData.js"></script>
+    <script src="../../../search-engine.js"></script>
+    <script src="../../../app.js" defer></script>
+
+    <!-- LOCAL ASSETS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <!-- SCREEN 1: THE HUB (Topic Selection) -->
+        <main id="home-screen">
+            <header class="hub-header">
+                <h1>Classification <span>Hub</span></h1>
+                <p>Convert passive notes into clinical muscle memory.</p>
+            </header>
+            
+            <div class="filter-card">
+                <label class="label-tiny">Step 1: Choose Subject</label>
+                <div class="sub-row" id="subject-filters"></div>
+                
+                <div class="search-grid">
+                    <div style="flex-grow:1">
+                        <label class="label-tiny">Step 2: Chapter</label>
+                        <select id="chapter-dropdown" class="search-topics" onchange="renderTopics()">
+                            <option value="All">All Chapters</option>
+                        </select>
+                    </div>
+                    <div style="flex-grow:2">
+                        <label class="label-tiny">Step 3: Search Topic</label>
+                        <input type="text" id="topic-search" class="search-topics" placeholder="Search specific topic..." onkeyup="renderTopics()">
+                    </div>
+                </div>
+            </div>
+
+            <div id="topic-grid"></div>
+        </main>
+
+        <!-- SCREEN 2: THE ARENA (Gameplay) -->
+        <div id="game-header" style="display:none;">
+            <button class="exit-btn" onclick="location.reload()">✕ EXIT ARENA</button>
+            <div id="accuracy-stat" class="acc-badge">ACCURACY: 100%</div>
+        </div>
+
+        <main id="play-screen">
+            <aside class="pool-box">
+                <div class="pool-label">ITEM POOL</div>
+                <div id="drug-pool"></div>
+            </aside>
+            
+            <section class="bucket-grid" id="bucket-container"></section>
+        </main>
+
+        <!-- CLINICAL INSIGHTS DRAWER -->
+        <div class="console collapsed" id="game-console">
+            <div class="console-handle" onclick="toggleConsole()">
+                <span id="handle-text">📖 SHOW CLINICAL INSIGHTS</span>
+                <span class="arrow-icon">▲</span>
+            </div>
+
+            <div class="console-body">
+                <div class="note-area">
+                    <span class="note-label">High-Yield Clinical Pearl:</span>
+                    <div id="note-text">Matching correctly will reveal insights here.</div>
+                </div>
+                
+                <div class="mnem-section">
+                    <button class="mnem-toggle" onclick="toggleMnemonic()">💡 VIEW MNEMONIC</button>
+                    <div class="mnem-box" id="mnem-display"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCAL SCRIPTS -->
+    <script src="data.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
+
