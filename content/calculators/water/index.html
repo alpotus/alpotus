@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>Water Intake Calculator - Daily Hydration Requirement | Alpotus</title>
+    <meta name="description" content="Calculate your personalized daily water intake with the Alpotus Hydration Tool. Accurate results based on weight, climate, and activity. Expert guide by CEO Sukkannagari Karthik Reddy.">
+    <meta name="keywords" content="water intake calculator, daily hydration requirement, how much water to drink, hydration guide, Alpotus health tools, Sukkannagari Karthik Reddy">
+    <link rel="canonical" href="https://www.alpotus.com/content/calculators/water/index.html" />
+
+    <!-- JSON-LD STRUCTURED DATA (Medical/Health Application) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Daily Water Intake Calculator",
+      "description": "An advanced health utility to determine optimal daily hydration levels based on metabolic and environmental factors.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Sukkannagari Karthik Reddy",
+        "url": "https://www.alpotus.com/about.html"
+      },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 5%; }
+
+        /* Calculator UI */
+        .water-card {
+            background: var(--bg-card);
+            border-radius: 30px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .water-card::before {
+            content: ''; position: absolute; top:0; left:0; width: 100%; height: 8px; background: var(--primary);
+        }
+
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 8px; }
+        input, select {
+            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color);
+            background: var(--bg-body); color: var(--text-main); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .btn-calc {
+            grid-column: span 2; padding: 20px; background: var(--primary); color: #000;
+            border: none; border-radius: 50px; font-weight: 900; font-size: 1.2rem;
+            cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+        .btn-calc:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(250, 204, 21, 0.4); }
+
+        /* Result Dashboard */
+        #result-area { display: none; margin-top: 40px; text-align: center; animation: fadeInUp 0.6s ease; }
+        .main-res { font-size: 4.5rem; font-weight: 950; color: var(--text-main); line-height: 1; }
+        .main-res span { font-size: 1.5rem; color: var(--primary); }
+
+        .breakdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
+        .break-card { background: var(--bg-body); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); }
+        .break-card i { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+        .break-card h4 { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+        .break-card div { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+
+        /* SEO Knowledge Base */
+        .seo-section { margin-top: 80px; padding-bottom: 100px; }
+        .seo-section h2 { font-size: 2.2rem; font-weight: 900; color: var(--text-main); margin-bottom: 25px; border-left: 8px solid var(--primary); padding-left: 20px; }
+        .seo-section h3 { font-size: 1.5rem; margin: 30px 0 15px 0; color: var(--text-main); }
+        .seo-section p { line-height: 1.9; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+        .seo-section ul { padding-left: 20px; color: var(--text-muted); line-height: 1.8; }
+        .ceo-quote { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); margin: 40px 0; font-style: italic; }
+
+        @media (max-width: 768px) { .calc-grid { grid-template-columns: 1fr; } .btn-calc { grid-column: span 1; } .breakdown-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- TOP AD -->
+        <div class="ad-slot" style="margin-bottom:30px;">ADVERTISEMENT</div>
+
+        <section class="water-card">
+            <h1 style="text-align:center; font-weight:950; font-size: 2.5rem;">Water Intake <span style="color:var(--primary)">Calculator</span></h1>
+            <p style="text-align:center; color:var(--text-muted); margin-top:5px;">Calculate your exact biological hydration requirement.</p>
+
+            <div class="calc-grid">
+                <div class="input-group">
+                    <label>Your Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="e.g. 75" required>
+                </div>
+                <div class="input-group">
+                    <label>Activity Level</label>
+                    <select id="activity">
+                        <option value="0">Sedentary (Office Work)</option>
+                        <option value="350">Light (30m Exercise)</option>
+                        <option value="700">Moderate (1h Exercise)</option>
+                        <option value="1200">Athlete (High Intensity)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Climate / Temperature</label>
+                    <select id="climate">
+                        <option value="0">Cold / Indoor</option>
+                        <option value="300">Moderate (20-25°C)</option>
+                        <option value="600">Hot (>30°C)</option>
+                        <option value="900">Tropical / Humid</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Special Condition</label>
+                    <select id="special">
+                        <option value="0">None</option>
+                        <option value="350">Pregnant (+350ml)</option>
+                        <option value="700">Lactating (+700ml)</option>
+                    </select>
+                </div>
+                <button class="btn-calc" onclick="calculateHydration()">ANALYZE HYDRATION REQUIREMENT →</button>
+            </div>
+
+            <!-- RESULT DISPLAY -->
+            <div id="result-area">
+                <p style="text-transform: uppercase; font-weight: 800; color: var(--text-muted); font-size: 0.8rem;">Your Recommended Daily Intake</p>
+                <div class="main-res" id="res-liters">0.0 <span>Liters</span></div>
+                
+                <div class="breakdown-grid">
+                    <div class="break-card"><i>🥛</i><h4>Standard Glasses</h4><div id="res-glasses">0</div><small>(250ml each)</small></div>
+                    <div class="break-card"><i>☕</i><h4>US Cups</h4><div id="res-cups">0</div><small>(236ml each)</small></div>
+                    <div class="break-card" style="background:var(--primary); border:none;"><i>💧</i><h4 style="color:#000">In Milliliters</h4><div id="res-ml" style="color:#000">0</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- POWERFUL SEO KNOWLEDGE BASE -->
+        <article class="seo-section">
+            <h2>The Science of Hydration</h2>
+            <p>Proper hydration is the cornerstone of metabolic health. Every cell, tissue, and organ in the human body requires water to function correctly. From temperature regulation to joint lubrication and waste removal, water is the primary catalyst for life. But <strong>how much water should you drink?</strong> The old "8 glasses a day" rule is outdated and fails to account for individual biological needs.</p>
+
+            <div class="ceo-quote">
+                "At Alpotus, we believe in data-driven health. Our Water Intake Calculator doesn't just guess; it uses clinical variables including weight-to-volume ratios and environmental sweat-rate estimates to give you a precise target."
+                <br><br><strong>— Sukkannagari Karthik Reddy, CEO of Alpotus</strong>
+            </div>
+
+            <h3>How Our Algorithm Works</h3>
+            <p>The Alpotus Hydration Engine uses a base metabolic rate of <strong>33ml of water per kilogram of body mass</strong>. However, the calculation doesn't stop there. We integrate additional physiological stressors:</p>
+            <ul>
+                <li><strong>Physical Exertion:</strong> For every 30 minutes of moderate activity, your body loses roughly 350ml of fluid through perspiration.</li>
+                <li><strong>Climate Dynamics:</strong> High temperatures and humidity levels increase the rate of thermoregulation, requiring an additional 300ml to 900ml per day.</li>
+                <li><strong>Maternal Health:</strong> Pregnancy and breastfeeding significantly increase fluid volume requirements to support fetal growth and milk production.</li>
+            </ul>
+
+            <h3>Benefits of Staying Hydrated</h3>
+            <p>Maintaining the water levels calculated by our tool can lead to immediate physiological improvements:</p>
+            <ul>
+                <li><strong>Enhanced Cognitive Function:</strong> Even 1% dehydration can impair concentration and memory.</li>
+                <li><strong>Weight Management:</strong> Water increases satiety and boosts metabolic rate.</li>
+                <li><strong>Physical Performance:</strong> Proper hydration prevents the decline in endurance and strength during workouts.</li>
+                <li><strong>Skin Health:</strong> Hydrated skin maintains elasticity and appears more vibrant.</li>
+            </ul>
+
+            <h3>Expert Tips for Meeting Your Goal</h3>
+            <p>If the <strong>Alpotus Water Calculator</strong> suggests a higher intake than you are used to, try these professional tips: Carry a reusable bottle, set hourly reminders on your PWA Alpotus app, and eat water-rich foods like cucumber and watermelon.</p>
+        </article>
+
+        <!-- BOTTOM AD -->
+        <div class="ad-slot" style="margin-top:20px;">ADVERTISEMENT</div>
+    </div>
+
+    <script>
+        function calculateHydration() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const climate = parseFloat(document.getElementById('climate').value);
+            const special = parseFloat(document.getElementById('special').value);
+
+            if (!weight || weight <= 0) {
+                alert("Please enter a valid weight.");
+                return;
+            }
+
+            // Base Formula: 33ml per kg
+            let baseMl = weight * 33;
+
+            // Add Extras
+            let totalMl = baseMl + activity + climate + special;
+
+            // Update UI
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('res-liters').innerHTML = `${(totalMl / 1000).toFixed(1)} <span>Liters</span>`;
+            document.getElementById('res-ml').innerText = `${Math.round(totalMl)} ml`;
+            document.getElementById('res-glasses').innerText = Math.round(totalMl / 250);
+            document.getElementById('res-cups').innerText = Math.round(totalMl / 236);
+
+            // Scroll to results
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
+
