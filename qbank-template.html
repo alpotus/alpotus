@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Topics | Alpotus 2.0</title>
+    <link rel="stylesheet" href="qbank.css">
+    <script src="cart-logic.js"></script>
+    <style>
+        /* Chapter Chips Style */
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .filter-container::-webkit-scrollbar { display: none; }
+        
+        .chip {
+            white-space: nowrap;
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-muted);
+        }
+        .chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .topic-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn-add {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .btn-add.in-cart {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-alt);">
+
+    <main class="main-content">
+        <div id="loading">Building Clinical Hierarchy...</div>
+        
+        <div id="content-view" style="display:none;">
+            <!-- Navigation -->
+            <button onclick="location.href='mbbsqbank.html'" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; margin-bottom:20px; display:flex; align-items:center; gap:5px;">
+                ← BACK TO SUBJECTS
+            </button>
+            
+            <h1 id="sub-title" style="font-weight:950; text-transform: capitalize; margin-bottom:10px;">Subject</h1>
+            
+            <!-- Search Bar -->
+            <input type="text" id="topic-search" class="search-bar" placeholder="🔍 Search units or topics in this subject..." onkeyup="filterTopics(this.value)">
+            
+            <!-- Chapter Filters (Chips) -->
+            <div id="unit-chips" class="filter-container"></div>
+            
+            <!-- Hierarchy List -->
+            <div id="hierarchy-list"></div>
+        </div>
+    </main>
+
+    <!-- Floating Quiz Cart (Syncs with Index) -->
+    <div id="cart-float" class="cart-float" style="display:none;" onclick="CartLogic.startQuiz()">
+        <span>🚀 START CUSTOM QUIZ</span>
+        <span id="cart-count" class="badge">0</span>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const subjectId = params.get('sub');
+        let parsedData = {}; 
+
+        window.onload = () => {
+            if (!subjectId) return;
+            
+            const s = document.createElement('script');
+            s.src = `data/qbank/${subjectId}.js`;
+            document.head.appendChild(s);
+            
+            s.onload = () => {
+                parseData();
+                renderUI();
+                CartLogic.updateUI();
+            };
+        };
+
+        function parseData() {
+            const lines = window.RawInput.split('\n');
+            lines.forEach(line => {
+                const uMatch = line.match(/UNIT=([^\s]+)/);
+                const tMatch = line.match(/TOPIC=([^\s]+)/);
+                if (uMatch && tMatch) {
+                    const unit = uMatch[1];
+                    const topic = tMatch[1];
+                    if (!parsedData[unit]) parsedData[unit] = new Set();
+                    parsedData[unit].add(topic);
+                }
+            });
+        }
+
+        function renderUI() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content-view').style.display = 'block';
+            document.getElementById('sub-title').innerText = subjectId;
+
+            const chipContainer = document.getElementById('unit-chips');
+            const listContainer = document.getElementById('hierarchy-list');
+            
+            let chipsHtml = `<div class="chip active" onclick="filterByUnit('all', this)">ALL CHAPTERS</div>`;
+            let listHtml = "";
+
+            for (let unit in parsedData) {
+                const cleanUnit = unit.replace(/-/g, ' ');
+                chipsHtml += `<div class="chip" onclick="filterByUnit('${unit}', this)">${cleanUnit}</div>`;
+                
+                listHtml += `<div class="unit-box" data-unit="${unit}">
+                    <div class="unit-header">${cleanUnit}</div>`;
+                
+                parsedData[unit].forEach(topic => {
+                    const cleanTopic = topic.replace(/-/g, ' ');
+                    const inCart = CartLogic.isInCart(topic);
+                    
+                    listHtml += `
+                        <div class="card topic-card" data-topic-name="${cleanTopic.toLowerCase()}">
+                            <div>
+                                <div style="font-weight:700;">${cleanTopic}</div>
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-top:4px;">10+ High Yield Questions</div>
+                            </div>
+                            <div class="action-btns">
+                                <button class="btn-add ${inCart ? 'in-cart' : ''}" 
+                                        onclick="handleCartClick(this, '${subjectId}', '${unit}', '${topic}')">
+                                    ${inCart ? 'REMOVE' : '+ ADD TO QUIZ'}
+                                </button>
+                                <button onclick="location.href='qbank-engine.html?sub=${subjectId}&unit=${unit}&topic=${topic}'" 
+                                        style="background:none; border:none; color:var(--primary); font-weight:900; cursor:pointer; font-size:1.2rem;">➔</button>
+                            </div>
+                        </div>`;
+                });
+                listHtml += `</div>`;
+            }
+
+            chipContainer.innerHTML = chipsHtml;
+            listContainer.innerHTML = listHtml;
+        }
+
+        function handleCartClick(btn, sub, unit, topic) {
+            const added = CartLogic.toggle(sub, unit, topic);
+            if (added) {
+                btn.classList.add('in-cart');
+                btn.innerText = 'REMOVE';
+            } else {
+                btn.classList.remove('in-cart');
+                btn.innerText = '+ ADD TO QUIZ';
+            }
+        }
+
+        function filterByUnit(unitId, el) {
+            // Update Chips
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+
+            // Show/Hide Units
+            document.querySelectorAll('.unit-box').forEach(box => {
+                if (unitId === 'all' || box.getAttribute('data-unit') === unitId) {
+                    box.style.display = 'block';
+                } else {
+                    box.style.display = 'none';
+                }
+            });
+        }
+
+        function filterTopics(query) {
+            const q = query.toLowerCase();
+            document.querySelectorAll('.topic-card').forEach(card => {
+                const text = card.getAttribute('data-topic-name');
+                card.style.display = text.includes(q) ? 'flex' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

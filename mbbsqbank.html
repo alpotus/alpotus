@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Hub 2.0 | Alpotus Q-Bank</title>
+    <link rel="stylesheet" href="qbank.css">
+    <script src="data/masterdata.js"></script>
+    <script src="cart-logic.js"></script>
+</head>
+<body style="background-color: var(--bg-alt);">
+
+    <!-- Global Search Section -->
+    <header style="padding:40px 20px; text-align:center; background: white; border-bottom: 1px solid var(--border);">
+        <h1 style="font-weight:900; font-size:2.2rem; letter-spacing:-1px;">Clinical <span style="color:var(--primary);">Q-Bank 2.0</span></h1>
+        
+        <div style="position:relative; max-width:600px; margin: 25px auto 0 auto;">
+            <input type="text" id="global-search" class="search-bar" 
+                   placeholder="🔍 Search 5000+ Topics (e.g. Anemia, Hernia...)" 
+                   onkeyup="handleGlobalSearch(this.value)">
+            
+            <!-- Search Results Dropdown -->
+            <div id="search-results" class="search-results-overlay"></div>
+        </div>
+        
+        <div id="scanner-status" style="font-size:0.6rem; color:var(--text-muted); font-weight:700; margin-top:10px;">
+            SYSTEM STATUS: READY
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Subject Grid -->
+        <h2 style="font-size:0.8rem; font-weight:900; color:var(--text-muted); margin-bottom:20px; text-transform:uppercase; letter-spacing:1px;">Core Clinical Subjects</h2>
+        <div class="v5-grid" id="q-grid"></div>
+    </main>
+
+    <!-- Floating Quiz Cart -->
+    <div id="cart-float" class="cart-float" style="display:none;" onclick="CartLogic.startQuiz()">
+        <span>🚀 START CUSTOM QUIZ</span>
+        <span id="cart-count" class="badge">0</span>
+    </div>
+
+   <script>
+    // Global variable to store all topics from all 19 subjects for the search engine
+    let searchIndex = []; 
+
+    window.onload = () => {
+        // 1. Check if masterData loaded, then render the 19 cards
+        if (typeof AlpotusData !== 'undefined') {
+            renderSubjectGrid();
+        } else {
+            console.error("MasterData.js not found. Check your file paths.");
+            document.getElementById('q-grid').innerHTML = "Error loading subject data.";
+        }
+
+        // 2. Start the background scanner to build the search index
+        autoScanAllSubjects();
+
+        // 3. Update the floating quiz cart visibility
+        if (typeof CartLogic !== 'undefined') {
+            CartLogic.updateUI();
+        }
+    };
+
+    // 1. RENDER SUBJECT GRID: Creates the 19 cards automatically
+    function renderSubjectGrid() {
+        const grid = document.getElementById('q-grid');
+        // This loops through exactly what is inside your masterData.js
+        grid.innerHTML = AlpotusData.mbbs.items.map(sub => `
+            <div class="v5-card" onclick="location.href='qbank-template.html?sub=${sub.id}'">
+                <div style="font-size:2.5rem; margin-bottom:10px; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.1));">
+                    ${sub.icon}
+                </div>
+                <h3>${sub.name}</h3>
+                <div style="font-size:0.6rem; font-weight:900; color:var(--primary); margin-top:15px; letter-spacing:1px; opacity:0.8;">
+                    EXPLORE SUBJECT →
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 2. AUTO-SCAN LOGIC: Reads all 19 .js files in background to enable search
+    async function autoScanAllSubjects() {
+        const status = document.getElementById('scanner-status');
+        const subjects = AlpotusData.mbbs.items;
+        
+        status.innerText = "🔍 SCANNING 19 SUBJECTS...";
+
+        for (let sub of subjects) {
+            try {
+                // Fetch the file as text to avoid loading 19 scripts into memory at once
+                const response = await fetch(`data/qbank/${sub.id}.js`);
+                if (!response.ok) continue; // Skip if file doesn't exist yet
+                
+                const text = await response.text();
+                const lines = text.split('\n');
+
+                lines.forEach(line => {
+                    // Look for lines containing both UNIT and TOPIC
+                    if (line.includes('UNIT=') && line.includes('TOPIC=')) {
+                        const uMatch = line.match(/UNIT=([^\s]+)/);
+                        const tMatch = line.match(/TOPIC=([^\s]+)/);
+                        
+                        if (uMatch && tMatch) {
+                            const unit = uMatch[1];
+                            const topic = tMatch[1];
+
+                            // Add to index if this topic isn't already there
+                            const exists = searchIndex.find(i => i.topic === topic && i.subId === sub.id);
+                            if (!exists) {
+                                searchIndex.push({
+                                    subId: sub.id,
+                                    subName: sub.name,
+                                    unit: unit,
+                                    topic: topic
+                                });
+                            }
+                        }
+                    }
+                });
+            } catch (e) { 
+                console.warn(`Scanner: ${sub.id}.js not ready yet.`); 
+            }
+        }
+        status.innerText = `✅ INDEXED ${searchIndex.length} TOPICS ACROSS 19 SUBJECTS`;
+    }
+
+    // 3. GLOBAL SEARCH HANDLER: Shows dropdown results
+    function handleGlobalSearch(val) {
+        const container = document.getElementById('search-results');
+        
+        // Only start searching after 2 characters
+        if (val.length < 2) {
+            container.style.display = 'none';
+            return;
+        }
+
+        const query = val.toLowerCase();
+        
+        // Filter the index we built during Auto-Scan
+        const filtered = searchIndex.filter(i => 
+            i.topic.toLowerCase().replace(/-/g, ' ').includes(query) || 
+            i.unit.toLowerCase().replace(/-/g, ' ').includes(query)
+        ).slice(0, 10); // Show only top 10 results for speed
+
+        if (filtered.length > 0) {
+            container.style.display = 'block';
+            container.innerHTML = filtered.map(i => `
+                <div class="search-item" onclick="location.href='qbank-engine.html?sub=${i.subId}&unit=${i.unit}&topic=${i.topic}'">
+                    <div>
+                        <div style="font-weight:800; color:var(--text); font-size:0.9rem;">
+                            ${i.topic.replace(/-/g, ' ')}
+                        </div>
+                        <div style="font-size:0.65rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; margin-top:2px;">
+                            ${i.subName} • ${i.unit.replace(/-/g, ' ')}
+                        </div>
+                    </div>
+                    <span style="color:var(--primary); font-weight:900;">➔</span>
+                </div>
+            `).join('');
+        } else {
+            container.style.display = 'block';
+            container.innerHTML = `
+                <div style="padding:20px; text-align:center; color:var(--text-muted); font-size:0.8rem; font-weight:600;">
+                    No clinical topics found matching "${val}"
+                </div>`;
+        }
+    }
+
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#global-search')) {
+            document.getElementById('search-results').style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

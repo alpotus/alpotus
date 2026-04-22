@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /assets/icons/
+
+Sitemap: https://www.alpotus.com/sitemap.xml

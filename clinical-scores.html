@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>Clinical Scores & Medical Scales | GCS, APGAR, CURB-65 - Alpotus</title>
+    <meta name="description" content="Access a comprehensive database of medical clinical scores including GCS, APGAR, MELD, and SOFA. Professional calculators for healthcare providers by Alpotus.">
+    <meta name="keywords" content="clinical scores, medical scales, GCS calculator, APGAR score, MELD score, CURB-65, SOFA score, medical utilities, Alpotus">
+    <link rel="canonical" href="https://www.alpotus.com/clinical-scores.html" />
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="style.css">
+    <script src="data/masterData.js"></script>
+    <script src="search-engine.js"></script>
+    <script src="app.js" defer></script>
+
+    <style>
+        .category-hero {
+            padding: 120px 5% 40px 5%;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .category-hero h1 { font-size: 2.5rem; font-weight: 900; color: var(--text-main); }
+        .category-hero p { color: var(--text-muted); margin-top: 10px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        
+        .filter-wrap { max-width: 500px; margin: 30px auto 0 auto; position: relative; }
+        .filter-input { 
+            width: 100%; padding: 15px 25px; border-radius: 50px; 
+            border: 2px solid var(--border-color); background: var(--bg-body);
+            color: var(--text-main); outline: none; transition: var(--transition);
+        }
+        .filter-input:focus { border-color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <header class="category-hero">
+        <h1>📋 Clinical <span>Scores</span></h1>
+        <p>A library of validated medical scoring systems and clinical scales for healthcare professionals.</p>
+        
+        <div class="filter-wrap">
+            <input type="text" id="localSearch" class="filter-input" placeholder="Filter clinical scores..." onkeyup="filterLocal()">
+        </div>
+    </header>
+
+    <!-- TOP AD -->
+    <div class="ad-slot" style="margin: 20px 5%;">ADVERTISEMENT (TOP)</div>
+
+    <main class="grid-container" id="category-grid">
+        <!-- JS will auto-render scores from masterData here -->
+    </main>
+
+    <!-- BOTTOM AD -->
+    <div class="ad-slot" style="margin: 40px 5%;">ADVERTISEMENT (BOTTOM)</div>
+
+    <script>
+        /**
+         * SMART RENDERER
+         * Pulls only 'scores' items from the Master Brain
+         */
+        function renderItems(data) {
+            const grid = document.getElementById('category-grid');
+            if (!grid) return;
+
+            grid.innerHTML = data.map(item => `
+                <article class="card" onclick="window.location.href='${item.path}'">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">${item.icon}</div>
+                    <h3>${item.name}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">${item.desc}</p>
+                    <div style="margin-top:15px; font-weight:bold; color:var(--primary-hover); font-size:0.8rem;">OPEN SCALE →</div>
+                </article>
+            `).join('');
+        }
+
+        function filterLocal() {
+            const query = document.getElementById('localSearch').value.toLowerCase();
+            const filtered = AlpotusData.scores.items.filter(i => 
+                i.name.toLowerCase().includes(query) || i.desc.toLowerCase().includes(query)
+            );
+            renderItems(filtered);
+        }
+
+        window.addEventListener('load', () => {
+            if (typeof AlpotusData !== 'undefined') {
+                renderItems(AlpotusData.scores.items);
+            }
+        });
+    </script>
+</body>
+</html>

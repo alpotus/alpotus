@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- PRIMARY SEO 5.0 -->
+    <title>Alpotus | Professional Medical Library, Clinical Scores & Web Utilities</title>
+    <meta name="description" content="Alpotus 5.0 is a premium digital ecosystem for medical professionals. Access the 19-subject MBBS Library, clinical calculators (GCS, MELD, CrCl), and professional web tools offline. Optimized for speed and privacy.">
+    <meta name="keywords" content="Alpotus, MBBS library, medical notes, clinical scores, BMI calculator, GCS calculator, pharmacology games, web utilities,y, medical student tools">
+    <link rel="canonical" href="https://www.alpotus.com/index.html" />
+
+    <!-- OPEN GRAPH / SOCIAL MEDIA SEO -->
+    <meta property="og:title" content="Alpotus Digital Hub - High-Yield Medical & Web Utilities">
+    <meta property="og:description" content="Access professional tools, medical scores, and 19-subject library in one unified app.">
+    <meta property="og:url" content="https://www.alpotus.com/index.html">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/icons/icon-512.png">
+
+    <!-- PWA CONFIGURATION -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#facc15">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- JSON-LD STRUCTURED DATA (Google E-E-A-T) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Digital Hub 5.0",
+      "url": "https://www.alpotus.com",
+      "applicationCategory": "MedicalApplication, UtilitiesApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "",
+        "jobTitle": "CEO & Founder"
+      },
+      "description": "A comprehensive digital suite offering medical education, clinical scoring systems, and professional web tools."
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="style.css">
+    <script src="data/masterData.js"></script>
+    <script src="search-engine.js"></script>
+    <script src="app.js" defer></script>
+
+    <style>
+        /* VERSION 5.0 ENHANCED HOME STYLES */
+        .home-hero {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(250, 204, 21, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 30px;
+        }
+
+        .home-hero h1 { font-size: 2.8rem; font-weight: 950; line-height: 1; margin-bottom: 10px; }
+        .home-hero h1 span { color: var(--primary-dark); }
+        .home-hero p { color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+        .section-label { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 20px; margin-bottom: 15px; 
+        }
+        .section-label h2 { font-size: 1.3rem; font-weight: 900; }
+        .section-label span { font-size: 0.75rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; }
+
+        /* Unified Category Grid */
+        .v5-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 20px;
+        }
+
+        .v5-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 25px 20px;
+            border-radius: 24px;
+            text-align: center;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .v5-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .v5-card i { font-style: normal; font-size: 2.5rem; display: block; margin-bottom: 12px; transition: 0.3s; }
+        .v5-card:hover i { transform: scale(1.2) rotate(5deg); }
+        .v5-card h3 { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
+        .v5-card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
+
+        /* Special Highlighting for MBBS */
+        .v5-card.premium {
+            grid-column: span 2;
+            background: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 20px;
+            border: none;
+        }
+        .v5-card.premium h3 { color: var(--primary); font-size: 1.4rem; }
+        .v5-card.premium p { color: #ccc; font-size: 0.85rem; }
+
+        /* SEO Footer Section (Hidden for App Feel, but readable by Google) */
+        .seo-footer { padding: 60px 20px 20px 20px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+        .seo-footer b { color: var(--text-main); }
+        
+        /* --- HERO LOGO STYLING --- */
+.hero-logo-box {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-logo {
+    width: 100px; /* Standard professional size */
+    height: 100px;
+    border-radius: 24px; /* Matches your card design */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 3px solid var(--primary);
+    background: #fff;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: heroLogoFade 1s ease-out;
+}
+
+.hero-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Smooth entry animation */
+@keyframes heroLogoFade {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Adjust for mobile */
+@media (max-width: 600px) {
+    .hero-logo {
+        width: 80px;
+        height: 80px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <!-- HERO SECTION -->
+<header class="home-hero">
+    <!-- NEW LOGO SNIPPET START -->
+    <div class="hero-logo-box">
+        <img src="assets/icons/icon-512.png" alt="Alpotus Logo" class="hero-logo">
+    </div>
+    <!-- NEW LOGO SNIPPET END -->
+
+    <h1>AL<span>POTUS</span> 5.0</h1>
+    <p>Simplified Clinical Excellence. Master Medicine with professional tools and high-yield notes.</p>
+</header>
+
+    <!-- TRENDING SECTION -->
+    <div class="section-label">
+        <h2>🔥 Trending <span>Latest Updates</span></h2>
+    </div>
+    <div class="trending-wrapper" id="trending-container">
+        <!-- JS Auto-renders newest 5 items -->
+    </div>
+
+    <!-- MAIN CATEGORY GRID -->
+    <div class="section-label" style="margin-top: 30px;">
+        <h2>📂 Categories <span>Explore All</span></h2>
+    </div>
+    
+    <div class="v5-grid">
+        <!-- 1. MBBS Library (Premium Column) -->
+        <div class="v5-card premium" onclick="location.href='mbbs-library.html'">
+            <i style="font-size: 3.5rem;">📚</i>
+            <div>
+                <h3>MBBS Mastery Library</h3>
+                <p>19 subjects with Active Recall & Anki export logic.</p>
+            </div>
+        </div>
+        
+        <!-- 4. Flashcard Arena -->
+<div class="v5-card" onclick="location.href='flashcards.html'" style="border-color: #3b82f6;">
+    <i style="color: #3b82f6;">🗃️</i>
+    <h3>Flashcard Arena</h3>
+    <p>3D Flip Cards & Spaced Repetition.</p>
+    <div style="position:absolute; top:10px; right:10px; font-size:0.5rem; background:#3b82f6; color:#fff; padding:2px 6px; border-radius:10px; font-weight:900;">SRS</div>
+</div>
+        
+        <!-- 3. Clinical Q-Bank -->
+<div class="v5-card" onclick="location.href='mbbsqbank.html'" style="border-color: #22c55e;">
+    <i style="color: #22c55e;">🎯</i>
+    <h3>Q-Bank</h3>
+    <p>Subject-wise MCQs & Analytics.</p>
+    <div style="position:absolute; top:10px; right:10px; font-size:0.5rem; background:#22c55e; color:#fff; padding:2px 6px; border-radius:10px; font-weight:900;">NEW</div>
+</div>
+
+       
+
+        <!-- 3. Clinical Scores -->
+        <div class="v5-card" onclick="location.href='clinical-scores.html'">
+            <i>📋</i>
+            <h3>Scores</h3>
+            <p>GCS, SOFA, MELD tools.</p>
+        </div>
+
+        <!-- 4. Web Tools -->
+        <div class="v5-card" onclick="location.href='tools.html'">
+            <i>🛠️</i>
+            <h3>Web Tools</h3>
+            <p>AI Notes & Image Resizer.</p>
+        </div>
+
+        <!-- 5. Calculators -->
+        <div class="v5-card" onclick="location.href='calculators.html'">
+            <i>🧮</i>
+            <h3>Calculators</h3>
+            <p>BMI, BMR & Renal math.</p>
+        </div>
+<!-- 2. Interactive Games -->
+<div class="v5-card" onclick="location.href='games.html'">
+    <i>🎮</i>
+    <h3>Games</h3>
+    <p>Pharma & clinical triads.</p>
+</div>
+
+        <!-- 6. Knowledge Hub -->
+        <div class="v5-card" style="grid-column: span 2;" onclick="location.href='articles.html'">
+            <div style="display:flex; align-items:center; justify-content: center; gap: 15px;">
+                <i>📑</i>
+                <div style="text-align:left">
+                    <h3>Knowledge Hub</h3>
+                    <p>Clinical research, articles, and surgical step-by-step guides.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO FOOTER (Visible at bottom of scroll) -->
+    <footer class="seo-footer">
+        <p>© 2026 <b>Alpotus Digital Hub</b> <b></b> </p>
+        <p style="margin-top:5px; opacity:0.6;">Built for medical education and clinical productivity.</p>
+    </footer>
+
+    <script>
+    /**
+     * VERSION 5.0 DYNAMIC TRENDING ENGINE (FIXED)
+     */
+    window.addEventListener('load', () => {
+        const container = document.getElementById('trending-container');
+        // Safety check: stop if container or data is missing
+        if (!container || typeof AlpotusData === 'undefined') return;
+
+        const allItems = [];
+        
+        // 1. Combine all categories into one list
+        for (const categoryKey in AlpotusData) {
+            const category = AlpotusData[categoryKey];
+            
+            // Ensure the category has an items array before looping
+            if (category && Array.isArray(category.items)) {
+                category.items.forEach(item => {
+                    allItems.push({ 
+                        ...item, 
+                        categoryName: category.title || categoryKey 
+                    });
+                });
+            }
+        }
+
+        // 2. Sort by date and take top 5
+        // Added filter to only show items that actually have a date
+        const trending = allItems
+            .filter(item => item.date) 
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5);
+
+        // 3. Render items with Safety Fallbacks
+        container.innerHTML = trending.map(item => {
+            // FIX: If desc is missing, use a fallback string
+            const rawDesc = item.desc || "Explore the latest clinical notes and tools.";
+            const shortDesc = rawDesc.length > 60 ? rawDesc.substring(0, 60) + "..." : rawDesc;
+            
+            // FIX: Fallback for missing path
+            const targetPath = item.path || "mbbsqbank.html";
+
+            return `
+                <div class="card trending-item" onclick="location.href='${targetPath}'">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">${item.icon}</div>
+                    <span style="font-size: 0.65rem; font-weight: 900; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 1px;">
+                        ${item.categoryName}
+                    </span>
+                    <h4 style="margin: 5px 0; font-size: 1rem;">${item.name}</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                        ${shortDesc}
+                    </p>
+                </div>
+            `;
+        }).join('');
+    });
+</script>
+</body>
+</html>

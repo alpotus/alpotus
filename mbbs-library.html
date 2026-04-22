@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alpotus Mededge | Professional Medical Dashboard</title>
+    
+    <!-- Import Modular Core CSS -->
+    <link rel="stylesheet" href="data/mbbs/mbbs-style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* DASHBOARD SPECIFIC ANIMATIONS */
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .subject-card {
+            background: var(--page); 
+            border: 1px solid var(--border);
+            padding: 50px 30px; 
+            border-radius: var(--radius-lg); 
+            text-decoration: none;
+            color: inherit; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            text-align: center; 
+            box-shadow: var(--shadow-sm);
+            animation: cardEntrance 0.6s ease backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Desktop Hover Effect */
+        .subject-card:hover {
+            transform: translateY(-15px) rotate(0.5deg);
+            border-color: var(--primary-red);
+            box-shadow: 0 30px 60px -15px rgba(190, 18, 60, 0.2);
+            background: var(--page);
+        }
+
+        .sub-icon { 
+            font-size: 4.5rem; 
+            margin-bottom: 25px; 
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.08)); 
+            transition: 0.4s ease;
+        }
+
+        .subject-card:hover .sub-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .sub-name { 
+            font-weight: 900; 
+            font-size: 1.4rem; 
+            margin-bottom: 10px; 
+            letter-spacing: -0.5px; 
+            color: var(--text-main);
+        }
+
+        .sub-phase { 
+            font-size: 0.8rem; 
+            color: var(--text-sub); 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+        }
+
+        .sub-go { 
+            margin-top: 30px; 
+            font-size: 0.85rem; 
+            font-weight: 900; 
+            color: var(--primary-red); 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .subject-card:hover .sub-go {
+            border-color: var(--primary-red);
+            background: rgba(190, 18, 60, 0.04);
+        }
+
+        #empty-view { grid-column: 1/-1; text-align: center; padding: 100px; opacity: 0.5; font-size: 1.5rem; font-weight: 800; }
+
+        @media (max-width: 768px) {
+            .subject-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .subject-card { padding: 35px 15px; border-radius: 20px; }
+            .sub-icon { font-size: 3rem; }
+            .sub-name { font-size: 1.15rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TITAN MASTER HEADER (Dashboard Version) -->
+    <header>
+        <div class="header-inner">
+            <div class="top-row">
+                <div class="brand" onclick="location.href='mbbs-library.html'">
+                    ALPOTUS <span>MEDEDGE</span>
+                </div>
+                <button class="theme-switch" onclick="toggleDark()" id="themeBtn">NIGHT MODE</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="libSearch" class="search-bar" placeholder="Search Subjects (e.g. Anatomy, Pharma)..." onkeyup="filterGrid()">
+            </div>
+        </div>
+        <div class="banner-strip">19 Subjects • Clinical Integrated High-Yield Notes • v2.0 Titan Pro</div>
+    </header>
+
+    <!-- MAIN SUBJECT GRID -->
+    <main class="grid-wrapper">
+        <div class="subject-grid" id="mainGrid">
+            <!-- Cards Rendered via JS -->
+        </div>
+        <div id="empty-view" style="display:none;">No subjects found.</div>
+    </main>
+
+    <!-- Scroll to Top -->
+    <div class="fab" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+    <!-- Data Import -->
+    <script src="data/mbbs/mbbs-library-data.js"></script>
+    <script>
+        // Renders all subjects listed in the Registry
+        function renderDashboard() {
+            const grid = document.getElementById('mainGrid');
+            if(!window.AlpotusRegistry) {
+                grid.innerHTML = "<div style='grid-column: 1/-1; text-align:center;'>Registry data missing.</div>";
+                return;
+            }
+
+            const subjectKeys = Object.keys(AlpotusRegistry);
+            grid.innerHTML = subjectKeys.map((key, index) => {
+                const sub = AlpotusRegistry[key];
+                return `
+                <a href="mbbs-explorer.html?sub=${key}" class="subject-card" data-name="${sub.title.toLowerCase()}" style="animation-delay: ${index * 0.04}s">
+                    <div class="sub-icon">${sub.icon}</div>
+                    <div class="sub-name">${sub.title}</div>
+                    <div class="sub-phase">${sub.phase}</div>
+                    <div class="sub-go">Explore Notes →</div>
+                </a>`;
+            }).join('');
+        }
+
+        // Real-time grid search
+        function filterGrid() {
+            const query = document.getElementById('libSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.subject-card');
+            let hasMatch = false;
+
+            cards.forEach(card => {
+                const name = card.dataset.name;
+                if(name.includes(query)) {
+                    card.style.display = "flex";
+                    hasMatch = true;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+            document.getElementById('empty-view').style.display = hasMatch ? "none" : "block";
+        }
+
+        // Theme Management
+        function toggleDark() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('alpotus_theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeBtn').innerText = isDark ? 'DAY MODE' : 'NIGHT MODE';
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderDashboard();
+            if (localStorage.getItem('alpotus_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeBtn').innerText = 'DAY MODE';
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flashcard Arena | Alpotus 5.0</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #0f172a; color: white; overflow: hidden; height: 100vh; margin: 0; }
+        
+        /* 1. TOP BAR & PROGRESS */
+        .arena-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .stats { display: flex; gap: 15px; font-weight: 800; font-size: 0.9rem; }
+        
+        .timer-container { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 6px; 
+            background: rgba(255,255,255,0.1); display: none; 
+        }
+        #timer-bar { height: 100%; width: 100%; background: #ef4444; transition: width 0.1s linear; }
+
+        /* 2. THE 3D STAGE */
+        .stage { 
+            height: calc(100vh - 180px); display: flex; align-items: center; justify-content: center;
+            perspective: 1200px; padding: 20px;
+        }
+        
+        .card-3d {
+            width: 100%; max-width: 400px; height: 450px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .card-3d.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute; inset: 0; backface-visibility: hidden;
+            background: #ffffff; color: #1e293b; border-radius: 30px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        .face-back { transform: rotateY(180deg); background: #f8fafc; }
+
+        .card-text { font-size: 1.5rem; font-weight: 800; line-height: 1.4; }
+        .card-source { font-size: 0.7rem; color: #6366f1; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; }
+        .card-img { max-width: 100%; max-height: 250px; border-radius: 15px; margin-top: 20px; border: 1px solid #e2e8f0; }
+
+        /* 3. SRS CONTROLS */
+        .controls {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; display: none; grid-template-columns: repeat(3, 1fr); gap: 15px;
+        }
+        .srs-btn {
+            border: none; padding: 20px 10px; border-radius: 20px; color: white;
+            font-weight: 900; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+        }
+        .btn-hard { background: #ef4444; }
+        .btn-good { background: #3b82f6; }
+        .btn-easy { background: #22c55e; }
+        .srs-btn:active { transform: scale(0.95); }
+
+        /* 4. REPORT SCREEN */
+        .report-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 2000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; text-align: center;
+        }
+        .stat-circle { width: 120px; height: 120px; border: 8px solid #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; margin-bottom: 20px; }
+
+        @media (max-height: 700px) { .card-3d { height: 380px; } .card-text { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- Blitz Timer -->
+    <div class="timer-container" id="timer-container">
+        <div id="timer-bar"></div>
+    </div>
+
+    <header class="arena-header">
+        <button onclick="window.location.href='checkout.html'" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">✕</button>
+        <div class="stats">
+            <span>LEFT: <span id="count-left">0</span></span>
+            <span style="color:#22c55e">DONE: <span id="count-done">0</span></span>
+        </div>
+    </header>
+
+    <main class="stage">
+        <div class="card-3d" id="main-card" onclick="flipCard()">
+            <!-- Front -->
+            <div class="card-face face-front">
+                <div class="card-source" id="source-text">SUBJECT > TOPIC</div>
+                <div class="card-text" id="front-text">Loading deck...</div>
+                <div style="margin-top:30px; font-size:0.7rem; opacity:0.5; font-weight:800;">TAP TO REVEAL</div>
+            </div>
+            <!-- Back -->
+            <div class="card-face face-back">
+                <div class="card-source">EXPLANATION</div>
+                <div class="card-text" id="back-text">...</div>
+                <div id="image-container"></div>
+                <div style="margin-top:30px; font-size:0.7rem; opacity:0.5; font-weight:800;">RATE DIFFICULTY</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating SRS Buttons -->
+    <div class="controls" id="srs-controls">
+        <button class="srs-btn btn-hard" onclick="handleSRS('hard')">HARD<br><small>Re-learn</small></button>
+        <button class="srs-btn btn-good" onclick="handleSRS('good')">GOOD<br><small>Remembered</small></button>
+        <button class="srs-btn btn-easy" onclick="handleSRS('easy')">EASY<br><small>Mastered</small></button>
+    </div>
+
+    <!-- Final Analysis Overlay -->
+    <div id="report-screen" class="report-overlay">
+        <div class="stat-circle" id="final-acc">0%</div>
+        <h1 style="margin:0">Session Complete!</h1>
+        <p id="session-summary" style="color:#94a3b8; margin: 10px 0 30px 0;">You mastered 0 cards today.</p>
+        <button class="btn-launch" style="width:100%; max-width:300px; background:#6366f1; color:white; border:none; padding:20px; border-radius:15px; font-weight:900; cursor:pointer;" onclick="window.location.href='flashcards.html'">RETURN TO HUB</button>
+    </div>
+
+    <script src="js/flashcardsData.js"></script>
+    <script src="js/srs-core.js"></script>
+    <script src="js/viewer-engine.js"></script>
+</body>
+</html>

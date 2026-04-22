@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Titan Explorer | Alpotus Mededge</title>
+    
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="data/mbbs/mbbs-style.css">
+    <link rel="stylesheet" href="data/mbbs/mbbsnotes-element.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- EXPLORER UI UPGRADES (FULL WIDTH) --- */
+        .explorer-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 40px 8% 120px !important; /* Matches note-page padding */
+            box-sizing: border-box;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+        .breadcrumb {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .breadcrumb:hover { color: var(--primary-red); transform: translateX(-5px); }
+
+        .subject-title-main {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        /* --- LIST CARD (100% WIDTH) --- */
+        .list-card {
+            background: var(--page);
+            padding: 28px 35px;
+            border-radius: 22px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border) !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            width: 100% !important;
+            box-sizing: border-box;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .list-card:hover {
+            border-color: var(--primary-red) !important;
+            transform: translateX(12px);
+            background: rgba(225, 29, 72, 0.02);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-meta { font-size: 0.7rem; font-weight: 900; color: var(--text-sub); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .card-title { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+        .card-arrow { font-size: 1.5rem; color: var(--border); transition: 0.3s; }
+        .list-card:hover .card-arrow { color: var(--primary-red); transform: rotate(-45deg); }
+
+        /* --- SEARCH UI OVERRIDES --- */
+        .search-results-box {
+            position: absolute; top: 100%; left: 0;
+            background: var(--page); width: 100%; 
+            border: 1px solid var(--border); display: none; 
+            max-height: 400px; overflow-y: auto; z-index: 10000; 
+            border-radius: 18px; box-shadow: var(--shadow-lg);
+            margin-top: 10px;
+        }
+        .search-item { padding: 18px 25px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .search-item:hover { background: rgba(225, 29, 72, 0.04); }
+        .search-item .t-name { font-weight: 800; color: var(--text-main); }
+        .search-item .c-name { font-size: 0.7rem; color: var(--primary-red); font-weight: 900; text-transform: uppercase; }
+
+        /* Correction for Header Padding since View Bar is removed */
+        body { padding-top: 145px !important; }
+
+        body.dark-mode .list-card:hover { background: #1e293b; }
+    </style>
+
+    <script>
+        // --- GLOBAL UTILITIES ---
+        window.toggleTheme = function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('alpotus_theme', isDark ? 'dark' : 'light');
+            const btn = document.getElementById('tBtn');
+            if(btn) btn.innerText = isDark ? 'DAY' : 'NIGHT';
+        };
+    </script>
+</head>
+<body>
+
+    <!-- TITAN HEADER (Cleaned: No View Bar) -->
+    <header>
+        <div class="header-inner">
+            <div class="top-row">
+                <div class="brand" onclick="location.href='mbbs-library.html'">
+                    ALPOTUS <span>MEDEDGE</span>
+                </div>
+                <button class="theme-switch" onclick="toggleTheme()" id="tBtn">NIGHT</button>
+            </div>
+            
+            <!-- Global Search Container -->
+            <div class="search-container">
+                <input type="text" id="uSearch" class="search-bar" placeholder="Search topics in this subject..." onkeyup="doLocalSearch()">
+                <div id="resBox" class="search-results-box"></div>
+            </div>
+        </div>
+
+        <div class="banner-strip">
+            19 Subjects • Clinical Integrated High-Yield Notes • v2.0 Titan Pro
+        </div>
+    </header>
+
+    <!-- EXPLORER VIEWPORT -->
+    <main class="explorer-container" id="view-port">
+        <!-- Content dynamically generated -->
+    </main>
+
+    <div class="fab" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+    <!-- Data Registry -->
+    <script src="data/mbbs/mbbs-library-data.js"></script>
+    
+    <script>
+        let currentSub = "", currentCh = "";
+
+        // --- EXPLORER ENGINE ---
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            currentSub = params.get('sub'); 
+            currentCh = params.get('ch'); 
+            
+            if(!currentSub || !window.AlpotusRegistry[currentSub]) { 
+                location.href = "mbbs-library.html"; 
+                return; 
+            }
+
+            // Sync Persistent Theme
+            if(localStorage.getItem('alpotus_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                const btn = document.getElementById('tBtn');
+                if(btn) btn.innerText = "DAY";
+            }
+
+            renderExplorer();
+        };
+
+        function renderExplorer() {
+            const vp = document.getElementById('view-port');
+            const subject = AlpotusRegistry[currentSub];
+            vp.innerHTML = ""; 
+
+            // VIEW 1: TOPIC LIST (Inside a Chapter)
+            if(currentCh) {
+                const chapter = subject.chapters.find(c => c.name === currentCh);
+                if(!chapter) { nav(currentSub); return; }
+
+                vp.innerHTML = `
+                    <div class="breadcrumb" onclick="nav('${currentSub}')">← ALL ${subject.title.toUpperCase()} CHAPTERS</div>
+                    <h1 class="subject-title-main">${chapter.name}</h1>
+                    ${chapter.topics.map(t => `
+                        <div class="list-card" onclick="location.href='${t.file}'">
+                            <div>
+                                <span class="card-meta">Clinical Integrated Note</span>
+                                <span class="card-title">${t.title}</span>
+                            </div>
+                            <div class="card-arrow">↗</div>
+                        </div>`).join('')}
+                `;
+            } 
+            // VIEW 2: CHAPTER LIST (Subject Landing)
+            else {
+                vp.innerHTML = `
+                    <div class="breadcrumb" onclick="location.href='mbbs-library.html'">← MBBS DASHBOARD</div>
+                    <h1 class="subject-title-main" style="color:var(--primary-red)">${subject.title}</h1>
+                    ${subject.chapters.map(ch => `
+                        <div class="list-card" onclick="nav('${currentSub}','${ch.name}')">
+                            <div>
+                                <span class="card-meta">${ch.topics.length} High-Yield Topics Available</span>
+                                <span class="card-title">${ch.name}</span>
+                            </div>
+                            <div class="card-arrow">→</div>
+                        </div>`).join('')}
+                `;
+            }
+            window.scrollTo(0,0);
+        }
+
+        // --- NAVIGATION & SEARCH ---
+        window.nav = function(s, c) {
+            let url = `mbbs-explorer.html?sub=${s}`;
+            if(c) url += `&ch=${encodeURIComponent(c)}`;
+            window.history.pushState({}, "", url);
+            currentSub = s; currentCh = c || ""; 
+            renderExplorer();
+        };
+
+        window.doLocalSearch = function() {
+            const q = document.getElementById('uSearch').value.toLowerCase();
+            const resBox = document.getElementById('resBox');
+            if(q.length < 2) { resBox.style.display = "none"; return; }
+
+            let html = "";
+            const subject = AlpotusRegistry[currentSub];
+            subject.chapters.forEach(ch => {
+                ch.topics.forEach(t => {
+                    if(t.title.toLowerCase().includes(q)) {
+                        html += `
+                        <div class="search-item" onclick="location.href='${t.file}'">
+                            <div class="c-name">${ch.name}</div>
+                            <div class="t-name">${t.title}</div>
+                        </div>`;
+                    }
+                });
+            });
+
+            resBox.innerHTML = html || `<div style="padding:30px; text-align:center; font-weight:700; opacity:0.5;">No results found in ${subject.title}.</div>`;
+            resBox.style.display = "block";
+        };
+
+        // Close search when clicking outside
+        document.addEventListener('click', (e) => {
+            const resBox = document.getElementById('resBox');
+            if(resBox && !e.target.closest('.search-container')) resBox.style.display = "none";
+        });
+
+        // Browser Back Button Support
+        window.onpopstate = () => {
+            const params = new URLSearchParams(window.location.search);
+            currentSub = params.get('sub'); currentCh = params.get('ch');
+            renderExplorer();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "name": "Alpotus Digital Hub 5.0",
+  "short_name": "Alpotus",
+  "description": "Premium MBBS Library, Clinical Scores, and Professional Web Utilities managed by Sukkannagari Karthik Reddy.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#facc15",
+  "theme_color": "#facc15",
+  "orientation": "portrait-primary",
+  "categories": [
+    "medical",
+    "education",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "MBBS Library",
+      "short_name": "Library",
+      "description": "Access 19-subject medical notes and active recall tools",
+      "url": "mbbs-library.html",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Clinical Scores",
+      "short_name": "Scores",
+      "description": "Calculate GCS, MELD, and other clinical scales",
+      "url": "clinical-scores.html",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/images/screenshot-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Alpotus Mobile Interface"
+    },
+    {
+      "src": "assets/images/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Alpotus Unified Dashboard"
+    }
+  ]
+}

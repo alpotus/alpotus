@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Engine 2.0 | Alpotus</title>
+    <link rel="stylesheet" href="qbank.css">
+    <script src="cart-logic.js"></script>
+    <style>
+        .analysis-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 12px; overflow: hidden; }
+        .analysis-table th { background: var(--primary-light); color: var(--primary-dark); padding: 12px; text-align: left; font-size: 0.7rem; text-transform: uppercase; }
+        .analysis-table td { padding: 15px 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; font-weight: 600; }
+        .stat-badge { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; }
+        .bg-green { background: #dcfce7; color: #166534; }
+        .bg-red { background: #fee2e2; color: #991b1b; }
+        .timer-accent { color: var(--primary); font-family: monospace; font-weight: 800; }
+    </style>
+</head>
+<body style="background-color: var(--bg-alt);">
+
+    <div class="main-content" style="max-width: 750px;">
+        
+        <!-- QUIZ INTERFACE -->
+        <div id="quiz-ui">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span id="q-meta" style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Loading...</span>
+                <span id="q-timer" class="timer-accent">00:00</span>
+            </div>
+
+            <div style="height:6px; background:var(--border); border-radius:10px; margin-bottom:30px; overflow:hidden;">
+                <div id="progress-bar" style="height:100%; background:var(--primary); width:0%; transition:0.3s;"></div>
+            </div>
+
+            <div id="question-box">
+                <h2 id="question-text" style="font-size:1.3rem; margin-bottom:25px; line-height:1.4;">---</h2>
+                <div id="options-list"></div>
+            </div>
+
+            <div id="explanation-box" style="display:none; margin-top:20px; padding:20px; border-radius:15px; background:white; border-left:5px solid var(--primary); box-shadow:var(--card-shadow);">
+                <b style="color:var(--primary); font-size:0.8rem; text-transform:uppercase; display:block; margin-bottom:8px;">Rationale</b>
+                <p id="explanation-text" style="font-size:0.95rem; color:var(--text);"></p>
+                <button onclick="nextQuestion()" class="v5-button" style="width:100%; margin-top:20px;">NEXT QUESTION →</button>
+            </div>
+        </div>
+
+        <!-- ANALYSIS / RESULT SCREEN -->
+        <div id="result-ui" style="display:none;">
+            <div style="text-align:center; padding:40px 0;">
+                <h1 style="font-size:2.5rem; font-weight:900;">Performance <span style="color:var(--primary);">Report</span></h1>
+                <p style="color:var(--text-muted);">Comprehensive analysis of your clinical session.</p>
+            </div>
+
+            <div id="topic-wise-analysis">
+                <!-- Analysis Table Injected Here -->
+            </div>
+
+            <div style="margin-top:30px; display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <button onclick="location.reload()" class="v5-button" style="background:var(--text);">RETRY SESSION</button>
+                <button onclick="finishSession()" class="v5-button">FINISH & CLEAR CART</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode'); // 'multi' or null (single)
+        
+        let questions = [];
+        let currentIndex = 0;
+        let sessionStats = {}; // { "Topic-Name": { correct: 0, total: 0, time: 0 } }
+        
+        let qStartTime;
+        let timerInterval;
+        let totalTime = 0;
+
+        window.onload = async () => {
+            if (mode === 'multi') {
+                const cartData = JSON.parse(decodeURIComponent(urlParams.get('data')));
+                await loadMultiData(cartData);
+            } else {
+                const single = { 
+                    sub: urlParams.get('sub'), 
+                    unit: urlParams.get('unit'), 
+                    topic: urlParams.get('topic') 
+                };
+                await loadMultiData([single]);
+            }
+            startSession();
+        };
+
+        // Efficient Data Loader for Multiple Subjects
+        async function loadMultiData(cartItems) {
+            const subjectsNeeded = [...new Set(cartItems.map(i => i.sub))];
+            
+            for (let sub of subjectsNeeded) {
+                const response = await fetch(`data/qbank/${sub}.js`);
+                const scriptText = await response.text();
+                // Extract RawInput string from file manually to avoid window overwrite conflicts
+                const rawContent = scriptText.split('window.RawInput = `')[1].split('`;')[0];
+                
+                const lines = rawContent.split('\n');
+                cartItems.filter(item => item.sub === sub).forEach(item => {
+                    const filteredLines = lines.filter(l => l.includes(`UNIT=${item.unit}`) && l.includes(`TOPIC=${item.topic}`));
+                    
+                    filteredLines.forEach(line => {
+                        const qObj = parseLine(line);
+                        qObj.topicLabel = item.topic.replace(/-/g, ' ');
+                        questions.push(qObj);
+                        
+                        // Initialize stats for this topic
+                        if (!sessionStats[qObj.topicLabel]) {
+                            sessionStats[qObj.topicLabel] = { correct: 0, total: 0, time: 0 };
+                        }
+                        sessionStats[qObj.topicLabel].total++;
+                    });
+                });
+            }
+        }
+
+        function parseLine(line) {
+            const obj = {};
+            ["UNIT", "TOPIC", "Q", "O1", "O2", "O3", "O4", "ANS", "EXP"].forEach((key, i, arr) => {
+                const start = line.indexOf(`${key}=`) + key.length + 1;
+                const end = arr[i+1] ? line.indexOf(`${arr[i+1]}=`) : line.length;
+                obj[key] = line.substring(start, end).trim();
+            });
+            return obj;
+        }
+
+        function startSession() {
+            if (questions.length === 0) {
+                alert("No questions found.");
+                return;
+            }
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            document.getElementById('explanation-box').style.display = 'none';
+            document.getElementById('q-meta').innerText = `${q.topicLabel} | Question ${currentIndex + 1} of ${questions.length}`;
+            document.getElementById('question-text').innerText = q.Q.replace(/-/g, ' ');
+            document.getElementById('progress-bar').style.width = `${(currentIndex / questions.length) * 100}%`;
+
+            let optsHtml = "";
+            [1,2,3,4].forEach(n => {
+                optsHtml += `<button class="option-btn" onclick="checkAnswer(this, ${n})">${q['O'+n].replace(/-/g, ' ')}</button>`;
+            });
+            document.getElementById('options-list').innerHTML = optsHtml;
+            
+            qStartTime = Date.now();
+            startTimer();
+        }
+
+        function startTimer() {
+            let sec = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                sec++;
+                document.getElementById('q-timer').innerText = `00:${sec < 10 ? '0'+sec : sec}`;
+            }, 1000);
+        }
+
+        function checkAnswer(btn, choice) {
+            clearInterval(timerInterval);
+            const q = questions[currentIndex];
+            const timeSpent = Math.floor((Date.now() - qStartTime) / 1000);
+            sessionStats[q.topicLabel].time += timeSpent;
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (choice == q.ANS) {
+                btn.classList.add('correct');
+                sessionStats[q.topicLabel].correct++;
+            } else {
+                btn.classList.add('wrong');
+                allBtns[q.ANS - 1].classList.add('correct');
+            }
+
+            document.getElementById('explanation-text').innerText = q.EXP.replace(/-/g, ' ');
+            document.getElementById('explanation-box').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showAnalysis();
+            }
+        }
+
+        function showAnalysis() {
+            document.getElementById('quiz-ui').style.display = 'none';
+            document.getElementById('result-ui').style.display = 'block';
+
+            let tableHtml = `
+                <table class="analysis-table">
+                    <thead>
+                        <tr><th>Topic Name</th><th>Score</th><th>Time</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>`;
+            
+            for (let topic in sessionStats) {
+                const s = sessionStats[topic];
+                const percent = Math.round((s.correct / s.total) * 100);
+                const statusClass = percent >= 70 ? 'bg-green' : 'bg-red';
+
+                tableHtml += `
+                    <tr>
+                        <td>${topic}</td>
+                        <td>${s.correct}/${s.total}</td>
+                        <td class="timer-accent">${s.time}s</td>
+                        <td><span class="stat-badge ${statusClass}">${percent}%</span></td>
+                    </tr>`;
+            }
+            
+            tableHtml += `</tbody></table>`;
+            document.getElementById('topic-wise-analysis').innerHTML = tableHtml;
+        }
+
+        function finishSession() {
+            CartLogic.clear();
+            location.href = 'mbbsqbank.html';
+        }
+    </script>
+</body>
+</html>

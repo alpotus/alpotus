@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 5.0 -->
+    <title>Settings & Preferences | Alpotus Digital Hub</title>
+    <meta name="description" content="Manage your Alpotus 5.0 experience. Toggle dark mode, access professional legal documents, and learn more about the Alpotus mission led by CEO Sukkannagari Karthik Reddy.">
+    <meta name="keywords" content="Alpotus settings, dark mode toggle, medical app preferences, Alpotus privacy, Sukkannagari Karthik Reddy, digital hub tools">
+    <link rel="canonical" href="https://www.alpotus.com/settings.html" />
+
+    <!-- JSON-LD STRUCTURED DATA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Alpotus Settings Hub",
+      "description": "User preferences and legal information portal for Alpotus 5.0.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Alpotus",
+        "logo": "https://www.alpotus.com/assets/icons/icon-512.png"
+      }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="style.css">
+    <script src="data/masterData.js"></script>
+    <script src="search-engine.js"></script>
+    <script src="app.js" defer></script>
+
+    <style>
+        /* SETTINGS SPECIFIC UI 5.0 */
+        .settings-wrap { padding-bottom: 40px; }
+        
+        .settings-section { margin-bottom: 35px; }
+        
+        .section-heading { 
+            font-size: 0.75rem; font-weight: 900; color: var(--primary-dark); 
+            text-transform: uppercase; letter-spacing: 1.5px; 
+            margin-bottom: 12px; padding-left: 10px;
+        }
+
+        .settings-group {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 24px; overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .settings-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 20px; border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: background 0.2s;
+            text-decoration: none; color: var(--text-main); font-weight: 700;
+        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-row:hover { background: rgba(250, 204, 21, 0.05); }
+
+        .row-left { display: flex; align-items: center; gap: 15px; }
+        .row-left i { font-style: normal; font-size: 1.2rem; }
+        
+        .row-right { color: var(--text-muted); font-weight: 900; font-size: 1rem; }
+
+        /* CEO Badge */
+        .ceo-badge {
+            margin-top: 50px; text-align: center; padding: 20px;
+            opacity: 0.7;
+        }
+        .ceo-badge img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--primary); margin-bottom: 10px; }
+        .version-text { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+
+        /* Dark Mode Switch override for settings page */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        body.dark-mode .settings-group { background: var(--bg-card); }
+          /* Prevent the checkbox from interfering with the row click */
+    .switch, .switch input, .slider {
+        pointer-events: none;
+    }
+    .settings-row {
+        user-select: none; /* Prevent text highlighting on click */
+    }
+    </style>
+</head>
+<body>
+
+    <main class="main-content">
+        <div class="settings-wrap">
+            <h1 style="font-weight: 950; font-size: 2.2rem; margin-bottom: 30px; letter-spacing: -1px;">Settings</h1>
+
+            <!-- PREFERENCES -->
+            <div class="settings-section">
+                <div class="section-heading">Preferences</div>
+                <div class="settings-group">
+                    <!-- UPDATE THIS ROW -->
+<div class="settings-row" onclick="toggleDarkMode()">
+    <div class="row-left"><i>🌙</i> Dark Mode</div>
+    <label class="switch">
+        <!-- Change: Added 'pointer-events:none' to the input and slider -->
+        <input type="checkbox" id="darkTogglePage" style="pointer-events: none;">
+        <span class="slider" style="pointer-events: none;"></span>
+    </label>
+</div>
+
+<!-- ADD THIS TO YOUR <style> BLOCK IN settings.html -->
+
+                </div>
+            </div>
+
+            <!-- ORGANIZATION -->
+            <div class="settings-section">
+                <div class="section-heading">Organization</div>
+                <div class="settings-group">
+                    <a href="about.html" class="settings-row">
+                        <div class="row-left"><i>👤</i> About Alpotus & CEO</div>
+                        <div class="row-right">→</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LEGAL & SECURITY -->
+            <div class="settings-section">
+                <div class="section-heading">Legal & Privacy</div>
+                <div class="settings-group">
+                    <a href="privacy.html" class="settings-row">
+                        <div class="row-left"><i>🔒</i> Privacy Policy</div>
+                        <div class="row-right">→</div>
+                    </a>
+                    <a href="terms.html" class="settings-row">
+                        <div class="row-left"><i>📜</i> Terms of Service</div>
+                        <div class="row-right">→</div>
+                    </a>
+                    <a href="disclaimer.html" class="settings-row">
+                        <div class="row-left"><i>⚠️</i> Medical Disclaimer</div>
+                        <div class="row-right">→</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SYSTEM INFO -->
+            <div class="ceo-badge">
+                <img src="assets/images/ceo-karthik.png" alt="CEO Karthik Reddy" onerror="this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='">
+                <div style="font-weight: 900; color: var(--text-main); font-size: 0.9rem;"> </div>
+                <div style="color: var(--primary-dark); font-weight: 800; font-size: 0.7rem; margin-bottom: 10px;"> </div>
+                <div class="version-text">Alpotus Digital Hub v5.0.0</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /**
+         * SETTINGS PAGE LOGIC
+         * Syncs the toggle state with the global app settings
+         */
+        window.addEventListener('load', () => {
+            // Check current theme from body class (set by app.js)
+            const isDark = document.body.classList.contains('dark-mode');
+            const toggle = document.getElementById('darkTogglePage');
+            if (toggle) toggle.checked = isDark;
+        });
+
+        // The toggleDarkMode() function is already globally defined in app.js
+    </script>
+
+</body>
+</html>

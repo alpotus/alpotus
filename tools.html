@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Tools & Digital Utilities | Alpotus Productivity Hub</title>
+    <meta name="description" content="Explore a collection of professional web tools including PPT generators, image resizers, and Pomodoro timers. Boost your productivity with Alpotus 4.0.">
+    <meta name="keywords" content="web tools, productivity tools, PPT generator, image resizer, Pomodoro timer, digital utilities, Alpotus">
+    <link rel="canonical" href="https://www.alpotus.com/tools.html" />
+
+    <link rel="stylesheet" href="style.css">
+    <script src="data/masterData.js"></script>
+    <script src="search-engine.js"></script>
+    <script src="app.js" defer></script>
+
+    <style>
+        .category-hero { padding: 120px 5% 40px 5%; background: var(--bg-card); border-bottom: 1px solid var(--border-color); text-align: center; }
+        .category-hero h1 { font-size: 2.5rem; font-weight: 900; color: var(--text-main); }
+        .filter-wrap { max-width: 500px; margin: 30px auto 0 auto; position: relative; }
+        .filter-input { width: 100%; padding: 15px 25px; border-radius: 50px; border: 2px solid var(--border-color); background: var(--bg-body); outline: none; }
+    </style>
+</head>
+<body>
+    <header class="category-hero">
+        <h1>🛠️ Web <span>Tools</span></h1>
+        <p>A professional suite of tools designed to simplify your daily digital tasks and workflow.</p>
+        <div class="filter-wrap">
+            <input type="text" id="localSearch" class="filter-input" placeholder="Search web tools..." onkeyup="filterLocal()">
+        </div>
+    </header>
+
+    <div class="ad-slot" style="margin: 20px 5%;">ADVERTISEMENT</div>
+    <main class="grid-container" id="category-grid"></main>
+    <div class="ad-slot" style="margin: 40px 5%;">ADVERTISEMENT</div>
+
+    <script>
+        function renderItems(data) {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = data.map(item => `
+                <article class="card" onclick="window.location.href='${item.path}'">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">${item.icon}</div>
+                    <h3>${item.name}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">${item.desc}</p>
+                </article>
+            `).join('');
+        }
+        function filterLocal() {
+            const query = document.getElementById('localSearch').value.toLowerCase();
+            const filtered = AlpotusData.tools.items.filter(i => i.name.toLowerCase().includes(query));
+            renderItems(filtered);
+        }
+        window.addEventListener('load', () => renderItems(AlpotusData.tools.items));
+    </script>
+</body>
+</html>

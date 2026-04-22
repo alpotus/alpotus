@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alpotus 4.0 Sitemap Generator</title>
+    <script src="data/masterData.js"></script>
+</head>
+<body style="padding:50px; font-family:sans-serif; line-height:1.6;">
+    <h2>🚀 Alpotus 4.0 Sitemap Generator</h2>
+    <p>Copy the XML below into your <b>sitemap.xml</b> file.</p>
+    <textarea id="xml-output" style="width:100%; height:500px; padding:15px; font-family:monospace;"></textarea>
+
+    <script>
+        const baseUrl = "https://www.alpotus.com/";
+        const staticPages = [
+            "index.html", "tools.html", "games.html", "clinical-scores.html", 
+            "quick-revision.html", "calculators.html", "articles.html", 
+            "about.html", "privacy.html", "terms.html", "disclaimer.html", "settings.html"
+        ];
+
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+        // Add Static Pages
+        staticPages.forEach(page => {
+            xml += `  <url>\n    <loc>${baseUrl}${page}</loc>\n    <priority>${page === 'index.html' ? '1.0' : '0.8'}</priority>\n  </url>\n`;
+        });
+
+        // Add Dynamic Items from Master Data
+        for (const cat in AlpotusData) {
+            AlpotusData[cat].items.forEach(item => {
+                xml += `  <url>\n    <loc>${baseUrl}${item.path}</loc>\n    <priority>0.7</priority>\n  </url>\n`;
+            });
+        }
+
+        xml += `</urlset>`;
+        document.getElementById('xml-output').value = xml;
+    </script>
+</body>
+</html>

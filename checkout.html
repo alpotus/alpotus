@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Review & Launch | Alpotus Flashcards</title>
+    
+    <link rel="stylesheet" href="style.css">
+ <style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #1e293b;
+        --bg: #f1f5f9;
+        --success: #22c55e;
+    }
+
+    /* FIX: Ensure body can scroll and has space for the fixed footer */
+    body { 
+        font-family: 'Inter', sans-serif; 
+        background: var(--bg); 
+        margin: 0; 
+        padding: 20px 20px 120px 20px; /* Extra bottom padding (120px) to allow scrolling past the button */
+        color: var(--secondary); 
+        min-height: 100vh;
+        overflow-y: auto; 
+    }
+    
+    .checkout-container { 
+        max-width: 600px; 
+        margin: 0 auto; 
+    }
+
+    header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+    .back-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+    h1 { font-size: 1.5rem; font-weight: 900; margin: 0; }
+
+    .section-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 10px; display: block; }
+
+    /* Cart List */
+    .cart-list { background: #fff; border-radius: 20px; padding: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 25px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f1f5f9; }
+    .cart-item:last-child { border-bottom: none; }
+    .item-info h4 { margin: 0; font-size: 1rem; }
+    .item-info p { margin: 0; font-size: 0.75rem; color: #64748b; }
+    .remove-item { color: #ef4444; border: none; background: none; font-weight: 800; cursor: pointer; padding: 10px; }
+
+    /* Due Suggestions */
+    .due-box { background: #e0e7ff; border: 2px dashed var(--primary); border-radius: 20px; padding: 20px; margin-bottom: 25px; }
+    .due-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+
+    /* Mode Selection */
+    .modes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+    .mode-card { 
+        background: #fff; border: 2px solid transparent; border-radius: 18px; padding: 15px; 
+        cursor: pointer; transition: 0.3s; 
+    }
+    .mode-card.active { border-color: var(--primary); background: #f5f3ff; }
+    .mode-card h4 { margin: 0 0 5px 0; font-size: 0.9rem; }
+    .mode-card p { margin: 0; font-size: 0.7rem; color: #64748b; line-height: 1.3; }
+
+    /* Toggle Switch Styling */
+    .option-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; }
+    input[type="checkbox"] {
+        width: 45px; height: 24px; appearance: none; background: #cbd5e1;
+        border-radius: 20px; position: relative; cursor: pointer; outline: none; transition: 0.3s;
+    }
+    input[type="checkbox"]:checked { background: var(--success); }
+    input[type="checkbox"]::before {
+        content: ""; position: absolute; width: 18px; height: 18px; background: white;
+        border-radius: 50%; top: 3px; left: 3px; transition: 0.3s;
+    }
+    input[type="checkbox"]:checked::before { left: 24px; }
+
+    /* Launch Footer */
+    .launch-footer { 
+        position: fixed; bottom: 0; left: 0; width: 100%; 
+        background: white; padding: 20px; 
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
+        z-index: 1000;
+        display: flex; justify-content: center;
+    }
+    .btn-launch { 
+        background: var(--primary); color: #fff; border: none; 
+        width: 100%; max-width: 500px; padding: 18px; border-radius: 15px; 
+        font-size: 1.1rem; font-weight: 900; cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <header>
+            <button class="back-btn" onclick="window.location.href='flashcards.html'">←</button>
+            <h1>Study <span>Checkout</span></h1>
+        </header>
+
+        <!-- 1. Topics in Cart -->
+        <label class="section-title">Topics in your session</label>
+        <div id="cart-items" class="cart-list">
+            <!-- Dynamic Items -->
+        </div>
+
+        <!-- 2. Due for Review Suggestion -->
+        <div id="due-suggestion" class="due-box" style="display: none;">
+            <div class="due-header">
+                <div>
+                    <h4 style="margin:0">Spaced Repetition Due</h4>
+                    <p style="margin:0; font-size: 0.75rem;">You have <span id="total-due-count">0</span> cards due for review today.</p>
+                </div>
+                <button class="btn-add-cart" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:8px; font-weight:800;" onclick="addDueToCart()">ADD ALL DUE</button>
+            </div>
+        </div>
+
+        <!-- 3. Study Mode Selection -->
+        <label class="section-title">Select Study Mode</label>
+        <div class="modes-grid">
+            <div class="mode-card active" id="mode-standard" onclick="setMode('standard')">
+                <h4>Standard</h4>
+                <p>Classic study. No timers. Perfect for deep learning.</p>
+            </div>
+            <div class="mode-card" id="mode-blitz" onclick="setMode('blitz')">
+                <h4>Blitz Mode 🔥</h4>
+                <p>5 seconds per card. High pressure for exam readiness.</p>
+            </div>
+        </div>
+
+        <!-- 4. Options -->
+        <label class="section-title">Session Options</label>
+        <div class="cart-list">
+            <div class="cart-item">
+                <div class="item-info">
+                    <h4>Review Due Only</h4>
+                    <p>Only show cards scheduled for review today.</p>
+                </div>
+                <input type="checkbox" id="due-only-toggle" style="width:20px; height:20px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="launch-footer">
+        <button class="btn-launch" onclick="launchArena()">LAUNCH ARENA →</button>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/flashcardsData.js"></script>
+    <script src="js/srs-core.js"></script>
+    <script src="js/checkout-logic.js"></script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+/* -------------------------------------------------------------------------- */
+/* ALPOTUS 5.0 MASTER DESIGN SYSTEM (Unified App Shell)                       */
+/* Designed by: Alpotus Development Team                                      */
+/* -------------------------------------------------------------------------- */
+
+/* 1. ROOT VARIABLES - LIGHT MODE (Default) */
+:root {
+    --primary: #facc15;       /* Vibrant Alpotus Yellow */
+    --primary-dark: #eab308;  /* Slightly darker for accents */
+    --primary-light: #fffbeb; /* Very light yellow for subtle backgrounds */
+    
+    --bg-body: #ffffff;       /* Pure White for main background */
+    --bg-card: #f8fafc;       /* Off-white/light grey for cards */
+    --bg-highlight: #f1f5f9;  /* Soft grey for selected states/sections */
+    
+    --text-main: #0f172a;     /* Deep Slate for primary text */
+    --text-muted: #64748b;    /* Muted grey for secondary text */
+    --text-contrast: #000000; /* Black for high contrast on yellow */
+    
+    --border-color: #e2e8f0;  /* Light grey for borders */
+    --shadow: 0 5px 15px rgba(0,0,0,0.05); /* Soft shadow for depth */
+    
+    --nav-height: 65px;       /* Fixed height for top navigation bar */
+    --bottom-nav-height: 70px; /* Fixed height for bottom tab bar */
+    --max-content-width: 900px; /* Max width for central content alignment */
+    
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-medium: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. DARK MODE OVERRIDES */
+body.dark-mode {
+    --bg-body: #0f172a;       /* Deep Navy Blue */
+    --bg-card: #1e293b;       /* Darker Slate Blue for cards */
+    --bg-highlight: #2d3a4b;  /* Dark grey for selected states */
+    
+    --text-main: #f8fafc;     /* Off-white for primary text */
+    --text-muted: #94a3b8;    /* Lighter grey for secondary text */
+    --text-contrast: #ffffff; /* White for high contrast on dark backgrounds */
+    
+    --border-color: #334155;  /* Darker grey for borders */
+    --shadow: 0 8px 25px rgba(0,0,0,0.3); /* Deeper shadow for dark mode depth */
+}
+
+/* 3. BASE STYLES & FONT */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    padding-top: var(--nav-height); /* Space for fixed top header */
+    padding-bottom: var(--bottom-nav-height); /* Space for fixed bottom navigation */
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+    min-height: 100vh; /* Ensures content fills screen for PWA */
+    transition: background-color var(--transition-medium), color var(--transition-medium);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* 4. SPLASH SCREEN (Unified App Entry) */
+#splash {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--primary); /* Alpotus Yellow background */
+    z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+}
+#splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.splash-content {
+    font-size: 3.5rem; /* Larger for impact */
+    font-weight: 900;
+    color: var(--text-contrast); /* Black text on yellow */
+    letter-spacing: -1px;
+    animation: splashPulse 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes splashPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(0,0,0,0.1)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(0,0,0,0.3)); }
+}
+
+/* 5. TOP APP HEADER (Fixed for all views) */
+.app-header {
+    position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+    background: var(--bg-body);
+    border-bottom: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.header-container {
+    width: 100%; max-width: var(--max-content-width);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 15px;
+}
+
+.logo {
+    font-weight: 950; font-size: 1.4rem; letter-spacing: -1px;
+    color: var(--text-main); cursor: pointer;
+    flex-shrink: 0; /* Prevents logo from shrinking on smaller screens */
+}
+.logo span { color: var(--primary); }
+
+.search-bar {
+    flex-grow: 1; position: relative; margin: 0 20px;
+    max-width: 450px; /* Constrain search bar width */
+}
+
+.search-bar input {
+    width: 100%; padding: 10px 18px; border-radius: 50px;
+    border: 1px solid var(--border-color); background: var(--bg-card);
+    color: var(--text-main); font-size: 0.9rem; outline: none;
+    transition: var(--transition-fast);
+}
+.search-bar input::placeholder { color: var(--text-muted); opacity: 0.7; }
+.search-bar input:focus {
+    border-color: var(--primary); background: #fff;
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.2);
+}
+
+/* 6. BOTTOM APP NAVIGATION (Fixed for all views) */
+.bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height);
+    background: var(--bg-body);
+    border-top: 1px solid var(--border-color);
+    display: flex; justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+}
+
+.nav-container {
+    width: 100%; max-width: var(--max-content-width);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+}
+
+.nav-tab {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--text-muted); text-decoration: none; font-size: 0.7rem; font-weight: 700;
+    transition: var(--transition-fast); user-select: none; /* Prevent accidental text selection */
+}
+
+.nav-tab.active { color: var(--primary-dark); }
+.nav-tab:hover { color: var(--primary-dark); background: rgba(250, 204, 21, 0.05); } /* Subtle hover */
+.nav-tab i { font-size: 1.4rem; margin-bottom: 4px; line-height: 1; }
+
+/* 7. MAIN CONTENT AREA (Centered & Padded) */
+.main-content {
+    width: 100%; max-width: var(--max-content-width);
+    margin: 0 auto; padding: 20px;
+}
+
+.section-label {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 5px; margin-bottom: 15px;
+}
+.section-label h2 { font-size: 1.35rem; font-weight: 900; color: var(--text-main); }
+.section-label span { font-size: 0.75rem; font-weight: 800; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* 8. GENERAL CARD STYLING (Used across all grids) */
+.card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition-medium);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+}
+
+.card i { font-style: normal; } /* Ensure emojis/icons don't get italicized */
+
+/* 9. TRENDING SECTION */
+.trending-wrapper {
+    display: flex; overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 15px; padding: 10px 0; /* Adjusted padding */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+.trending-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+.trending-item {
+    flex: 0 0 160px; /* Smaller, app-like cards */
+    scroll-snap-align: start;
+    min-height: 180px; /* Consistent height */
+    padding: 15px; /* Adjusted padding */
+    border-radius: 15px; /* Softer edges */
+}
+
+.trending-item i { font-size: 1.8rem; margin-bottom: 8px; }
+.trending-item h4 { font-size: 0.9rem; font-weight: 700; margin: 0; }
+.trending-item p { display: none; } /* Hide description for compact view */
+
+/* 10. CATEGORY GRIDS (Unified V5-Grid) */
+.v5-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Auto-fit columns */
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.v5-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    transition: var(--transition-medium);
+    cursor: pointer;
+}
+
+.v5-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: var(--shadow); }
+.v5-card i { font-style: normal; font-size: 2.2rem; display: block; margin-bottom: 10px; }
+.v5-card h3 { font-size: 1rem; font-weight: 800; color: var(--text-main); }
+.v5-card p { display: none; } /* Hide description for compact category cards */
+
+/* Premium Card (MBBS Library) */
+.v5-card.premium {
+    grid-column: 1 / -1; /* Spans full width */
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 20px;
+    padding: 30px; /* More padding for premium feel */
+    border: none; /* No border for seamless black background */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.v5-card.premium i { font-size: 3rem; color: var(--primary); margin-bottom: 0; }
+.v5-card.premium h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; }
+.v5-card.premium p { color: #ccc; font-size: 0.9rem; line-height: 1.4; display: block; } /* Show description here */
+
+/* 11. SEARCH DROPDOWN STYLING */
+.search-results {
+    position: absolute; top: 120%; left: 0; width: 100%;
+    background: var(--bg-body); border: 1px solid var(--border-color);
+    border-radius: 15px; box-shadow: var(--shadow);
+    max-height: 300px; overflow-y: auto; display: none;
+    z-index: 100;
+}
+
+.search-item {
+    padding: 12px 15px; border-bottom: 1px solid var(--border-color);
+    cursor: pointer; display: flex; align-items: center; gap: 12px;
+    font-size: 0.9rem; color: var(--text-main); transition: var(--transition-fast);
+}
+.search-item:hover { background: var(--primary); color: var(--text-contrast); }
+.search-item i { font-style: normal; font-size: 1.2rem; }
+.search-item span.category { font-size: 0.7rem; color: var(--text-muted); margin-left: auto; }
+
+/* 12. MOBILE SPECIFIC ADJUSTMENTS */
+@media (max-width: 600px) {
+    .header-container { padding: 0 10px; }
+    .search-bar { margin: 0 10px; }
+    .logo { font-size: 1.2rem; }
+    .app-header { height: 60px; }
+    body { padding-top: 60px; }
+    .main-content { padding: 15px; }
+    .section-label h2 { font-size: 1.1rem; }
+    .trending-item { flex: 0 0 140px; min-height: 160px; }
+    .trending-item i { font-size: 1.5rem; }
+    .v5-grid { grid-template-columns: 1fr; } /* Single column for very small screens */
+    .v5-card.premium { flex-direction: column; text-align: center; }
+    .v5-card.premium div { text-align: center; }
+}
+
+/* 13. DARK MODE SPECIFIC STYLES */
+body.dark-mode .app-header { border-bottom-color: var(--border-color); }
+body.dark-mode .search-bar input { background: var(--bg-card); color: var(--text-main); border-color: var(--border-color); }
+body.dark-mode .search-results { background: var(--bg-body); border-color: var(--border-color); }
+body.dark-mode .search-item:hover { background: var(--primary); color: var(--text-contrast); }
+body.dark-mode .v5-card.premium { background: #1a1a1a; }
+body.dark-mode .v5-card.premium h3 { color: var(--primary); }
+body.dark-mode .v5-card.premium p { color: #ccc; }
+
+
+
+/* This makes sure every <br> creates a nice clean gap */
+br {
+    content: "";
+    margin: 0.5em 0;
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
