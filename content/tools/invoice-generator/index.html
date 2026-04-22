@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>Free Professional Invoice Generator | Create PDF Invoices Online | Alpotus</title>
+    <meta name="description" content="Generate professional PDF invoices instantly with the Alpotus Invoicing Dashboard. No login required. 100% private, automated calculations, and custom branding. Perfect for freelancers and small businesses.">
+    <meta name="keywords" content="invoice generator, free invoice maker, professional invoice template, online billing tool, PDF invoice creator, Alpotus digital tools, business utility">
+    <link rel="canonical" href="https://www.alpotus.com/content/tools/invoice-generator/index.html" />
+
+    <!-- JSON-LD STRUCTURED DATA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Invoice Pro",
+      "description": "A high-performance, browser-based invoicing tool for professional document generation with real-time preview and tax automation.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 80px; background: var(--bg-body); }
+        .invoice-container { max-width: 1300px; margin: 0 auto; padding: 0 5%; display: grid; grid-template-columns: 450px 1fr; gap: 30px; }
+
+        /* EDITOR PANEL */
+        .editor-panel { background: var(--bg-card); border-radius: 25px; padding: 30px; border: 1px solid var(--border-color); box-shadow: var(--shadow); height: fit-content; }
+        .editor-panel h2 { font-size: 1.2rem; font-weight: 900; margin-bottom: 20px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-body); color: var(--text-main); font-size: 0.9rem; outline: none; }
+        
+        .line-item-row { display: grid; grid-template-columns: 1fr 60px 100px 30px; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .remove-btn { color: #ef4444; cursor: pointer; font-weight: bold; text-align: center; border: 1px solid #ef4444; border-radius: 5px; padding: 5px; }
+
+        .btn-add { background: #000; color: #fff; padding: 10px; width: 100%; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        .btn-print { background: var(--primary); color: #000; padding: 18px; width: 100%; border: none; border-radius: 50px; font-weight: 950; cursor: pointer; margin-top: 30px; font-size: 1rem; }
+
+        /* PREVIEW PANEL */
+        .preview-panel { background: #525659; border-radius: 25px; padding: 40px; display: flex; justify-content: center; position: sticky; top: 90px; height: 85vh; overflow-y: auto; }
+        #invoice-preview { background: #fff; width: 210mm; min-height: 297mm; padding: 20mm; color: #333; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Arial', sans-serif; position: relative; }
+
+        .preview-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .preview-logo { max-width: 150px; height: auto; }
+        
+        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .preview-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .preview-table th { background: #f4f4f4; padding: 12px; text-align: left; font-size: 0.8rem; text-transform: uppercase; border-bottom: 2px solid #ddd; }
+        .preview-table td { padding: 12px; border-bottom: 1px solid #eee; }
+
+        .preview-total-box { margin-left: auto; width: 250px; }
+        .total-row { display: flex; justify-content: space-between; padding: 8px 0; font-weight: bold; }
+        .grand-total { border-top: 2px solid #333; font-size: 1.4rem; padding-top: 10px; color: #000; }
+
+        /* SEO CONTENT */
+        .seo-content { grid-column: span 2; margin-top: 100px; padding-bottom: 100px; line-height: 2; color: var(--text-muted); }
+        .seo-content h2 { font-size: 2.2rem; font-weight: 950; color: var(--text-main); margin-bottom: 30px; border-left: 8px solid var(--primary); padding-left: 20px; }
+        .seo-content p { font-size: 1.1rem; margin-bottom: 25px; }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .editor-panel, .ad-slot, .navbar, #sidebar, #bottom-nav, .seo-content, .btn-print, .alpotus-footer { display: none !important; }
+            .preview-panel { padding: 0; background: white; position: static; height: auto; overflow: visible; }
+            #invoice-preview { box-shadow: none; width: 100%; margin: 0; border: none; }
+            .invoice-container { display: block; }
+        }
+
+        @media (max-width: 1100px) { .invoice-container { grid-template-columns: 1fr; } .preview-panel { height: auto; overflow: visible; } }
+        /* Update the main container to be more flexible */
+.invoice-container { 
+    max-width: 100%; 
+    margin: 0 auto; 
+    padding: 0 2%; 
+    display: flex; 
+    flex-wrap: wrap; /* Stacks on small screens */
+    gap: 20px; 
+    justify-content: center;
+}
+
+/* Editor Panel Width */
+.editor-panel { 
+    flex: 0 0 400px; /* Stays fixed at 400px */
+    width: 400px;
+}
+
+/* Preview Panel Scaling Container */
+.preview-panel { 
+    flex: 1; 
+    min-width: 350px; 
+    background: #525659; 
+    border-radius: 25px; 
+    padding: 20px; 
+    display: flex; 
+    justify-content: center; 
+    overflow: hidden; /* Important for scaling */
+    height: fit-content;
+}
+
+/* Force the Invoice to stay A4 width but scale visually */
+#invoice-preview { 
+    transform-origin: top center;
+    width: 210mm !important; /* Fixed A4 Width */
+    min-height: 297mm;
+    transition: transform 0.2s ease;
+}
+
+@media (max-width: 1200px) {
+    .editor-panel { flex: 0 0 100%; width: 100%; }
+}
+/* Ensure the description starts AFTER the tool grid ends */
+.invoice-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 30px; 
+    margin-bottom: 50px; /* Space between tool and description */
+}
+
+/* Fix the Preview Panel so it doesn't hide the text below */
+.preview-panel { 
+    flex: 1; 
+    min-width: 350px; 
+    background: #525659; 
+    border-radius: 25px; 
+    padding: 20px; 
+    display: flex; 
+    justify-content: center; 
+    height: fit-content; /* Only take space needed by the scaled paper */
+    overflow: hidden; 
+    position: relative;
+}
+
+/* Ensure the SEO Content is 100% width and clear of the grid */
+.seo-content { 
+    width: 100%; 
+    clear: both; 
+    margin-top: 50px; 
+    padding-top: 50px;
+    border-top: 1px solid var(--border-color);
+}
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container">
+        <div class="ad-slot" style="grid-column: span 2;">ADVERTISEMENT</div>
+
+        <!-- LEFT: EDITOR -->
+        <aside class="editor-panel">
+            <h2>Invoice Editor</h2>
+            
+            <div class="form-group">
+                <label>Brand Logo</label>
+                <input type="file" id="logo-input" accept="image/*" onchange="loadLogo(event)">
+            </div>
+
+            <div class="form-group">
+                <label>Company / Your Name</label>
+                <input type="text" id="from-name" placeholder="Your Business" oninput="sync()">
+                <textarea id="from-details" placeholder="Address, Email, Tax ID" rows="3" style="margin-top:5px" oninput="sync()"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Bill To (Client)</label>
+                <input type="text" id="to-name" placeholder="Client Name" oninput="sync()">
+                <textarea id="to-details" placeholder="Client Address/Details" rows="3" style="margin-top:5px" oninput="sync()"></textarea>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div class="form-group"><label>Invoice #</label><input type="text" id="inv-num" value="INV-001" oninput="sync()"></div>
+                <div class="form-group"><label>Currency</label><input type="text" id="inv-cur" value="$" oninput="sync()"></div>
+            </div>
+
+            <h2>Line Items</h2>
+            <div id="items-list">
+                <!-- Dynamic Items -->
+            </div>
+            <button class="btn-add" onclick="addItem()">+ ADD NEW ITEM</button>
+
+            <div style="margin-top:20px; display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div class="form-group"><label>Tax (%)</label><input type="number" id="inv-tax" value="0" oninput="sync()"></div>
+                <div class="form-group"><label>Discount</label><input type="number" id="inv-disc" value="0" oninput="sync()"></div>
+            </div>
+
+            <button class="btn-print" onclick="window.print()">GENERATE PDF INVOICE →</button>
+        </aside>
+
+        <!-- RIGHT: LIVE PREVIEW -->
+        <main class="preview-panel">
+            <div id="invoice-preview">
+                <header class="preview-header">
+                    <div>
+                        <img id="prev-logo" class="preview-logo" src="" style="display:none">
+                        <h3 id="prev-from-name">Your Business</h3>
+                        <p id="prev-from-details" style="white-space: pre-line; font-size: 0.8rem; color:#666;"></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h1 style="color:var(--primary); font-size: 3rem; margin:0">INVOICE</h1>
+                        <p id="prev-inv-num" style="font-weight: bold;">#INV-001</p>
+                        <p id="prev-date" style="font-size: 0.8rem;"></p>
+                    </div>
+                </header>
+
+                <div class="preview-grid">
+                    <div>
+                        <strong style="text-transform: uppercase; font-size: 0.7rem; color:#999;">Bill To:</strong>
+                        <p id="prev-to-name" style="font-weight: bold; font-size: 1.1rem; margin:5px 0;"></p>
+                        <p id="prev-to-details" style="white-space: pre-line; font-size: 0.8rem; color:#666;"></p>
+                    </div>
+                </div>
+
+                <table class="preview-table">
+                    <thead>
+                        <tr><th>Description</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th><th style="text-align:right">Total</th></tr>
+                    </thead>
+                    <tbody id="prev-items">
+                        <!-- JS injected -->
+                    </tbody>
+                </table>
+
+                <div class="preview-total-box">
+                    <div class="total-row"><span>Subtotal:</span> <span id="prev-sub">0.00</span></div>
+                    <div class="total-row"><span>Tax:</span> <span id="prev-tax-val">0.00</span></div>
+                    <div class="total-row"><span>Discount:</span> <span id="prev-disc-val">0.00</span></div>
+                    <div class="total-row grand-total"><span>Total:</span> <span id="prev-total">0.00</span></div>
+                </div>
+
+                <footer style="margin-top:100px; border-top:1px solid #eee; padding-top:20px; font-size: 0.75rem; color:#999; text-align:center;">
+                    Thank you for your business. Generated by Alpotus Invoicing.
+                </footer>
+            </div>
+        </main>
+
+        <!-- SEO DESCRIPTION -->
+        <article class="seo-content">
+            <h2>The Importance of Professional Invoicing</h2>
+            <p>For any professional entity, from a freelance developer to a specialized medical consultant, the invoice is more than just a request for payment—it is a critical touchpoint of your brand identity. A <strong>professional invoice generator</strong> ensures that your financial transactions are documented clearly, accurately, and stylishly. The Alpotus Invoicing Dashboard provides a streamlined experience to create high-quality documents without the need for expensive accounting software.</p>
+
+            <h3>Why Use an Online Invoice Maker?</h3>
+            <p>Traditional methods of creating invoices, such as manual spreadsheets or Word documents, are prone to calculation errors and formatting inconsistencies. By using an automated <strong>PDF invoice creator</strong>, you ensure that taxes, discounts, and line-item totals are calculated with mathematical precision every time. This reduces friction with clients and speeds up the payment cycle.</p>
+
+            <h3>Privacy and Security First</h3>
+            <p>In an era where data privacy is paramount, Alpotus 4.0 takes a different approach. Most online tools require you to upload your sensitive client data to their servers. Our dashboard operates entirely within your <strong>local browser environment</strong>. This means your client names, rates, and business details never leave your device. We use the HTML5 File API and local JavaScript processing to keep your business records 100% private.</p>
+
+            <h3>Key Features for Global Professionals</h3>
+            <ul>
+                <li><strong>Custom Branding:</strong> Upload your business logo to the header instantly.</li>
+                <li><strong>Currency Flexibility:</strong> Easily switch between USD, EUR, INR, or any custom currency symbol.</li>
+                <li><strong>Dynamic Tax Handling:</strong> Apply percentage-based taxes for VAT, GST, or Sales Tax compliance.</li>
+                <li><strong>A4 Print Ready:</strong> Optimized CSS ensures that when you click 'Generate', the result is a perfectly formatted A4 page suitable for digital sending or physical printing.</li>
+            </ul>
+
+            <div class="ad-slot">ADVERTISEMENT</div>
+        </article>
+    </div>
+
+    <script>
+        let items = [{id: 1, desc: 'Professional Service', qty: 1, price: 100}];
+
+        window.addEventListener('load', () => {
+            document.getElementById('prev-date').innerText = new Date().toLocaleDateString();
+            renderItems();
+            sync();
+        });
+
+        function loadLogo(e) {
+            const img = document.getElementById('prev-logo');
+            img.src = URL.createObjectURL(e.target.files[0]);
+            img.style.display = 'block';
+        }
+
+        function addItem() {
+            items.push({id: Date.now(), desc: '', qty: 1, price: 0});
+            renderItems();
+        }
+
+        function removeItem(id) {
+            items = items.filter(i => i.id !== id);
+            renderItems();
+            sync();
+        }
+
+        function renderItems() {
+            const list = document.getElementById('items-list');
+            list.innerHTML = items.map(item => `
+                <div class="line-item-row">
+                    <input type="text" placeholder="Item desc" value="${item.desc}" oninput="updateItem(${item.id}, 'desc', this.value)">
+                    <input type="number" value="${item.qty}" oninput="updateItem(${item.id}, 'qty', this.value)">
+                    <input type="number" value="${item.price}" oninput="updateItem(${item.id}, 'price', this.value)">
+                    <div class="remove-btn" onclick="removeItem(${item.id})">×</div>
+                </div>
+            `).join('');
+            sync();
+        }
+
+        function updateItem(id, field, val) {
+            const item = items.find(i => i.id === id);
+            item[field] = val;
+            sync();
+        }
+
+        function sync() {
+            const cur = document.getElementById('inv-cur').value;
+            document.getElementById('prev-from-name').innerText = document.getElementById('from-name').value || 'Your Business';
+            document.getElementById('prev-from-details').innerText = document.getElementById('from-details').value;
+            document.getElementById('prev-to-name').innerText = document.getElementById('to-name').value || 'Client Name';
+            document.getElementById('prev-to-details').innerText = document.getElementById('to-details').value;
+            document.getElementById('prev-inv-num').innerText = '#' + document.getElementById('inv-num').value;
+
+            let sub = 0;
+            let html = '';
+            items.forEach(i => {
+                const total = (parseFloat(i.qty) || 0) * (parseFloat(i.price) || 0);
+                sub += total;
+                html += `<tr><td>${i.desc || 'Untitled Item'}</td><td style="text-align:center">${i.qty}</td><td style="text-align:right">${cur}${parseFloat(i.price).toFixed(2)}</td><td style="text-align:right; font-weight:bold;">${cur}${total.toFixed(2)}</td></tr>`;
+            });
+
+            const taxRate = parseFloat(document.getElementById('inv-tax').value) || 0;
+            const discVal = parseFloat(document.getElementById('inv-disc').value) || 0;
+            const taxTotal = sub * (taxRate / 100);
+            const grandTotal = sub + taxTotal - discVal;
+
+            document.getElementById('prev-items').innerHTML = html;
+            document.getElementById('prev-sub').innerText = cur + sub.toFixed(2);
+            document.getElementById('prev-tax-val').innerText = cur + taxTotal.toFixed(2);
+            document.getElementById('prev-disc-val').innerText = cur + discVal.toFixed(2);
+            document.getElementById('prev-total').innerText = cur + grandTotal.toFixed(2);
+        }
+        function fitInvoiceToScreen() {
+    const container = document.querySelector('.preview-panel');
+    const preview = document.getElementById('invoice-preview');
+    if (!container || !preview) return;
+
+    const padding = 40; 
+    const availableWidth = container.offsetWidth - padding;
+    const invoiceWidth = 794; // Fixed width of A4 in pixels
+
+    if (availableWidth < invoiceWidth) {
+        const scale = availableWidth / invoiceWidth;
+        preview.style.transform = `scale(${scale})`;
+        
+        // CRUCIAL: Set the container height to match the SHRUNK height of the paper
+        // This prevents the "Invisible space" that hides your description
+        const realHeight = (preview.offsetHeight * scale) + padding;
+        container.style.height = realHeight + "px";
+    } else {
+        preview.style.transform = `scale(1)`;
+        container.style.height = "auto";
+    }
+}
+    </script>
+</body>
+</html>
+
