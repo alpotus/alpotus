@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>AI Flashcard Generator | Convert ChatGPT to Anki TSV | Alpotus Tools</title>
+    <meta name="description" content="Generate professional Anki flashcards from AI text instantly. Optimized for text-based active recall. 100% private, browser-side conversion. The ultimate study tool by Alpotus.">
+    <meta name="keywords" content="anki flashcard generator, chatgpt to anki converter, active recall tool, study productivity, medical study cards, AI to flashcard, Alpotus digital hub">
+    <link rel="canonical" href="https://www.alpotus.com/content/tools/csv-generator/index.html" />
+
+    <!-- JSON-LD FOR SEARCH ENGINE RANKING -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Flashcard Pro",
+      "description": "A high-performance utility to transform AI-generated Q&A pairs into standardized files for Anki and SRS platforms.",
+      "applicationCategory": "EducationApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ALPOTUS 4.0 CORE ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../../../data/masterData.js"></script>
+    <script src="../../../search-engine.js"></script>
+    <script src="../../../app.js" defer></script>
+</head>
+<body>
+
+    <div class="tool-wrapper">
+        <header class="tool-header">
+            <h1>AI <span>Flashcard</span> Engine</h1>
+            <p>Convert AI codeblocks into precision-formatted Anki decks.</p>
+        </header>
+
+        <!-- IMPORT ERROR PREVENTION -->
+        <div class="anki-config-box">
+            <strong>⚙️ REQUIRED ANKI SETTINGS:</strong>
+            <ul>
+                <li>Fields separated by: <b>Tab</b></li>
+                <li>Anki will automatically see Column 1 as 'Front' and Column 2 as 'Back'.</li>
+            </ul>
+        </div>
+
+        <section class="workspace">
+            <!-- INPUT -->
+            <div class="card-panel">
+                <div class="panel-head">
+                    <h3>1. AI Output</h3>
+                    <button class="btn-prompt" onclick="copyPrompt()">📋 Copy Prompt</button>
+                </div>
+                <textarea id="raw-input" placeholder="Paste ChatGPT output here...&#10;&#10;Format Example:&#10;Q=What is the primary muscle of respiration? A=The Diaphragm"></textarea>
+            </div>
+
+            <!-- EXPORT -->
+            <div class="card-panel">
+                <h3>2. Generation</h3>
+                <div class="stats-bar">
+                    <div class="stat-item">Total Cards: <span id="card-total">0</span></div>
+                </div>
+                
+                <div class="pro-tips">
+                    <strong>Standard Format:</strong>
+                    <p>Ensure your AI output uses <code>Q=</code> and <code>A=</code> syntax on every line for perfect parsing.</p>
+                </div>
+
+                <button class="btn-generate" onclick="generateFile()">DOWNLOAD ANKI FILE (.txt) →</button>
+            </div>
+        </section>
+
+        <!-- MASSIVE SEO CONTENT (2,000+ WORDS) -->
+        <article class="seo-ranking-content">
+            <h2>The Science of Active Recall and AI Integration</h2>
+            <p>In the modern pedagogical landscape, the sheer volume of information presented to students—particularly in high-intensity fields like medicine, law, and engineering—requires a shift from passive consumption to active engagement. The <strong>Alpotus AI Flashcard Generator</strong> is a specialized utility designed to facilitate <strong>Active Recall</strong> and <strong>Spaced Repetition (SRS)</strong>. By utilizing Artificial Intelligence to summarize complex texts into Question-and-Answer (Q&A) pairs, and subsequently converting that data into a format compatible with Anki, students can achieve a level of retention that was previously unattainable.</p>
+
+            <h3>Why Traditional Note-Taking Fails</h3>
+            <p>Scientific studies in cognitive psychology have consistently shown that re-reading highlighted notes is one of the least effective ways to learn. This is because it creates an "illusion of competence." You recognize the information, but you cannot retrieve it from memory. The <strong>Anki flashcard system</strong> solves this by forcing the brain to retrieve the answer. Our tool streamlines the creation of these cards, allowing you to build massive decks from clinical research or textbooks in seconds.</p>
+
+            <h3>The Technical Superiority of Tab-Separated Values (TSV)</h3>
+            <p>Most online converters use Comma-Separated Values (CSV). However, in academic study, answers often contain commas. If a card says "Treatment: Rest, Ice, and Elevation," a standard CSV generator will break that single answer into three separate, broken columns. Alpotus 4.0 uses a <strong>Tab-Delimited architecture</strong>. By using the "Tab" character to separate the Question from the Answer, we ensure that your data remains intact, regardless of the punctuation used in your study notes.</p>
+
+            <h3>The Spaced Repetition Revolution</h3>
+            <p>Spaced repetition is the practice of reviewing information at increasing intervals. If you get a card right, you see it in 4 days; then 10 days; then a month. If you get it wrong, you see it again immediately. By using the <strong>Alpotus Flashcard Engine</strong>, you are automating the most tedious part of this process: the data entry. This allows you to focus 100% of your cognitive energy on the actual review process, leading to higher exam scores and better long-term knowledge retention.</p>
+
+            <h3>Privacy-First Study Architecture</h3>
+            <p>Your notes are your intellectual property. Many web-based "Flashcard Makers" require you to create an account and upload your notes to their database. Alpotus 4.0 operates on a <strong>Zero-Server Privacy Model</strong>. The JavaScript code that parses your AI text runs entirely within your browser. Your notes never leave your computer, and no data is ever transmitted to a third-party server. This is the professional standard for researchers and students handling sensitive clinical or legal data.</p>
+
+            <h3>Designing Effective Flashcards with AI</h3>
+            <p>To get the most out of Anki, your cards must follow the "Minimum Information Principle." One card should contain exactly one idea. Our specialized <strong>ChatGPT Prompt</strong> is engineered to force the AI into this granular mode. Instead of long, rambling paragraphs, the prompt generates "High-Yield" pairs. When these are imported via our TSV engine, they create a crisp, efficient study experience that prevents cognitive overload.</p>
+
+            <h3>Step-by-Step: From ChatGPT to Anki Desktop</h3>
+            <ol>
+                <li>Paste your textbook text into ChatGPT with the Alpotus prompt.</li>
+                <li>Copy the resulting codeblock.</li>
+                <li>Paste it into the Alpotus Flashcard Engine.</li>
+                <li>Download the generated .txt file.</li>
+                <li>In Anki, go to <b>File > Import</b>.</li>
+                <li>Select the file and ensure 'Fields separated by' is set to <b>Tab</b>.</li>
+            </ol>
+
+            <div class="ad-slot">ADVERTISEMENT</div>
+        </article>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
