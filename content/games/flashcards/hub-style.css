@@ -1,0 +1,150 @@
+/* -------------------------------------------------------------------------- */
+/* ALPOTUS 5.0 FLASHCARD HUB - PREMIUM STYLES                                 */
+/* -------------------------------------------------------------------------- */
+
+:root {
+    --sub-color: #facc15; 
+}
+
+body { background: var(--bg-body); }
+
+.flashcard-hub {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 15px 120px 15px; /* Space for fixed bottom navigation */
+}
+
+/* --- 1. HUB NAVIGATION & PROFILE --- */
+.hub-header-v5 {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px; padding: 10px 0;
+}
+
+.brand-text { font-size: 1.8rem; font-weight: 950; letter-spacing: -1px; }
+.brand-text span { color: var(--primary); }
+
+.profile-trigger {
+    width: 48px; height: 48px; background: var(--card);
+    border: 2px solid var(--primary); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1.3rem; transition: 0.3s;
+    box-shadow: var(--shadow);
+}
+.profile-trigger:hover { transform: scale(1.1); background: var(--primary); color: #000; }
+
+/* --- 2. FILTERS & NAVIGATION --- */
+.label-tiny {
+    font-size: 0.65rem; font-weight: 900; text-transform: uppercase;
+    color: var(--text-muted); letter-spacing: 1px; margin-bottom: 8px; display: block;
+}
+
+.sub-scroll-row {
+    display: flex; gap: 10px; overflow-x: auto;
+    padding: 10px 0; margin-bottom: 25px; scrollbar-width: none;
+}
+.sub-scroll-row::-webkit-scrollbar { display: none; }
+
+.sub-btn {
+    padding: 12px 24px; border-radius: 50px; background: var(--card);
+    border: 2px solid var(--border); white-space: nowrap; font-weight: 800;
+    font-size: 0.85rem; cursor: pointer; transition: 0.3s; color: var(--text-main);
+}
+.sub-btn.active {
+    background: var(--sub-color); color: #000; border-color: var(--sub-color);
+    transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.hub-controls { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 30px; }
+
+.hub-select {
+    width: 100%; padding: 15px; border-radius: 15px; border: 2px solid var(--border);
+    background: var(--card); color: var(--text-main); font-weight: 700; outline: none;
+}
+
+.btn-outline {
+    background: #000; color: #fff; border: none; padding: 15px 20px;
+    border-radius: 15px; font-weight: 800; font-size: 0.7rem; cursor: pointer; transition: 0.3s;
+}
+.btn-outline:hover { background: #333; }
+
+/* --- 3. TOPIC LIST ITEMS --- */
+.topic-list { display: grid; gap: 12px; }
+
+.topic-item {
+    background: var(--card); padding: 22px 25px; border-radius: 24px;
+    border: 1px solid var(--border); display: flex; justify-content: space-between;
+    align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.topic-item:hover { border-color: var(--sub-color); transform: translateX(8px); }
+.topic-item.selected { border-color: var(--primary); background: #fffbeb; }
+
+.topic-info h3 { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+.topic-meta { font-size: 0.65rem; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.topic-action { font-size: 1.2rem; font-weight: 900; color: var(--sub-color); }
+
+/* --- 4. FLOATING START BAR --- */
+.start-action-bar {
+    position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%);
+    width: calc(100% - 30px); max-width: 500px; background: #000; color: #fff;
+    padding: 20px 30px; border-radius: 25px; display: none; /* Injected by JS */
+    justify-content: space-between; align-items: center; z-index: 2500;
+    border-top: 4px solid var(--primary); box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.btn-launch {
+    background: var(--primary); color: #000; border: none; padding: 14px 30px;
+    border-radius: 12px; font-weight: 950; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+}
+.btn-launch:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(250, 204, 21, 0.3); }
+
+/* --- 5. MODALS & ANALYTICS --- */
+.history-modal {
+    position: fixed; inset: 0; background: var(--bg-body); z-index: 5000;
+    display: none; flex-direction: column; padding: 40px 25px; animation: slideUp 0.4s ease;
+}
+
+.modal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.modal-nav h2 { font-weight: 900; }
+.modal-nav h2 span { color: var(--primary-dark); }
+.btn-close { background: var(--bg-highlight); border: none; width: 40px; height: 40px; border-radius: 50%; font-weight: 900; cursor: pointer; }
+
+.overall-stats { display: flex; gap: 15px; margin-bottom: 30px; }
+.stat-pill {
+    flex: 1; background: var(--card); padding: 20px; border-radius: 20px;
+    text-align: center; border: 1px solid var(--border);
+}
+.stat-pill span { display: block; font-size: 1.8rem; font-weight: 950; color: var(--primary-dark); }
+.stat-pill label { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); }
+
+.history-scroll-area { flex-grow: 1; overflow-y: auto; display: grid; gap: 10px; }
+.history-item {
+    background: var(--card); padding: 20px; border-radius: 18px; border: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.naming-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+    z-index: 6000; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.naming-box {
+    background: var(--bg-body); padding: 40px; border-radius: 35px; width: 100%;
+    max-width: 400px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.naming-box input {
+    width: 100%; padding: 18px; border-radius: 15px; border: 2px solid var(--border);
+    margin-bottom: 20px; outline: none; font-size: 1rem; font-weight: 700; text-align: center;
+}
+.btn-cancel { background: none; border: none; color: var(--text-muted); font-weight: 800; margin-top: 20px; cursor: pointer; }
+
+/* --- ANIMATIONS --- */
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 600px) {
+    .hub-header-v5 { margin-bottom: 20px; }
+    .brand-text { font-size: 1.5rem; }
+    .hub-controls { flex-direction: column; align-items: stretch; }
+    .naming-box { padding: 30px 20px; }
+  }
+
