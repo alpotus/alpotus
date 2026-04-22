@@ -1,0 +1,349 @@
+<!-- ALPOTUS MEDEDGE TITAN FRAGMENT: ANTIHYPERTENSIVE DRUGS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport ID is required for the Desktop/Mobile Toggle -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
+    
+    <title>Antihypertensive Drugs: Clinical Pharmacology | Alpotus Mededge</title>
+    <meta name="description" content="Clinical notes on Antihypertensive drugs, classification, and mechanisms for MBBS students.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../data/mbbs/mbbs-style.css">
+    <link rel="stylesheet" href="../../data/mbbs/mbbsnotes-element.css">
+    
+    <!-- AdSense Global Script (Replace with your actual ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Kalam:wght@700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    /* Remove any background color from body to make it seamless */
+    body { background: var(--page) !important; }
+    
+    #titan-content { opacity: 0; transition: opacity 0.5s ease; }
+    
+    /* Ensure the view bar spans 100% */
+    .view-bar {
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--border);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    
+    <div class="header-inner">
+        <div class="top-row">
+            <div class="brand" onclick="location.href='../../mbbs-library.html'">
+                ALPOTUS <span>MEDEDGE</span>
+            </div>
+            <button class="theme-switch" onclick="toggleTheme()" id="tBtn">NIGHT</button>
+        </div>
+    </div>
+    <!-- Integrated View Switcher -->
+    <div class="view-bar">
+        <button id="mView" class="view-btn active" onclick="setView('mobile')">📱 Mobile View</button>
+        <button id="dView" class="view-btn" onclick="setView('desktop')">💻 Desktop View</button>
+    </div>
+</header>
+
+<main class="note-page">
+    <div id="titan-content">
+        <!-- PASTE YOUR MEDICAL SHORTHAND HERE -->
+
+
+<h2 class="note-header">TOTAL DAILY DOSE AND DRUG INTERACTIONS OF ANTIEPILEPTICS</h2>
+
+<div class="callout def">
+    <div>Drug interactions are extremely important in antiepileptic therapy because many antiepileptic drugs induce or inhibit hepatic microsomal enzymes. This may either decrease the effect of another drug or increase toxicity.</div>
+</div>
+
+FLOWCHART: An antiepileptic drug is administered together with another drug ->
+    The antiepileptic either induces or inhibits hepatic enzymes ->
+    The plasma concentration of the second drug changes ->
+    [Treatment failure develops | Toxicity develops]
+
+<h2 class="note-header">PHENYTOIN</h2>
+
+TABLE:
+| Property | Details |
+| Total Daily Dose | <span class="hl-green">200–400 mg</span> |
+
+<h3>Interaction 1: Phenytoin with Oral Contraceptive Pills, Steroids, Vitamin D and Theophylline</h3>
+
+FLOWCHART: Phenytoin induces hepatic microsomal enzymes ->
+    Metabolism of oral contraceptive pills, steroids, vitamin D and theophylline increases ->
+    The plasma concentration of these drugs falls ->
+    Their effectiveness decreases
+
+TABLE:
+| Drug Affected by Phenytoin | Result |
+| Oral contraceptive pills | Contraceptive failure may occur |
+| Steroids | Effect decreases |
+| Vitamin D | Vitamin D deficiency and osteomalacia may develop |
+| Theophylline | Bronchodilator effect decreases |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"PHENYTOIN Pushes Pills, Prednisolone and Vitamin D Down"</div>
+</div>
+
+<h3>Interaction 2: Phenytoin with Carbamazepine</h3>
+
+FLOWCHART: Phenytoin induces metabolism of carbamazepine ->
+    Carbamazepine induces metabolism of phenytoin ->
+    The plasma concentration of both drugs decreases ->
+    The effectiveness of both drugs becomes less
+
+<p><span class="hl-yellow">This is called mutual induction.</span></p>
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"Phenytoin and Carbamazepine Compete and Clear each other"</div>
+</div>
+
+<h3>Interaction 3: Chloramphenicol, Isoniazid and Warfarin with Phenytoin</h3>
+
+FLOWCHART: Chloramphenicol, isoniazid or warfarin is given together with phenytoin ->
+    Metabolism of phenytoin becomes inhibited ->
+    Plasma concentration of phenytoin rises ->
+    <span class="hl-red">Phenytoin toxicity develops</span>
+
+TABLE:
+| Drug Given with Phenytoin | Result |
+| Chloramphenicol | Phenytoin toxicity |
+| Isoniazid (INH) | Phenytoin toxicity |
+| Warfarin | Phenytoin toxicity |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"CIW increases phenytoin"</div>
+    <ul class="mnemonic-list">
+        <li>C = Chloramphenicol</li>
+        <li>I = INH</li>
+        <li>W = Warfarin</li>
+    </ul>
+</div>
+
+<h2 class="note-header">CARBAMAZEPINE</h2>
+
+TABLE:
+| Property | Details |
+| Total Daily Dose | <span class="hl-green">600–1200 mg</span> |
+
+<h3>Interaction 1: Carbamazepine with Phenytoin, Phenobarbitone, Sodium Valproate and Oral Contraceptive Pills</h3>
+
+FLOWCHART: Carbamazepine induces hepatic enzymes ->
+    Metabolism of phenytoin, phenobarbitone, sodium valproate and oral contraceptive pills increases ->
+    Plasma concentration of these drugs decreases ->
+    Their therapeutic effect becomes less
+
+TABLE:
+| Drug Affected by Carbamazepine | Result |
+| Phenytoin | Reduced effect |
+| Phenobarbitone | Reduced effect |
+| Sodium valproate | Reduced effect |
+| Oral contraceptive pills | Contraceptive failure |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"CARBAMAZEPINE Clears Pills and Phenytoin"</div>
+</div>
+
+<h3>Interaction 2: INH and Erythromycin with Carbamazepine</h3>
+
+FLOWCHART: INH or erythromycin is administered together with carbamazepine ->
+    Metabolism of carbamazepine becomes inhibited ->
+    Carbamazepine accumulates in the body ->
+    <span class="hl-red">Carbamazepine toxicity develops</span>
+
+TABLE:
+| Drug Given with Carbamazepine | Result |
+| INH | Carbamazepine toxicity |
+| Erythromycin | Carbamazepine toxicity |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"IE increases carbamazepine"</div>
+    <ul class="mnemonic-list">
+        <li>I = INH</li>
+        <li>E = Erythromycin</li>
+    </ul>
+</div>
+
+<h2 class="note-header">PHENOBARBITONE</h2>
+
+TABLE:
+| Property | Details |
+| Total Daily Dose | <span class="hl-green">100–200 mg</span> |
+
+<h3>Interaction of Phenobarbitone with Oral Contraceptive Pills, Warfarin, Griseofulvin and Theophylline</h3>
+
+FLOWCHART: Phenobarbitone induces hepatic microsomal enzymes ->
+    Metabolism of oral contraceptive pills, warfarin, griseofulvin and theophylline increases ->
+    Their plasma concentration decreases ->
+    Their effect becomes weaker
+
+TABLE:
+| Drug Affected by Phenobarbitone | Result |
+| Oral contraceptive pills | Failure of contraception |
+| Warfarin | Reduced anticoagulant effect |
+| Griseofulvin | Reduced antifungal effect |
+| Theophylline | Reduced bronchodilator effect |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"PHENOBARBITONE Pushes Women, Worms and Wheeze drugs away"</div>
+    <ul class="mnemonic-list">
+        <li>W = Warfarin</li>
+        <li>W = Women pills (oral contraceptives)</li>
+        <li>W = Wheeze drug (theophylline)</li>
+        <li>W = Worm/fungal drug (griseofulvin)</li>
+    </ul>
+</div>
+
+<h2 class="note-header">ETHOSUXIMIDE</h2>
+
+TABLE:
+| Property | Details |
+| Total Daily Dose | <span class="hl-green">500–1500 mg</span> |
+
+<h3>Interaction of Ethosuximide with Valproate</h3>
+
+FLOWCHART: Valproate is given together with ethosuximide ->
+    Valproate inhibits metabolism of ethosuximide ->
+    Plasma concentration of ethosuximide increases ->
+    <span class="hl-red">Risk of ethosuximide toxicity increases</span>
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"Valproate Values Ethosuximide too much"</div>
+</div>
+
+<h2 class="note-header">SODIUM VALPROATE</h2>
+
+TABLE:
+| Property | Details |
+| Total Daily Dose | <span class="hl-green">1500–2000 mg</span> |
+
+<h3>Interaction 1: Sodium Valproate with Phenytoin</h3>
+
+FLOWCHART: Sodium valproate is given together with phenytoin ->
+    Valproate displaces phenytoin from plasma protein binding sites ->
+    Free phenytoin concentration rises ->
+    <span class="hl-red">Phenytoin toxicity develops</span>
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"Valproate pushes Phenytoin free"</div>
+</div>
+
+<h3>Interaction 2: Sodium Valproate with Phenobarbitone</h3>
+
+FLOWCHART: Valproate inhibits the degradation of phenobarbitone ->
+    Plasma concentration of phenobarbitone increases ->
+    <span class="hl-red">Phenobarbitone toxicity may occur</span>
+
+<h3>Interaction 3: Sodium Valproate with Carbamazepine</h3>
+
+FLOWCHART: Sodium valproate and carbamazepine are administered together ->
+    The incidence of teratogenicity increases ->
+    Risk to the fetus becomes greater during pregnancy
+
+TABLE:
+| Drug Combination | Important Result |
+| Valproate + Phenytoin | Phenytoin toxicity |
+| Valproate + Phenobarbitone | Phenobarbitone toxicity |
+| Valproate + Carbamazepine | Increased teratogenicity |
+
+<div class="mnemonic-box">
+    <div class="mnemonic-title">Mnemonic</div>
+    <div class="mnemonic-text">"Valproate causes 3 P problems"</div>
+    <ul class="mnemonic-list">
+        <li>P = Pushes phenytoin from proteins</li>
+        <li>P = Potentiates phenobarbitone</li>
+        <li>P = Pregnancy risk increases with carbamazepine</li>
+    </ul>
+</div>
+
+<h2 class="note-header">SUMMARY TABLE</h2>
+
+TABLE:
+| Drug | Total Daily Dose | Important Interaction |
+| Phenytoin | <span class="hl-green">200–400 mg</span> | Reduces effect of OC pills, steroids, vitamin D and theophylline |
+| Carbamazepine | <span class="hl-green">600–1200 mg</span> | Reduces effect of phenytoin, phenobarbitone, valproate and OC pills |
+| Phenobarbitone | <span class="hl-green">100–200 mg</span> | Reduces effect of OC pills, warfarin, griseofulvin and theophylline |
+| Ethosuximide | <span class="hl-green">500–1500 mg</span> | Valproate increases its concentration |
+| Sodium valproate | <span class="hl-green">1500–2000 mg</span> | Causes phenytoin and phenobarbitone toxicity |
+
+
+
+<!-- MEDICAL SHORTHAND ENDS HERE -->
+    </div>
+
+    <!-- PREMIUM FOOTER -->
+    <footer style="margin-top: 100px; padding: 60px 0; border-top: 1px solid var(--border); text-align: center;">
+        <div style="margin-bottom: 25px;">
+            <a href="../../mbbs-library.html" style="text-decoration:none; font-weight:900; color:var(--primary-red); font-size:0.9rem; letter-spacing:1px;">
+                ← RETURN TO MEDICAL LIBRARY
+            </a>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-sub); max-width: 500px; margin: 0 auto; line-height: 1.6;">
+            &copy; 2025 Alpotus Mededge. Titan Engine v21.0. <br>
+            Clinical notes are for academic reference only.Correlate with latest clinical guidelines.
+        </p>
+    </footer>
+</main>
+
+<div class="fab" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+<!-- CORE ENGINE -->
+<script src="../../data/mbbs/app-engine.js"></script>
+
+<script>
+    // 1. Theme Toggle Logic
+    window.toggleTheme = function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('alpotus_theme', isDark ? 'dark' : 'light');
+        const btn = document.getElementById('tBtn');
+        if(btn) btn.innerText = isDark ? 'DAY' : 'NIGHT';
+    };
+
+    // 2. View Switcher Logic (FIXED)
+    window.setView = function(mode) {
+        const vp = document.getElementById('viewport-meta');
+        const dBtn = document.getElementById('dView');
+        const mBtn = document.getElementById('mView');
+
+        if (!vp) {
+            console.error("Viewport meta tag not found!");
+            return;
+        }
+
+        if(mode === 'desktop') {
+            // Forces the phone to zoom out
+            vp.setAttribute('content', 'width=1200, initial-scale=0.3'); 
+            document.body.classList.add('force-desktop');
+            if(dBtn) dBtn.classList.add('active');
+            if(mBtn) mBtn.classList.remove('active');
+        } else {
+            // Standard mobile zoom
+            vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            document.body.classList.remove('force-desktop');
+            if(mBtn) mBtn.classList.add('active');
+            if(dBtn) dBtn.classList.remove('active');
+        }
+    };
+</script>
+</body>
+</html>
+
+
+
