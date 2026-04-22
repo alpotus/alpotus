@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>Age Calculator - Precise Chronological Age Finder | Alpotus</title>
+    <meta name="description" content="Calculate your exact age in years, months, days, hours, and seconds. Find your next birthday countdown and total time lived with the Alpotus Age Calculator. Free and accurate.">
+    <meta name="keywords" content="age calculator, chronological age, birthday countdown, how old am I, date of birth finder, Alpotus calculators">
+    <link rel="canonical" href="https://www.alpotus.com/content/calculators/age/index.html" />
+
+    <!-- JSON-LD STRUCTURED DATA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Age Calculator",
+      "description": "A high-precision tool to calculate chronological age, total time lived, and next birthday countdown.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Sukkannagari Karthik Reddy",
+        "url": "https://www.alpotus.com/about.html"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .calc-container { max-width: 800px; margin: 0 auto; padding: 0 5%; }
+
+        /* Calculator Card */
+        .age-card {
+            background: var(--bg-card);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .input-group { margin-bottom: 25px; }
+        .input-group label { display: block; font-weight: 800; color: var(--text-main); margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase; }
+        .input-group input {
+            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color);
+            background: var(--bg-body); color: var(--text-main); font-size: 1.1rem; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); }
+
+        .calc-btn {
+            width: 100%; padding: 18px; background: var(--primary); color: #000;
+            border: none; border-radius: 50px; font-weight: 900; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+        .calc-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(250, 204, 21, 0.3); }
+
+        /* Result Styles */
+        #results-area { display: none; margin-top: 40px; animation: fadeInUp 0.6s ease; }
+        
+        .main-age { text-align: center; margin-bottom: 30px; }
+        .age-number { font-size: 4rem; font-weight: 950; color: var(--text-main); line-height: 1; }
+        .age-number span { color: var(--primary); }
+        .age-labels { font-size: 1.2rem; font-weight: 700; color: var(--text-muted); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 30px; }
+        .stat-card { background: var(--bg-body); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-card h4 { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        .stat-card div { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+
+        /* SEO Content */
+        .seo-content { margin-top: 60px; line-height: 1.8; color: var(--text-muted); }
+        .seo-content h2 { color: var(--text-main); margin-top: 30px; border-left: 5px solid var(--primary); padding-left: 15px; }
+        .seo-content p { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <main class="calc-container">
+        <!-- TOP AD -->
+        <div class="ad-slot" style="margin-bottom: 20px;">ADVERTISEMENT</div>
+
+        <div class="age-card">
+            <h1 style="text-align: center; font-weight: 900; margin-bottom: 30px;">Age <span>Calculator</span></h1>
+            
+            <div class="input-group">
+                <label>Date of Birth</label>
+                <input type="date" id="dob" required>
+            </div>
+
+            <div class="input-group">
+                <label>Age at the Date of</label>
+                <input type="date" id="targetDate">
+            </div>
+
+            <button class="calc-btn" onclick="calculateAge()">CALCULATE EXACT AGE →</button>
+
+            <!-- RESULTS SECTION -->
+            <div id="results-area">
+                <div class="main-age">
+                    <div class="age-number" id="res-years">0 <span>Years</span></div>
+                    <div class="age-labels" id="res-ymd">0 Months | 0 Days</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><h4>Total Months</h4><div id="tot-months">0</div></div>
+                    <div class="stat-card"><h4>Total Weeks</h4><div id="tot-weeks">0</div></div>
+                    <div class="stat-card"><h4>Total Days</h4><div id="tot-days">0</div></div>
+                    <div class="stat-card" style="background: var(--primary); border:none;">
+                        <h4 style="color:#000">Next Birthday</h4>
+                        <div id="next-bday" style="color:#000">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POWERFUL SEO CONTENT BLOCK -->
+        <article class="seo-content">
+            <h2>What is an Age Calculator?</h2>
+            <p>An <strong>Age Calculator</strong> is a digital utility designed to determine the exact time elapsed between two specific dates—usually a person's date of birth and the current date. The Alpotus Age Calculator provides more than just years; it breaks down your life into months, weeks, days, and even hours, offering a comprehensive look at your chronological timeline.</p>
+
+            <h2>Why Use the Alpotus Age Calculator?</h2>
+            <p>Our tool is engineered by <strong>CEO Sukkannagari Karthik Reddy</strong> to be the most accurate in the industry. It accounts for leap years, varying month lengths (28, 30, or 31 days), and precise time differences. Whether you need to find your exact age for a legal document, medical record, or just to see how many days are left until your next big celebration, we provide instant, reliable results.</p>
+
+            <h2>How Your Chronological Age is Calculated</h2>
+            <p>We use a systematic subtraction algorithm. First, we determine the difference in years. If the current month is earlier than the birth month, we adjust the year count. We then calculate the remaining months and days, ensuring the result is perfectly aligned with the Gregorian calendar.</p>
+            
+            <ul>
+                <li><strong>Chronological Age:</strong> The total time since birth.</li>
+                <li><strong>Next Birthday:</strong> A live countdown of months and days until your next anniversary.</li>
+                <li><strong>Total Metrics:</strong> Cumulative values useful for researchers and fitness enthusiasts.</li>
+            </ul>
+        </article>
+
+        <!-- BOTTOM AD -->
+        <div class="ad-slot" style="margin: 40px 0;">ADVERTISEMENT</div>
+    </main>
+
+    <script>
+        // Set default target date to today
+        window.addEventListener('load', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('targetDate').value = today;
+        });
+
+        function calculateAge() {
+            const dobInput = document.getElementById('dob').value;
+            const targetInput = document.getElementById('targetDate').value;
+
+            if (!dobInput) {
+                alert("Please select your Date of Birth");
+                return;
+            }
+
+            const birthDate = new Date(dobInput);
+            const endDate = new Date(targetInput);
+
+            if (birthDate > endDate) {
+                alert("Date of birth cannot be in the future!");
+                return;
+            }
+
+            let years = endDate.getFullYear() - birthDate.getFullYear();
+            let months = endDate.getMonth() - birthDate.getMonth();
+            let days = endDate.getDate() - birthDate.getDate();
+
+            // Adjust for negative days/months
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // Update UI
+            document.getElementById('results-area').style.display = 'block';
+            document.getElementById('res-years').innerHTML = `${years} <span>Years</span>`;
+            document.getElementById('res-ymd').innerText = `${months} Months | ${days} Days`;
+
+            // Total Metrics
+            const diffTime = Math.abs(endDate - birthDate);
+            const totDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('tot-days').innerText = totDays.toLocaleString();
+            document.getElementById('tot-weeks').innerText = Math.floor(totDays / 7).toLocaleString();
+            document.getElementById('tot-months').innerText = (years * 12 + months).toLocaleString();
+
+            // Next Birthday Logic
+            let nextBday = new Date(endDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBday < endDate) {
+                nextBday.setFullYear(nextBday.getFullYear() + 1);
+            }
+            const diffBday = nextBday - endDate;
+            const daysLeft = Math.ceil(diffBday / (1000 * 60 * 60 * 24));
+            
+            const nextMonths = Math.floor(daysLeft / 30.44);
+            const nextDays = Math.floor(daysLeft % 30.44);
+            
+            document.getElementById('next-bday').innerText = `${nextMonths}m ${nextDays}d`;
+
+            // Scroll to results
+            document.getElementById('results-area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+
+</body>
+</html>
+
