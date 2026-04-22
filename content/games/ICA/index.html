@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- POWERFUL SEO & META DATA -->
+    <title>Pharmacology Quiz Game | Master Drug Indications & Side Effects - Alpotus</title>
+    <meta name="description" content="Test your clinical drug knowledge with Alpotus PharmaMaster. Interactive pharmacology games covering indications, contraindications, and side effects. Perfect for USMLE, NCLEX, and NAPLEX prep.">
+    <meta name="keywords" content="pharmacology quiz, drug indications game, side effects quiz, USMLE pharmacology, NCLEX prep, pharmacy student tools, Alpotus pharmacology">
+    <meta name="author" content="Alpotus Medical Education">
+    <link rel="canonical" href="https://www.alpotus.com/pharmacology-game" />
+
+    <!-- OPEN GRAPH (Social Media SEO) -->
+    <meta property="og:title" content="Alpotus PharmaMaster: The Ultimate Pharmacology Study Tool">
+    <meta property="og:description" content="Master drug classes, indications, and clinical scenarios with our interactive suite.">
+    <meta property="og:image" content="https://www.alpotus.com/assets/pharma-master-og.jpg">
+    <meta property="og:url" content="https://www.alpotus.com/pharmacology-game">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- STRUCTURED DATA (JSON-LD) for Google Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus PharmaMaster",
+      "operatingSystem": "Web",
+      "applicationCategory": "EducationalGame",
+      "description": "An interactive pharmacology quiz suite for medical and pharmacy students.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- STYLING & FONTS -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --alpotus-blue: #0f172a;
+            --alpotus-accent: #3b82f6;
+            --glass-white: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #f8fafc, #e2e8f0);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* LOGO BOX */
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: var(--alpotus-blue);
+            text-transform: uppercase;
+        }
+        .brand-logo span { color: var(--alpotus-accent); }
+
+        /* HERO SECTION */
+        header.hub-header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            padding: 20px;
+        }
+        .hub-header h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            color: var(--alpotus-blue);
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+            background: linear-gradient(to bottom right, #0f172a, #334155);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hub-header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 500;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* PREMIUM HUB GRID */
+        main.hub-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+        
+        .hub-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            padding: 50px 30px;
+            border-radius: 32px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        .hub-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--card-color);
+            opacity: 0.8;
+        }
+        .hub-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: #ffffff;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        .hub-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            width: 100px; height: 100px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center; justify-content: center;
+            border-radius: 30px;
+        }
+        .hub-card h3 { font-weight: 800; color: #1e293b; margin-bottom: 12px; font-size: 1.4rem; }
+        .hub-card p { font-size: 0.95rem; color: #64748b; line-height: 1.6; font-weight: 500; }
+        
+        .version-tag {
+            display: inline-block;
+            background: white;
+            color: var(--alpotus-blue);
+            padding: 6px 18px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* SEO CONTENT SECTION (Hidden but accessible to crawlers) */
+        .seo-content {
+            max-width: 800px;
+            margin: 60px auto;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        footer.footer-branding {
+            text-align: center;
+            padding: 40px;
+        }
+        .footer-branding span {
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="game-container">
+            
+            <!-- ALPOTUS HUB INTERFACE -->
+            <section class="hero-section">
+                
+                <header class="hub-header">
+                    <div class="brand-logo">ALP<span>O</span>TUS</div>
+                    <span class="version-tag">Study Suite 3.5</span>
+                    <h1>PharmaMaster Pro</h1>
+                    <p>Elevate your clinical reasoning. High-yield pharmacology training for medical students, pharmacists, and nursing professionals.</p>
+                </header>
+
+                <main class="hub-grid">
+                    <!-- INDICATIONS -->
+                    <article class="hub-card" 
+                         style="--card-color: #10b981; --card-color-light: #ecfdf5;" 
+                         onclick="initGame('indications', '#10b981')">
+                        <div class="hub-icon">💊</div>
+                        <h3>Indications Quiz</h3>
+                        <p>Practice therapeutic uses, primary clinical applications, and drug-of-choice logic.</p>
+                    </article>
+
+                    <!-- SIDE EFFECTS -->
+                    <article class="hub-card" 
+                         style="--card-color: #ef4444; --card-color-light: #fff1f2;" 
+                         onclick="initGame('side_effects', '#ef4444')">
+                        <div class="hub-icon">⚠️</div>
+                        <h3>Adverse Effects</h3>
+                        <p>Identify toxicities, safety warnings, and the common side effects found on USMLE & NCLEX exams.</p>
+                    </article>
+
+                    <!-- CONTRAINDICATIONS -->
+                    <article class="hub-card" 
+                         style="--card-color: #f59e0b; --card-color-light: #fffbeb;" 
+                         onclick="initGame('contraindications', '#f59e0b')">
+                        <div class="hub-icon">🚫</div>
+                        <h3>Contraindications</h3>
+                        <p>Learn vital clinical restrictions, black-box warnings, and absolute safety protocols.</p>
+                    </article>
+
+                    <!-- CLINICAL SCENARIOS -->
+                    <article class="hub-card" 
+                         style="--card-color: #3b82f6; --card-color-light: #eff6ff;" 
+                         onclick="initGame('scenario', '#3b82f6')">
+                        <div class="hub-icon">🏥</div>
+                        <h3>ER Simulator</h3>
+                        <p>Apply drug knowledge to diagnostic clinical patient cases in our high-speed hospital simulator.</p>
+                    </article>
+                </main>
+
+                <!-- SEO TEXT SECTION -->
+                <section class="seo-content">
+                    <h2>Why use the Alpotus Pharmacology Practice Tool?</h2>
+                    <p>
+                        Mastering <strong>pharmacology</strong> is one of the most difficult challenges for medical and pharmacy students. 
+                        Our interactive suite allows you to practice <strong>drug indications</strong>, <strong>side effects</strong>, 
+                        and <strong>contraindications</strong> through active recall and <strong>Select All That Apply (SATA)</strong> 
+                        logic. Whether you are preparing for the <strong>USMLE Step 1</strong>, <strong>NCLEX-RN</strong>, 
+                        or <strong>NAPLEX</strong>, Alpotus provides high-yield questions to help you study smarter.
+                    </p>
+                </section>
+
+                <footer class="footer-branding">
+                    <span>&copy; 2024 Alpotus Medical Education • Study Smarter, Learn Faster</span>
+                </footer>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="pharmacologyData.js"></script>
+    <script src="gameEngine.js"></script>
+
+</body>
+      </html>
+
