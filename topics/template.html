@@ -1,0 +1,124 @@
+<!-- ALPOTUS MEDEDGE TITAN FRAGMENT: ANTIHYPERTENSIVE DRUGS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport ID is required for the Desktop/Mobile Toggle -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
+    
+    <title>Antihypertensive Drugs: Clinical Pharmacology | Alpotus Mededge</title>
+    <meta name="description" content="Clinical notes on Antihypertensive drugs, classification, and mechanisms for MBBS students.">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../data/mbbs/mbbs-style.css">
+    <link rel="stylesheet" href="../../data/mbbs/mbbsnotes-element.css">
+    
+    <!-- AdSense Global Script (Replace with your actual ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Kalam:wght@700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    /* Remove any background color from body to make it seamless */
+    body { background: var(--page) !important; }
+    
+    #titan-content { opacity: 0; transition: opacity 0.5s ease; }
+    
+    /* Ensure the view bar spans 100% */
+    .view-bar {
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--border);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    
+    <div class="header-inner">
+        <div class="top-row">
+            <div class="brand" onclick="location.href='../../mbbs-library.html'">
+                ALPOTUS <span>MEDEDGE</span>
+            </div>
+            <button class="theme-switch" onclick="toggleTheme()" id="tBtn">NIGHT</button>
+        </div>
+    </div>
+    <!-- Integrated View Switcher -->
+    <div class="view-bar">
+        <button id="mView" class="view-btn active" onclick="setView('mobile')">📱 Mobile View</button>
+        <button id="dView" class="view-btn" onclick="setView('desktop')">💻 Desktop View</button>
+    </div>
+</header>
+
+<main class="note-page">
+    <div id="titan-content">
+        <!-- PASTE YOUR MEDICAL SHORTHAND HERE -->
+        
+        
+        
+        
+        
+        
+        <!-- MEDICAL SHORTHAND ENDS HERE -->
+    </div>
+
+    <!-- PREMIUM FOOTER -->
+    <footer style="margin-top: 100px; padding: 60px 0; border-top: 1px solid var(--border); text-align: center;">
+        <div style="margin-bottom: 25px;">
+            <a href="../../mbbs-library.html" style="text-decoration:none; font-weight:900; color:var(--primary-red); font-size:0.9rem; letter-spacing:1px;">
+                ← RETURN TO MEDICAL LIBRARY
+            </a>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-sub); max-width: 500px; margin: 0 auto; line-height: 1.6;">
+            &copy; 2025 Alpotus Mededge. Titan Engine v21.0. <br>
+            Clinical notes are for academic reference only.Correlate with latest clinical guidelines.
+        </p>
+    </footer>
+</main>
+
+<div class="fab" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+<!-- CORE ENGINE -->
+<script src="../../data/mbbs/app-engine.js"></script>
+
+<script>
+    // 1. Theme Toggle Logic
+    window.toggleTheme = function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('alpotus_theme', isDark ? 'dark' : 'light');
+        const btn = document.getElementById('tBtn');
+        if(btn) btn.innerText = isDark ? 'DAY' : 'NIGHT';
+    };
+
+    // 2. View Switcher Logic (FIXED)
+    window.setView = function(mode) {
+        const vp = document.getElementById('viewport-meta');
+        const dBtn = document.getElementById('dView');
+        const mBtn = document.getElementById('mView');
+
+        if (!vp) {
+            console.error("Viewport meta tag not found!");
+            return;
+        }
+
+        if(mode === 'desktop') {
+            // Forces the phone to zoom out
+            vp.setAttribute('content', 'width=1200, initial-scale=0.3'); 
+            document.body.classList.add('force-desktop');
+            if(dBtn) dBtn.classList.add('active');
+            if(mBtn) mBtn.classList.remove('active');
+        } else {
+            // Standard mobile zoom
+            vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            document.body.classList.remove('force-desktop');
+            if(mBtn) mBtn.classList.add('active');
+            if(dBtn) dBtn.classList.remove('active');
+        }
+    };
+</script>
+</body>
+</html>
