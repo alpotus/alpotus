@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- POWERFUL SEO 4.0 -->
+    <title>CURB-65 Score Calculator | Pneumonia Severity & Mortality Risk | Alpotus</title>
+    <meta name="description" content="Calculate CURB-65 score for Community-Acquired Pneumonia (CAP) severity. Predict mortality risk and determine treatment location (Home vs ICU). PubMed-backed clinical guide.">
+    <meta name="keywords" content="CURB-65 calculator, pneumonia severity index, CAP mortality risk, clinical scores, respiratory infection tool, BTS guidelines pneumonia, Alpotus clinical">
+    <link rel="canonical" href="https://www.alpotus.com/content/scores/curb65/index.html" />
+
+    <!-- JSON-LD MEDICAL SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Alpotus Clinical CURB-65 Suite",
+      "description": "High-precision clinical tool for assessing Community-Acquired Pneumonia severity using the CURB-65 criteria.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
+    <!-- ASSETS -->
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="../../../app.js" defer></script>
+
+    <style>
+        body { padding-top: 90px; background: var(--bg-body); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+
+        /* Calculator UI */
+        .curb-card {
+            background: var(--bg-card); border-radius: 30px; padding: 40px;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        .curb-card::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 8px; background: var(--primary); }
+
+        .curb-section { margin-bottom: 20px; }
+        .curb-section h3 { font-size: 0.8rem; font-weight: 950; text-transform: uppercase; color: var(--primary-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .opt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .curb-opt { 
+            padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-body); cursor: pointer; text-align: center;
+            transition: 0.3s; font-size: 0.95rem; font-weight: 700;
+        }
+        .curb-opt:hover { border-color: var(--primary); }
+        .curb-opt.active { background: var(--primary); border-color: var(--primary); color: #000; }
+
+        /* Unit Switcher for Urea */
+        .unit-toggle { display: inline-flex; background: #eee; border-radius: 5px; padding: 2px; margin-left: 10px; }
+        .u-btn { padding: 2px 8px; font-size: 0.6rem; border: none; cursor: pointer; border-radius: 3px; font-weight: 800; }
+        .u-btn.active { background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Result Display */
+        #result-area { display: none; margin-top: 40px; animation: fadeInUp 0.6s ease; }
+        .res-main { text-align: center; background: #000; color: #fff; padding: 40px; border-radius: 25px; border: 2px solid var(--primary); }
+        .score-val { font-size: 5rem; font-weight: 950; color: var(--primary); line-height: 1; }
+        .triage-badge { display: inline-block; padding: 10px 25px; border-radius: 50px; font-weight: 900; margin-top: 20px; text-transform: uppercase; font-size: 1.1rem; }
+
+        .mortality-box { background: var(--bg-body); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); margin-top: 20px; text-align: center; }
+        .mortality-box h4 { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+        .mortality-box div { font-size: 1.5rem; font-weight: 900; color: #e74c3c; }
+
+        /* AUTHORITY CONTENT */
+        .authority-content { margin-top: 80px; padding-bottom: 100px; line-height: 2; color: var(--text-muted); }
+        .authority-content h2 { font-size: 2.2rem; font-weight: 950; color: var(--text-main); margin: 45px 0 20px; border-left: 8px solid var(--primary); padding-left: 20px; }
+        .authority-content h3 { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 35px 0 15px; }
+        .authority-content p { font-size: 1.1rem; margin-bottom: 25px; text-align: justify; }
+        .clinical-table { width: 100%; border-collapse: collapse; margin: 30px 0; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; }
+        .clinical-table th, .clinical-table td { padding: 15px; border: 1px solid var(--border-color); text-align: left; }
+        .clinical-table th { background: var(--bg-card); color: var(--text-main); }
+
+        @media (max-width: 600px) { .score-val { font-size: 3.5rem; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="ad-slot">ADVERTISEMENT</div>
+
+        <section class="curb-card">
+            <h1 style="text-align:center; font-weight:950; font-size: 2.5rem;">CURB-65 <span style="color:var(--primary)">Calculator</span></h1>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom: 40px;">Pneumonia Severity & Triage Tool</p>
+
+            <!-- C -->
+            <div class="curb-section">
+                <h3><span>C</span>onfusion (New disorientation in person/place/time)</h3>
+                <div class="opt-row" data-cat="c">
+                    <div class="curb-opt" data-val="0" onclick="selectScore(this)">No</div>
+                    <div class="curb-opt" data-val="1" onclick="selectScore(this)">Yes</div>
+                </div>
+            </div>
+
+            <!-- U -->
+            <div class="curb-section">
+                <h3><span>U</span>rea 
+                    <div class="unit-toggle">
+                        <button class="u-btn active" id="btn-mg" onclick="toggleUrea('mg')">mg/dL</button>
+                        <button class="u-btn" id="btn-mmol" onclick="toggleUrea('mmol')">mmol/L</button>
+                    </div>
+                </h3>
+                <div class="opt-row" data-cat="u">
+                    <div class="curb-opt" data-val="0" id="urea-low" onclick="selectScore(this)">≤ 19 mg/dL</div>
+                    <div class="curb-opt" data-val="1" id="urea-high" onclick="selectScore(this)">> 19 mg/dL</div>
+                </div>
+            </div>
+
+            <!-- R -->
+            <div class="curb-section">
+                <h3><span>R</span>espiratory Rate (≥ 30 breaths/min)</h3>
+                <div class="opt-row" data-cat="r">
+                    <div class="curb-opt" data-val="0" onclick="selectScore(this)">Normal</div>
+                    <div class="curb-opt" data-val="1" onclick="selectScore(this)">Elevated (≥30)</div>
+                </div>
+            </div>
+
+            <!-- B -->
+            <div class="curb-section">
+                <h3><span>B</span>lood Pressure (SBP < 90 or DBP ≤ 60 mmHg)</h3>
+                <div class="opt-row" data-cat="b">
+                    <div class="curb-opt" data-val="0" onclick="selectScore(this)">Normal</div>
+                    <div class="curb-opt" data-val="1" onclick="selectScore(this)">Low BP</div>
+                </div>
+            </div>
+
+            <!-- 65 -->
+            <div class="curb-section">
+                <h3><span>65</span> Age (≥ 65 years)</h3>
+                <div class="opt-row" data-cat="age">
+                    <div class="curb-opt" data-val="0" onclick="selectScore(this)">Under 65</div>
+                    <div class="curb-opt" data-val="1" onclick="selectScore(this)">65 or Older</div>
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="result-area">
+                <div class="res-main">
+                    <div style="text-transform:uppercase; font-weight:800; color:#aaa; font-size:0.8rem;">Total CURB-65 Score</div>
+                    <div class="score-val" id="total-val">0</div>
+                    <div id="triage-badge" class="triage-badge">-</div>
+                </div>
+                <div class="mortality-box">
+                    <h4>Estimated 30-Day Mortality</h4>
+                    <div id="mort-val">-</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AUTHORITY CONTENT -->
+        <article class="authority-content">
+            <h2>What is the CURB-65 Score?</h2>
+            <p>The <strong>CURB-65 score</strong> is a validated clinical prediction rule used to assess the severity of Community-Acquired Pneumonia (CAP). Developed by the British Thoracic Society and popularized in the early 2000s, it provides clinicians with an objective framework to decide whether a patient can be safely treated at home or requires hospitalization. The acronym represents five core physiological variables: Confusion, Urea, Respiratory rate, Blood pressure, and Age.</p>
+
+            <h2>How to Use the Alpotus CURB-65 Engine</h2>
+            <p>To use this calculator, perform a clinical assessment of the patient and enter the laboratory and vital signs. A point is assigned for each of the following criteria:</p>
+            <ul>
+                <li><strong>C (Confusion):</strong> Use a validated mental test or observe new disorientation.</li>
+                <li><strong>U (Urea):</strong> Blood Urea Nitrogen (BUN) > 19 mg/dL (7 mmol/L). Note: Our tool allows you to toggle between units for global clinical use.</li>
+                <li><strong>R (Respiratory Rate):</strong> ≥ 30 breaths per minute.</li>
+                <li><strong>B (Blood Pressure):</strong> Systolic < 90 mmHg or Diastolic ≤ 60 mmHg.</li>
+                <li><strong>65:</strong> Age 65 or older.</li>
+            </ul>
+
+            <h3>Significance and Clinical Triage</h3>
+            <p>The significance of the CURB-65 score lies in its ability to streamline triage in high-pressure emergency environments. Research shows that patients with a score of 0 or 1 have a very low risk of mortality (less than 2%) and are often suitable for <strong>outpatient management</strong>. Conversely, a score of 3 or higher indicates a medical emergency with a mortality risk reaching 22%, necessitating urgent inpatient care or ICU admission.</p>
+
+            <h2>PubMed Studies and Clinical Evidence</h2>
+            <div style="background:rgba(250,204,21,0.05); padding:30px; border-radius:20px; border:1px solid var(--primary); margin:40px 0;">
+                <strong>Clinical Study Highlight (Lim et al., 2003):</strong> A landmark study published in <em>Thorax</em> (PubMed ID: 12728160) involved a derivation cohort of 1,068 patients. It confirmed that CURB-65 effectively stratifies patients into low, moderate, and high-risk groups for death within 30 days.
+            </div>
+
+            <h3>Comparison to PSI (Pneumonia Severity Index)</h3>
+            <p>While the Pneumonia Severity Index (PSI) is also widely used, CURB-65 is preferred in many emergency departments due to its simplicity. A comparative study in <em>The Lancet</em> suggested that while PSI is slightly more accurate at identifying low-risk patients, CURB-65 is far more practical for rapid decision-making because it requires fewer variables and no complex laboratory calculations.</p>
+
+            <table class="clinical-table">
+                <thead><tr><th>CURB-65 Score</th><th>Risk Group</th><th>30-Day Mortality</th><th>Recommendation</th></tr></thead>
+                <tbody>
+                    <tr><td>0 - 1</td><td>Low Risk</td><td>0.7% - 2.1%</td><td>Home treatment possible</td></tr>
+                    <tr><td>2</td><td>Moderate Risk</td><td>9.2%</td><td>Hospitalize or close monitoring</td></tr>
+                    <tr><td>3 - 5</td><td>High Risk</td><td>14.5% - 40%</td><td>Severe pneumonia; ICU assessment</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Scientific References:</h3>
+            <p style="font-size:0.85rem; background:#eee; padding:20px; border-radius:15px;">
+                1. Lim WS, et al. "Defining community acquired pneumonia severity on presentation to hospital: CURB65 score." Thorax, 2003.<br>
+                2. PubMed ID: 12728160 - The primary BTS clinical trial data.<br>
+                3. Ebell MH. "CURB-65 score for community-acquired pneumonia." American Family Physician, 2006.<br>
+                4. British Thoracic Society guidelines for the management of CAP in adults.
+            </p>
+        </article>
+    </div>
+
+    <script>
+        let scores = { c: null, u: null, r: null, b: null, age: null };
+        let ureaUnit = 'mg';
+
+        function toggleUrea(unit) {
+            ureaUnit = unit;
+            document.getElementById('btn-mg').classList.toggle('active', unit === 'mg');
+            document.getElementById('btn-mmol').classList.toggle('active', unit === 'mmol');
+            
+            const low = document.getElementById('urea-low');
+            const high = document.getElementById('urea-high');
+            
+            if (unit === 'mg') {
+                low.innerText = "≤ 19 mg/dL";
+                high.innerText = "> 19 mg/dL";
+            } else {
+                low.innerText = "≤ 7 mmol/L";
+                high.innerText = "> 7 mmol/L";
+            }
+        }
+
+        function selectScore(el) {
+            const cat = el.parentElement.dataset.cat;
+            const val = parseInt(el.dataset.val);
+            
+            el.parentElement.querySelectorAll('.curb-opt').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            scores[cat] = val;
+
+            if (Object.values(scores).every(v => v !== null)) {
+                calculateCURB();
+            }
+        }
+
+        function calculateCURB() {
+            const total = Object.values(scores).reduce((a, b) => a + b, 0);
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('total-val').innerText = total;
+
+            const triage = document.getElementById('triage-badge');
+            const mort = document.getElementById('mort-val');
+
+            if (total <= 1) {
+                triage.innerText = "OUTPATIENT / HOME";
+                triage.style.background = "#2ecc71"; triage.style.color = "#fff";
+                mort.innerText = total === 0 ? "0.6%" : "1.5%";
+            } else if (total === 2) {
+                triage.innerText = "INPATIENT (WARD)";
+                triage.style.background = "#f1c40f"; triage.style.color = "#000";
+                mort.innerText = "9.2%";
+            } else {
+                triage.innerText = "URGENT: CONSIDER ICU";
+                triage.style.background = "#e74c3c"; triage.style.color = "#fff";
+                mort.innerText = total === 3 ? "14.5%" : "40%";
+            }
+
+            window.scrollTo({ top: 500, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
