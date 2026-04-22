@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Text → PPT Generator</title>
+    <meta name="description" content="Transform formatted text into beautiful HTML presentations and PowerPoint files with 40 professional templates">
+    <link rel="stylesheet" href="style.css">
+    <!-- PptxGenJS Library for PowerPoint generation -->
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="header-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4h16v16H4V4z" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M8 8h8v2H8V8zM8 12h6v2H8v-2zM8 16h4v2H8v-2z" fill="currentColor"/>
+                </svg>
+            </div>
+            <div class="header-content">
+                <h1>Professional Text → PPT Generator</h1>
+                <p>Transform your formatted text into stunning HTML presentations and real PowerPoint files with 40 beautiful templates</p>
+            </div>
+        </header>
+
+        <!-- Template Selection Section -->
+        <section class="template-section">
+            <div class="template-header">
+                <h2>Choose Your Template</h2>
+                <p>Select from 40 professional designs organized by category</p>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="filter-controls">
+                <button class="filter-btn active" data-category="All">All Templates</button>
+                <button class="filter-btn" data-category="Business">Business</button>
+                <button class="filter-btn" data-category="Academic">Academic</button>
+                <button class="filter-btn" data-category="Medical">Medical</button>
+                <button class="filter-btn" data-category="Creative">Creative</button>
+                <button class="filter-btn" data-category="Dark">Dark</button>
+            </div>
+
+            <!-- Template Gallery -->
+            <div class="template-gallery" id="templateGallery">
+                <!-- Templates will be dynamically generated -->
+            </div>
+
+            <div class="selected-template-info">
+                <div id="selectedTemplateDisplay" class="selected-template">
+                    <div class="selected-preview">
+                        <div class="selected-template-name">Corporate Blue</div>
+                        <div class="selected-template-category">Business</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Text Input Section -->
+        <section class="input-section">
+            <div class="input-header">
+                <h2>Create Your Content</h2>
+                <p>Use <strong>**Headings**</strong> for slide titles and <strong>*bullets*</strong> for content points</p>
+            </div>
+
+            <div class="textarea-container">
+                <label for="textInput" class="sr-only">Enter your formatted text</label>
+                <textarea 
+                    id="textInput" 
+                    class="text-input"
+                    placeholder="Enter your formatted text here..."
+                    rows="16"
+                    aria-describedby="input-help"
+                ></textarea>
+                <div id="input-help" class="input-help">
+                    Format: **Slide Title** for headings, *Bullet point* for content
+                </div>
+            </div>
+        </section>
+
+        <!-- Export Options Section -->
+        <section class="export-section">
+            <div class="export-header">
+                <h2>Generate Your Presentation</h2>
+                <p>Choose your preferred export format</p>
+            </div>
+
+            <div class="export-buttons">
+                <button id="generateHtmlBtn" class="export-btn export-btn--html" type="button">
+                    <div class="export-btn-content">
+                        <span class="export-btn-icon">🌐</span>
+                        <div class="export-btn-text">
+                            <div class="export-btn-title">Generate HTML Presentation</div>
+                            <div class="export-btn-subtitle">Interactive web-based slideshow</div>
+                        </div>
+                    </div>
+                </button>
+
+                <button id="generatePptxBtn" class="export-btn export-btn--pptx" type="button">
+                    <div class="export-btn-content">
+                        <span class="export-btn-icon">📊</span>
+                        <div class="export-btn-text">
+                            <div class="export-btn-title">Generate PPTX File</div>
+                            <div class="export-btn-subtitle">Real PowerPoint presentation</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="download-links" id="downloadLinks">
+                <!-- Download links will appear here -->
+            </div>
+        </section>
+
+        <!-- Status and Loading Section -->
+        <section class="status-section">
+            <div id="loadingSpinner" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <div class="loading-text" id="loadingText">Creating your beautiful presentation...</div>
+            </div>
+            
+            <div id="statusMessage" class="status-message" role="status" aria-live="polite"></div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <h3>40 Professional Templates</h3>
+                    <p>Choose from Business, Academic, Medical, Creative, and Dark themes</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Smart Text Parsing</h3>
+                    <p>Automatically converts **headings** and *bullets* into perfect slides</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📥</div>
+                    <h3>Dual Export Options</h3>
+                    <p>Generate HTML presentations or real PowerPoint PPTX files</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Full Compatibility</h3>
+                    <p>Works with Microsoft PowerPoint, Google Slides, and all major presentation tools</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
