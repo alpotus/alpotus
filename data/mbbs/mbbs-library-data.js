@@ -7,64 +7,61 @@ window.AlpotusRegistry = {
     "anatomy": {
         "title": "Anatomy", "icon": "🦴", "phase": "1st Prof",
         "chapters": [
-            { "name": "General Anatomy", "topics": [{ "id": "intro-anatomy", "title": "Terminology & Basics", "file": "topics/anatomy/general.html" }] },
-            { "name": "Upper Limb", "topics": [{ "id": "brachial-plexus", "title": "Brachial Plexus", "file": "topics/anatomy/brachial.html" }] },
-            { "name": "Lower Limb", "topics": [] },
-            { "name": "Thorax", "topics": [{ "id": "coronary-circulation", "title": "Coronary Arteries", "file": "topics/anatomy/coronary.html" }] },
-            { "name": "Abdomen & Pelvis", "topics": [] },
-            { "name": "Head & Neck", "topics": [] },
-            { "name": "Neuroanatomy", "topics": [] },
-            { "name": "Embryology", "topics": [] },
-            { "name": "Histology", "topics": [] }
+     
         ]
     },
 
     "physiology": {
         "title": "Physiology", "icon": "🫁", "phase": "1st Prof",
         "chapters": [
-            { "name": "General Physiology", "topics": [] },
-            { "name": "Blood", "topics": [] },
-            { "name": "Nerve & Muscle", "topics": [{ "id": "action-potential", "title": "Action Potential", "file": "topics/physiology/action-potential.html" }] },
-            { "name": "Cardiovascular System", "topics": [] },
-            { "name": "Respiratory System", "topics": [] },
-            { "name": "Renal Physiology", "topics": [{ "id": "gfr", "title": "Glomerular Filtration Rate", "file": "topics/physiology/gfr.html" }] },
-            { "name": "Gastrointestinal System", "topics": [] },
-            { "name": "Endocrine System", "topics": [] },
-            { "name": "Central Nervous System", "topics": [] }
+   
         ]
     },
 
     "biochemistry": {
         "title": "Biochemistry", "icon": "🧪", "phase": "1st Prof",
         "chapters": [
-            { "name": "Molecular Biology", "topics": [{ "id": "dna-replication", "title": "DNA Replication", "file": "topics/biochemistry/dna.html" }] },
-            { "name": "Carbohydrate Metabolism", "topics": [{ "id": "glycolysis", "title": "Glycolysis", "file": "topics/biochemistry/glycolysis.html" }] },
-            { "name": "Lipid Metabolism", "topics": [] },
-            { "name": "Protein Metabolism", "topics": [] },
-            { "name": "Enzymology", "topics": [] },
-            { "name": "Clinical Biochemistry", "topics": [] }
+   
         ]
     },
 
     "pathology": {
         "title": "Pathology", "icon": "🔬", "phase": "2nd Prof",
         "chapters": [
-            { "name": "General Pathology", "topics": [{ "id": "cell-injury", "title": "Cell Injury & Death", "file": "topics/pathology/cell-injury.html" }] },
-            { "name": "Hematology", "topics": [] },
+         
             { "name": "Cardiovascular Pathology", "topics": [{ "id": "atherosclerosis", "title": "atherosclerosis",
-             "file": "topics/pathology/atherosclerosis.html" }] },
-            { "name": "Respiratory Pathology", "topics": [] },
-            { "name": "Gastrointestinal Pathology", "topics": [] },
-            { "name": "Renal Pathology", "topics": [] }
+             "file": "topics/pathology/atherosclerosis.html" },
+             { "id": "infective-endocarditis", "title": "Infective Endocarditis",
+             "file": "topics/pathology/infective-endocarditis.html" },
+             { "id": "acute-rehumatic-fever", "title": "Acute Rheumatic Fever And Rheumatic Heart disease",
+             "file": "topics/pathology/rhd.html" },
+             { "id": "myocardial-infraction", "title": "Myocardial Infraction",
+             "file": "topics/pathology/mi.html" }
+           
+             
+          
+             ,] },
+            { "name": "Respiratory Pathology", "topics": [
+                
+              { "id": "bronchiectasis", "title": "	Bronchiectasis",
+             "file": "topics/pathology/bronchiectasis.html" }  ,
+             { "id": "chronic-bronchitis", "title": "Chronic Bronchitis",
+             "file": "topics/pathology/chronic-bronchitis.html" },
+             { "id": "clinical-features-of-copd", "title": "Clinical Features of COPD",
+             "file": "topics/pathology/clinical-features-of-copd.html" },
+             { "id": "emphysema", "title": "Emphysema",
+             "file": "topics/pathology/emphysema.html" }
+                
+                
+            ] }
+       
         ]
     },
 
     "pharmacology": {
         "title": "Pharmacology", "icon": "💊", "phase": "2nd Prof",
         "chapters": [
-            { "name": "General Pharmacology", "topics": [{ "id": "routes", "title": "Routes of Administration", "file": "topics/pharmacology/routes.html" }] },
-            { "name": "Autonomic Nervous System", "topics": [{ "id": "adrenergic", "title": "Adrenergic System", "file": "topics/pharmacology/adrenergic.html" }] },
-            { "name": "Autacoids & Respiratory", "topics": [] },
+      
             { "name": "CVS", "topics": [
                 { "id": "antihypertensive-drugs", "title": "Antihypertensive Drugs", "file": "topics/pharmacology/antihypertensive.html" },
                  { "id": "antihypertensive-drugs-arb", "title": "Antihypertensive Drugs- ARB", "file": "topics/pharmacology/antihypertensive-arb.html" },
@@ -105,136 +102,110 @@ window.AlpotusRegistry = {
     "microbiology": {
         "title": "Microbiology", "icon": "🦠", "phase": "2nd Prof",
         "chapters": [
-            { "name": "General Microbiology", "topics": [] },
-            { "name": "Immunology", "topics": [] },
-            { "name": "Systemic Bacteriology", "topics": [{ "id": "staph", "title": "Staphylococcus", "file": "topics/microbiology/staph.html" }] },
-            { "name": "Virology", "topics": [] },
-            { "name": "Mycology", "topics": [] },
-            { "name": "Parasitology", "topics": [] }
+           
+            { "name": "Cardiovascular System", "topics": [
+                
+                { "id": "acute-rheumatic-fever", "title": "Acute Rehumatic Fever",
+             "file": "topics/microbiology/arf.html" },
+              { "id": "infective-endocarditis", "title": "Infective Endocarditis",
+             "file": "topics/microbiology/infective-endocarditis.html" }
+                
+                
+                
+                
+            ] },
+         
         ]
     },
 
     "fml": {
         "title": "Forensic Med", "icon": "⚖️", "phase": "2nd Prof",
         "chapters": [
-            { "name": "Legal Procedures", "topics": [] },
-            { "name": "Medical Thanatology", "topics": [] },
-            { "name": "Traumatology", "topics": [] },
-            { "name": "Toxicology", "topics": [] }
+     
         ]
     },
 
     "spm": {
         "title": "Community Med", "icon": "🏥", "phase": "3rd Prof",
         "chapters": [
-            { "name": "Epidemiology Concepts", "topics": [] },
-            { "name": "Screening for Disease", "topics": [] },
-            { "name": "Communicable Diseases", "topics": [] },
-            { "name": "Health Programs", "topics": [] }
+     
         ]
     },
 
     "ent": {
         "title": "ENT", "icon": "👂", "phase": "3rd Prof",
         "chapters": [
-            { "name": "Diseases of Ear", "topics": [] },
-            { "name": "Diseases of Nose", "topics": [] },
-            { "name": "Diseases of Throat", "topics": [] }
+      
         ]
     },
 
     "ophthalmology": {
         "title": "Ophthalmology", "icon": "👁️", "phase": "3rd Prof",
         "chapters": [
-            { "name": "Conjunctiva & Cornea", "topics": [] },
-            { "name": "Lens & Cataract", "topics": [] },
-            { "name": "Glaucoma", "topics": [] },
-            { "name": "Retina", "topics": [] }
+       
         ]
     },
 
     "medicine": {
         "title": "Medicine", "icon": "🩺", "phase": "Final Prof",
         "chapters": [
-            { "name": "Cardiology", "topics": [] },
-            { "name": "Pulmonology", "topics": [] },
-            { "name": "Neurology", "topics": [] },
-            { "name": "Endocrinology", "topics": [] },
-            { "name": "Infectious Diseases", "topics": [] }
+     
         ]
     },
 
     "surgery": {
         "title": "Surgery", "icon": "🔪", "phase": "Final Prof",
         "chapters": [
-            { "name": "General Surgery", "topics": [] },
-            { "name": "Trauma & Emergency", "topics": [] },
-            { "name": "Abdominal Surgery", "topics": [] },
-            { "name": "Urology", "topics": [] },
-            { "name": "Neurosurgery", "topics": [] }
+        
         ]
     },
 
     "obg": {
         "title": "OBG", "icon": "🤰", "phase": "Final Prof",
         "chapters": [
-            { "name": "Obstetrics", "topics": [] },
-            { "name": "Gynecology", "topics": [] },
-            { "name": "Contraception", "topics": [] }
+         
         ]
     },
 
     "pediatrics": {
         "title": "Pediatrics", "icon": "👶", "phase": "Final Prof",
         "chapters": [
-            { "name": "Growth & Development", "topics": [] },
-            { "name": "Neonatology", "topics": [] },
-            { "name": "Nutrition", "topics": [] },
-            { "name": "Systemic Disorders", "topics": [] }
+       
         ]
     },
 
     "orthopedics": {
         "title": "Orthopedics", "icon": "💪", "phase": "Minor",
         "chapters": [
-            { "name": "Traumatology", "topics": [] },
-            { "name": "Infections & Tumors", "topics": [] },
-            { "name": "Metabolic Bone Diseases", "topics": [] }
+            
         ]
     },
 
     "radiology": {
         "title": "Radiology", "icon": "☢️", "phase": "Minor",
         "chapters": [
-            { "name": "Basic Physics", "topics": [] },
-            { "name": "Systemic Imaging", "topics": [] }
+        
         ]
     },
 
     "dermatology": {
         "title": "Dermatology", "icon": "🧴", "phase": "Minor",
         "chapters": [
-            { "name": "Skin Infections", "topics": [] },
-            { "name": "Inflammatory Dermatosis", "topics": [] },
-            { "name": "Leprosy & STD", "topics": [] }
+            
         ]
     },
 
     "psychiatry": {
         "title": "Psychiatry", "icon": "🧠", "phase": "Minor",
         "chapters": [
-            { "name": "Psychotic Disorders", "topics": [] },
-            { "name": "Neurotic Disorders", "topics": [] },
-            { "name": "Treatment Modalities", "topics": [] }
+            
         ]
     },
 
     "anesthesia": {
         "title": "Anesthesia", "icon": "😴", "phase": "Minor",
         "chapters": [
-            { "name": "Pharmacology", "topics": [] },
-            { "name": "Regional & General", "topics": [] },
-            { "name": "Critical Care & CPR", "topics": [] }
+         
         ]
     }
 };
