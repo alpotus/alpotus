@@ -1,12 +1,15 @@
 /**
- * ALPOTUS 5.0 - ADVANCED CHALLENGE ENGINE (v5.3 PREMIUM)
- * Features: Custom Modals, Adaptive UI, Drawer Logic, Mastery Sync.
+ * ALPOTUS 5.0 - ADVANCED CHALLENGE ENGINE (v5.4 FLEX-MATCH)
+ * Feature: Flexible Matching for duplicate names (e.g., Diazepam).
+ * Any pill with the same name can be placed in any of its valid categories.
  */
 
 let state = {
     subject: "Pharmacology",
     game: null,
-    selected: null,
+    selected: null,      // Stores the drug object
+    selectedPillId: null, // Stores the ID of the HTML element (e.g., "pill-5")
+    solvedIndices: [],   // Tracks which items in the data are "finished"
     correct: 0,
     attempts: 0,
     isConsoleExpanded: false
@@ -23,7 +26,6 @@ function init() {
     const filterRow = document.getElementById('subject-filters');
     const subjects = Object.keys(ClassificationData);
     
-    // Render Subject Selector Buttons
     filterRow.innerHTML = subjects.map(s => `
         <button class="sub-btn ${state.subject === s ? 'active' : ''}" 
                 onclick="setSubject('${s}')"
@@ -32,7 +34,6 @@ function init() {
         </button>
     `).join('');
 
-    // Apply Theme Colors to CSS Variables
     const themeColor = ClassificationData[state.subject].color;
     document.documentElement.style.setProperty('--sub-color', themeColor);
     document.documentElement.style.setProperty('--sub-bg', hexToRgbA(themeColor, 0.1));
@@ -51,12 +52,10 @@ function updateChapters() {
     const subjectData = ClassificationData[state.subject];
     let uniqueChapters = new Set();
     
-    // Get chapters from hardcoded bank
     if (subjectData && subjectData.chapters) {
         Object.keys(subjectData.chapters).forEach(ch => uniqueChapters.add(ch));
     }
 
-    // Get chapters from VOID bank (Added via Data Helper)
     if (typeof MyAddedClassifications !== 'undefined') {
         MyAddedClassifications.forEach(g => {
             if (g.subject === state.subject && g.chapter) uniqueChapters.add(g.chapter);
@@ -70,7 +69,7 @@ function updateChapters() {
     dropdown.innerHTML = html;
 }
 
-// --- 2. TOPIC LISTING & PERSISTENCE ---
+// --- 2. TOPIC LISTING & MASTERY ---
 
 function renderTopics() {
     const grid = document.getElementById('topic-grid');
@@ -80,7 +79,6 @@ function renderTopics() {
     let topics = [];
     const chData = ClassificationData[state.subject].chapters;
     
-    // Merge hardcoded and void items
     for (let key in chData) {
         if (chFilter === "All" || key === chFilter) {
             topics = [...topics, ...chData[key]];
@@ -111,7 +109,7 @@ function renderTopics() {
     }).join('');
 }
 
-// --- 3. GAMEPLAY ENGINE (TAP-TO-ASSIGN) ---
+// --- 3. GAMEPLAY ENGINE (FLEXIBLE MATCHING) ---
 
 function startChallenge(id) {
     let all = [];
@@ -123,12 +121,13 @@ function startChallenge(id) {
     state.game = all.find(g => g.id === id);
     if(!state.game) return;
 
-    // Reset Session Stats
+    // Reset Stats
     state.correct = 0;
     state.attempts = 0;
     state.selected = null;
+    state.selectedPillId = null;
+    state.solvedIndices = []; // Reset solved items
 
-    // Switch Views
     document.getElementById('home-screen').style.display = "none";
     document.getElementById('game-header').style.display = "flex";
     document.getElementById('play-screen').style.display = "grid";
@@ -141,10 +140,15 @@ function startChallenge(id) {
 
 function renderPool() {
     const container = document.getElementById('drug-pool');
-    const shuffled = [...state.game.items].sort(() => Math.random() - 0.5);
+    
+    // We give every pill a unique ID (0, 1, 2...) for the UI, 
+    // even if they have the same name.
+    const itemsWithIds = state.game.items.map((item, idx) => ({ ...item, uiId: idx }));
+    const shuffled = [...itemsWithIds].sort(() => Math.random() - 0.5);
+
     container.innerHTML = shuffled.map(item => `
-        <div class="drug-pill" id="pill-${item.name.replace(/\s+/g, '')}" 
-             onclick="selectDrug('${item.name.replace(/'/g, "\\'")}', this)">
+        <div class="drug-pill" id="pill-${item.uiId}" 
+             onclick="selectDrug(${item.uiId}, this)">
             ${item.name}
         </div>
     `).join('');
@@ -160,9 +164,14 @@ function renderBuckets() {
     `).join('');
 }
 
-function selectDrug(name, el) {
+function selectDrug(uiId, el) {
     document.querySelectorAll('.drug-pill').forEach(p => p.classList.remove('selected'));
-    state.selected = state.game.items.find(i => i.name === name);
+    
+    // Get the name of the drug from the items list using the uiId
+    const drugTemplate = state.game.items[uiId];
+    state.selected = drugTemplate;
+    state.selectedPillId = `pill-${uiId}`;
+    
     el.classList.add('selected');
     document.querySelectorAll('.bucket').forEach(b => b.classList.add('highlight'));
 }
@@ -171,23 +180,36 @@ function assignTo(cat) {
     if (!state.selected) return;
     state.attempts++;
 
-    const pill = document.getElementById(`pill-${state.selected.name.replace(/\s+/g, '')}`);
-    
-    if (state.selected.category === cat) {
-        // SUCCESS
+    const pillElement = document.getElementById(state.selectedPillId);
+
+    // FLEXIBLE MATCHING LOGIC:
+    // 1. Find all items in the dataset that have this NAME and belong to this CATEGORY
+    // 2. Filter out the ones that have already been solved
+    const validMatchIndex = state.game.items.findIndex((item, index) => 
+        item.name === state.selected.name && 
+        item.category === cat && 
+        !state.solvedIndices.includes(index)
+    );
+
+    if (validMatchIndex !== -1) {
+        // SUCCESS: Found a match for this name in this category that hasn't been used yet
         state.correct++;
+        state.solvedIndices.push(validMatchIndex); // Mark this data entry as finished
+        
+        const matchedItem = state.game.items[validMatchIndex];
         const area = document.getElementById(`bucket-${cat.replace(/\s+/g, '')}`);
-        area.innerHTML += `<span class="placed-pill">${state.selected.name}</span>`;
+        area.innerHTML += `<span class="placed-pill">${matchedItem.name}</span>`;
         
-        updateConsole(state.selected.note);
+        updateConsole(matchedItem.note);
         
-        pill.remove();
+        pillElement.remove();
         state.selected = null;
+        state.selectedPillId = null;
         document.querySelectorAll('.bucket').forEach(b => b.classList.remove('highlight'));
     } else {
-        // FAILURE
-        pill.classList.add('shake');
-        setTimeout(() => pill.classList.remove('shake'), 400);
+        // FAILURE: Either name doesn't belong here, or all Diazepams for this category are done
+        pillElement.classList.add('shake');
+        setTimeout(() => pillElement.classList.remove('shake'), 400);
     }
     
     const acc = Math.round((state.correct / state.attempts) * 100);
@@ -217,7 +239,7 @@ function toggleConsole() {
 }
 
 function updateConsole(note) {
-    document.getElementById('note-text').innerHTML = note;
+    document.getElementById('note-text').innerHTML = note || "Match confirmed.";
     const handleText = document.getElementById('handle-text');
     handleText.innerText = "✨ NEW INSIGHT READY (TAP)";
     handleText.style.color = "#fff";
@@ -239,10 +261,9 @@ function toggleMnemonic() {
     box.style.display = isVisible ? "none" : "block";
 }
 
-// --- 5. CUSTOM MODAL & PERSISTENCE ---
+// --- 5. MODALS & THEME ---
 
 function showWinModal(accuracy) {
-    // Save to LocalStorage
     try {
         const existing = localStorage.getItem(`alpotus_mastery_${state.game.id}`);
         if (existing === null || accuracy > parseInt(existing)) {
@@ -250,24 +271,19 @@ function showWinModal(accuracy) {
         }
     } catch(e) {}
 
-    // Inject Modal HTML
     const modalHtml = `
         <div class="alpotus-modal-overlay" id="winModal">
             <div class="alpotus-modal">
                 <span class="modal-icon">⭐</span>
                 <h2 class="modal-title">Challenge Mastered!</h2>
-                <p class="modal-text">You completed this classification with <b>${accuracy}% accuracy</b>. Keep practicing to achieve 100%!</p>
+                <p class="modal-text">You completed this classification with <b>${accuracy}% accuracy</b>.</p>
                 <button class="modal-btn" onclick="location.reload()">BACK TO HUB</button>
             </div>
         </div>
     `;
     
     document.body.insertAdjacentHTML('beforeend', modalHtml);
-    
-    // Trigger Entry Animation
-    setTimeout(() => {
-        document.getElementById('winModal').classList.add('active');
-    }, 50);
+    setTimeout(() => document.getElementById('winModal').classList.add('active'), 50);
 }
 
 function hexToRgbA(hex, alpha) {
@@ -277,5 +293,4 @@ function hexToRgbA(hex, alpha) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// Start Engine
 document.addEventListener('DOMContentLoaded', init);
