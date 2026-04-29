@@ -23,8 +23,9 @@
     }
     </script>
 
-    <!-- GLOBAL ASSETS -->
+    <!-- GLOBAL ASSETS (Assuming these paths are correct for your server structure) -->
     <link rel="stylesheet" href="../../../style.css">
+    <!-- Note: These global scripts are loaded first -->
     <script src="../../../data/masterData.js"></script>
     <script src="../../../search-engine.js"></script>
     <script src="../../../app.js" defer></script>
@@ -44,7 +45,9 @@
             
             <div class="filter-card">
                 <label class="label-tiny">Step 1: Choose Subject</label>
-                <div class="sub-row" id="subject-filters"></div>
+                <div class="sub-row" id="subject-filters">
+                    <!-- Subject buttons injected here by game.js -->
+                </div>
                 
                 <div class="search-grid">
                     <div style="flex-grow:1">
@@ -60,26 +63,34 @@
                 </div>
             </div>
 
-            <div id="topic-grid"></div>
+            <div id="topic-grid">
+                <!-- Topic cards injected here by game.js -->
+            </div>
         </main>
 
         <!-- SCREEN 2: THE ARENA (Gameplay) -->
+        <!-- Hidden by default until a topic is selected -->
         <div id="game-header" style="display:none;">
             <button class="exit-btn" onclick="location.reload()">✕ EXIT ARENA</button>
             <div id="accuracy-stat" class="acc-badge">ACCURACY: 100%</div>
         </div>
 
-        <main id="play-screen">
+        <main id="play-screen" style="display:none;">
             <aside class="pool-box">
                 <div class="pool-label">ITEM POOL</div>
-                <div id="drug-pool"></div>
+                <div id="drug-pool">
+                    <!-- Corrected: Pills now use Unique IDs like pill-0, pill-1 -->
+                </div>
             </aside>
             
-            <section class="bucket-grid" id="bucket-container"></section>
+            <section class="bucket-grid" id="bucket-container">
+                <!-- Categories/Buckets injected here -->
+            </section>
         </main>
 
         <!-- CLINICAL INSIGHTS DRAWER -->
-        <div class="console collapsed" id="game-console">
+        <!-- Hidden by default until matching starts -->
+        <div class="console collapsed" id="game-console" style="display:none;">
             <div class="console-handle" onclick="toggleConsole()">
                 <span id="handle-text">📖 SHOW CLINICAL INSIGHTS</span>
                 <span class="arrow-icon">▲</span>
@@ -99,9 +110,8 @@
         </div>
     </div>
 
-    <!-- LOCAL SCRIPTS -->
+    <!-- LOCAL SCRIPTS (Must load data first, then game engine) -->
     <script src="data.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
-
