@@ -53,7 +53,20 @@ window.AlpotusRegistry = {
              "file": "topics/pathology/emphysema.html" }
                 
                 
+            ] },
+                { "name": "Renal Pathology", "topics": [
+                
+              { "id": "polycystic-kidney-disease", "title": "	Polycystic Kidney Disease",
+             "file": "topics/pathology/pkd.html" }  ,
+             { "id": "nephrotic-nephritic", "title": "Difference Between Nephrotic and Nephritic Syndrome",
+             "file": "topics/pathology/nephritic-nephrotic.html" },
+             { "id": "chronic-pyelonephritis", "title": "Chronic Pyelonephritis",
+             "file": "topics/pathology/chronic-pyelonephritis.html" }
+             
+                
+                
             ] }
+       
        
         ]
     },
