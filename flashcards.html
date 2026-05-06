@@ -4,157 +4,205 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- POWERFUL SEO 5.0 -->
-    <title>MBBS Flashcards Hub | Study Cart & Spaced Repetition | Alpotus</title>
-    <meta name="description" content="Browse 19 MBBS subjects. Add high-yield medical topics to your study cart and master them using the SM-2 Spaced Repetition algorithm. Designed for NEET PG and USMLE.">
-    <meta name="keywords" content="medical flashcards, anatomy srs, mbbs study cart, neet pg flashcards, clinical recall, alpotus 5.0">
+    <!-- MEDEDGE SEO 6.0 -->
+    <title>Mededge Hub | Alpotus MBBS Flashcards</title>
+    <meta name="description" content="Advanced medical active recall. Study 19 MBBS subjects with high-yield clinical pearls and SM-2 Spaced Repetition.">
     
-    <!-- JSON-LD Placeholder (Dynamic SEO Engine will fill this) -->
+    <!-- JSON-LD Placeholder (Filled by seo-engine.js) -->
     <script type="application/ld+json" id="seo-schema"></script>
 
     <!-- ASSETS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/style.css">
     <style>
-    :root {
-        --primary: #6366f1;
-        --bg-body: #f8fafc;
-        --card-bg: #ffffff;
-        --text-main: #1e293b;
-        --accent: #f59e0b;
-    }
+        :root {
+            --primary: #6366f1; /* Mededge Indigo */
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --high-yield: #ef4444; /* Red for Importance */
+        }
 
-    /* FIX 1: Remove default browser margins and set background */
-    body { 
-        font-family: 'Inter', system-ui, sans-serif; 
-        background: var(--bg-body); 
-        color: var(--text-main); 
-        padding: 0; 
-        margin: 0; /* REMOVES THE TOP BLANK GAP */
-        padding-bottom: 100px; 
-    }
-    
-    /* FIX 2: Header should be perfectly flush with the top */
-    .hub-header {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 15px 20px; background: #fff; border-bottom: 1px solid #e2e8f0;
-        position: sticky; top: 0; z-index: 100;
-    }
-    
-    .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
-    .brand span { color: var(--text-main); opacity: 0.5; }
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: var(--bg-body); 
+            color: var(--text-main); 
+            padding: 0; margin: 0;
+            padding-bottom: 120px; 
+        }
+        
+        /* 1. HEADER & CART */
+        .hub-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: #fff; border-bottom: 1px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
+        .brand span { color: #1e293b; opacity: 0.4; }
 
-    .cart-indicator {
-        position: relative; background: var(--primary); color: white;
-        padding: 8px 15px; border-radius: 50px; cursor: pointer;
-        font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
-    }
-    #cart-count { background: white; color: var(--primary); border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; }
+        .cart-indicator {
+            position: relative; background: var(--primary); color: white;
+            padding: 8px 15px; border-radius: 50px; cursor: pointer;
+            font-weight: 800; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        #cart-count { background: white; color: var(--primary); border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; }
 
-    /* FIX 3: Subject Navigation spacing and scrollbar removal */
-    .sub-nav {
-        display: flex; overflow-x: auto; gap: 10px; padding: 12px 20px;
-        background: #fff; border-bottom: 1px solid #f1f5f9;
-        position: sticky; top: 62px; /* Sticks right below the header */
-        z-index: 90;
-        scrollbar-width: none; /* Firefox */
-    }
-    .sub-nav::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+        /* 2. ADVANCED GLOBAL SEARCH */
+        .search-area { background: #fff; padding: 10px 20px 20px 20px; border-bottom: 1px solid #f1f5f9; }
+        .search-wrapper { position: relative; width: 100%; }
+        .global-search-input {
+            width: 100%; padding: 14px 15px 14px 45px; border-radius: 15px;
+            border: 2px solid #f1f5f9; background: #f8fafc;
+            font-size: 0.95rem; font-weight: 600; outline: none; transition: 0.3s;
+        }
+        .global-search-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.4; font-size: 1.2rem; }
 
-    .sub-btn {
-        white-space: nowrap; padding: 8px 18px; border-radius: 10px;
-        border: 1px solid #e2e8f0; background: #f8fafc; font-weight: 700; cursor: pointer;
-        transition: 0.2s; font-size: 0.85rem;
-    }
-    .sub-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2); }
+        /* 3. SUBJECT NAV (STICKY) */
+        .sub-nav {
+            display: flex; overflow-x: auto; gap: 10px; padding: 12px 20px;
+            background: #fff; border-bottom: 1px solid #f1f5f9;
+            position: sticky; top: 62px; z-index: 900;
+            scrollbar-width: none;
+        }
+        .sub-nav::-webkit-scrollbar { display: none; }
+        .sub-btn {
+            white-space: nowrap; padding: 8px 18px; border-radius: 12px;
+            border: 1px solid #e2e8f0; background: #f8fafc; font-weight: 700; cursor: pointer;
+            transition: 0.2s; font-size: 0.8rem;
+        }
+        .sub-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    /* Control Bar and Grids */
-    .hub-controls { padding: 15px 20px; display: flex; gap: 10px; background: #fff; }
-    .hub-select { flex-grow: 1; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 600; font-size: 0.9rem; background: #f8fafc; }
+        .hub-controls { padding: 15px 20px; display: flex; gap: 10px; background: #fff; border-bottom: 1px solid #f1f5f9; }
+        .hub-select { flex-grow: 1; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 700; font-size: 0.85rem; background: #f8fafc; cursor: pointer; }
 
-    .topic-grid { display: grid; grid-template-columns: 1fr; gap: 15px; padding: 20px; }
-    .topic-card {
-        background: white; border-radius: 20px; padding: 20px;
-        border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        display: flex; justify-content: space-between; align-items: center;
-    }
-    .topic-info h3 { margin: 0; font-size: 1rem; font-weight: 800; color: #0f172a; }
-    .topic-meta { font-size: 0.75rem; color: #64748b; margin-top: 4px; font-weight: 600; }
-    
-    .btn-add-cart {
-        background: #f1f5f9; color: var(--text-main); border: none;
-        padding: 10px 16px; border-radius: 10px; font-weight: 800; font-size: 0.75rem;
-        cursor: pointer; transition: 0.2s;
-    }
-    .btn-add-cart.in-cart { background: #dcfce7; color: #166534; }
+        /* 4. TOPIC GRID & BADGES */
+        .topic-grid { display: grid; grid-template-columns: 1fr; gap: 15px; padding: 20px; }
+        .topic-card {
+            background: white; border-radius: 20px; padding: 20px;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .topic-info h3 { margin: 0; font-size: 1rem; font-weight: 800; color: #0f172a; max-width: 85%; }
+        .topic-meta { font-size: 0.75rem; color: #64748b; margin-top: 5px; font-weight: 600; display: flex; gap: 8px; align-items: center; }
+        
+        .badge-yield { 
+            background: #fef2f2; color: #ef4444; font-size: 0.6rem; 
+            padding: 3px 8px; border-radius: 6px; font-weight: 900; 
+            text-transform: uppercase; border: 1px solid #fee2e2; margin-bottom: 5px; display: inline-block;
+        }
+        .due-indicator { color: #f59e0b; font-weight: 900; }
 
-    /* Floating Checkout Bar */
-    .checkout-bar {
-        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-        width: 90%; max-width: 500px; background: #1e293b; color: white;
-        padding: 12px 20px; border-radius: 18px; display: none;
-        justify-content: space-between; align-items: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
-        animation: slideIn 0.3s ease;
-    }
-    @keyframes slideIn { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        .btn-add-cart {
+            background: #f1f5f9; color: var(--text-main); border: none;
+            padding: 12px 16px; border-radius: 12px; font-weight: 800; font-size: 0.75rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-add-cart.in-cart { background: #dcfce7; color: #166534; }
 
-    .btn-checkout {
-        background: var(--primary); color: white; border: none;
-        padding: 10px 18px; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 0.85rem;
-    }
+        /* 5. CHECKOUT BAR */
+        .checkout-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 500px; background: #1e293b; color: white;
+            padding: 15px 20px; border-radius: 22px; display: none;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); z-index: 1000;
+        }
+        .btn-checkout {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 20px; border-radius: 12px; font-weight: 900; cursor: pointer;
+        }
 
-    @media (min-width: 768px) {
-        .topic-grid { grid-template-columns: 1fr 1fr; }
-    }
-</style>
+        @media (min-width: 768px) { .topic-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
 </head>
 <body>
 
     <header class="hub-header">
-        <div class="brand">Alpotus <span>5.0</span></div>
+        <div class="brand">Alpotus <span>MEDEDGE</span></div>
         <div class="cart-indicator" onclick="window.location.href='checkout.html'">
-            🛒 Study Cart <span id="cart-count">0</span>
+            🛒 Cart <span id="cart-count">0</span>
         </div>
     </header>
 
-    <!-- Subject Selector -->
+    <!-- ADVANCED GLOBAL SEARCH -->
+    <section class="search-area">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-bar" 
+                   placeholder="Search across all 19 subjects..." 
+                   class="global-search-input" onkeyup="handleGlobalSearch()">
+        </div>
+    </section>
+
+    <!-- SUBJECT NAVIGATION -->
     <nav class="sub-nav" id="subject-nav">
-        <!-- JS Renders -->
+        <!-- JS Renders Subjects -->
     </nav>
 
-    <!-- Controls -->
-    <div class="hub-controls">
+    <!-- LOCAL FILTERS -->
+    <div class="hub-controls" id="local-controls">
         <select id="chapter-dropdown" class="hub-select" onchange="renderTopics()">
             <option value="All">All Chapters</option>
         </select>
-        <input type="text" id="search-bar" placeholder="Search topics..." class="hub-select" onkeyup="renderTopics()">
     </div>
 
-    <!-- Topics -->
+    <!-- MAIN GRID -->
     <main class="topic-grid" id="topic-grid">
-        <!-- JS Renders -->
+        <!-- Rendered by Hub Engine -->
     </main>
 
-    <!-- Floating Action -->
+    <!-- ACTION BAR -->
     <div class="checkout-bar" id="checkout-bar">
         <div>
-            <div style="font-size: 0.9rem; font-weight: 800;">Cart Ready</div>
-            <div id="cart-summary" style="font-size: 0.7rem; opacity: 0.8;">0 Topics Selected</div>
+            <div id="cart-summary" style="font-size: 0.85rem; font-weight: 900;">0 Topics Selected</div>
+            <div style="font-size: 0.65rem; opacity: 0.6; text-transform: uppercase;">Ready to Launch</div>
         </div>
-        <button class="btn-checkout" onclick="window.location.href='checkout.html'">PROCEED TO CHECKOUT →</button>
+        <button class="btn-checkout" onclick="window.location.href='checkout.html'">REVIEW →</button>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- 1. CORE DATA INITIALIZATION -->
+    <script src="js/data-init.js"></script>
+    
+    <!-- 2. SPLIT SUBJECT DATA (ALL 19) -->
+    <!-- Pre-clinical -->
+    <script src="js/subjects/anatomy.js"></script>
+    <script src="js/subjects/physiology.js"></script>
+    <script src="js/subjects/biochemistry.js"></script>
+    <!-- Para-clinical -->
+    <script src="js/subjects/pathology.js"></script>
+    <script src="js/subjects/microbiology.js"></script>
+    <script src="js/subjects/pharmacology.js"></script>
+    <script src="js/subjects/forensic.js"></script>
+    <script src="js/subjects/psm.js"></script>
+    <!-- Clinical -->
+    <script src="js/subjects/ent.js"></script>
+    <script src="js/subjects/ophthalmology.js"></script>
+    <script src="js/subjects/medicine.js"></script>
+    <script src="js/subjects/surgery.js"></script>
+    <script src="js/subjects/obg.js"></script>
+    <script src="js/subjects/pediatrics.js"></script>
+    <script src="js/subjects/orthopedics.js"></script>
+    <script src="js/subjects/dermatology.js"></script>
+    <script src="js/subjects/psychiatry.js"></script>
+    <script src="js/subjects/radiology.js"></script>
+    <script src="js/subjects/anesthesia.js"></script>
+
+    <!-- 3. VOID / CUSTOM DATA -->
     <script src="js/flashcardsData.js"></script>
+
+    <!-- 4. ENGINES -->
     <script src="js/srs-core.js"></script>
-    <script src="js/seo-engine.js"></script> <!-- SEO Injected here -->
+    <script src="js/seo-engine.js"></script>
     <script src="js/flashcard-hub.js"></script>
 
     <script>
-        // Automatic Refresh of Cart UI on page load
+        // Start Hub logic
         window.onload = () => {
-            initHub(); 
-            updateCartUI();
+            if (typeof initHub === 'function') {
+                initHub(); 
+                updateCartUI();
+            }
         };
     </script>
 </body>
