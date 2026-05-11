@@ -82,21 +82,26 @@ window.AlpotusRegistry = {
                    { "id": "treatment-for-hypertension-and-hypertension-crisis", "title": "Treatment for Hypertension and Hypertension crisis ", "file": "topics/pharmacology/treatmentfor-htn.html" },
                      { "id": "antianginal-drugs", "title": "Antianginal Drugs", "file": "topics/pharmacology/angina.html" },
                        { "id": "beta-blockers-and-calcium-channel-blockers", "title": "Beta blockers and calcium channel blockers ", "file": "topics/pharmacology/betaandca.html" },
+                       { "id": "congestive heart failure", "title": " Drugs For Congestive heart failure", "file": "topics/pharmacology/congestive-heart-failure.html" },
+                       { "id": "congestive-heart-failure", "title": "Drugs For Congestive heart failure", "file": "topics/pharmacology/chf-others.html" }
             ] },
             { "name": "CNS Pharmacology", "topics":
              [{ "id": "local-anesthetics", "title": "Local Anaesthetics", "file": "topics/pharmacology/local-anesthetics.html" },
              { "id": "techniques-anesthetics", "title": "Techniques for Local Anaesthetics", "file": "topics/pharmacology/technique-localanesthetics.html" },
              
-             { "id": "antiepileptics", "title": "Anti Epileptics", "file": "topics/pharmacology/antiepileptics1.html" }
+             { "id": "antiepileptics", "title": "Anti Epileptics - Phenytoin", "file": "topics/pharmacology/antiepileptics1.html" }
          ,
-           { "id": "antiepileptics-part-2", "title": "Anti Epileptics Part 2", "file": "topics/pharmacology/antiepileptics2.html" }
+           { "id": "antiepileptics-part-2", "title": "Anti Epileptics Part 2", "file": "topics/pharmacology/antiepileptics2.html" },
+         { "id": "antiepileptics-sodiumvalproate", "title": "Anti Epileptics Sodium Valproate And Status Epilepticus", "file": "topics/pharmacology/antiepileptics4.html" }
          ,
            { "id": "antiepileptics-interactions", "title": "Anti Epileptics Interactions", "file": "topics/pharmacology/antiepileptics3.html" }
          ,
          { "id": "antidepressants", "title": "Antidepressants", "file": "topics/pharmacology/antidepressants.html" },
          { "id": "compare-antidepressants", "title": "Comparison of Antidepressants", "file": "topics/pharmacology/compare-antidepressants.html" },
              
-             { "id": "antiparkinsonian-drugs", "title": "ANTIPARKINSONIAN DRUGS", "file": "topics/pharmacology/antiparkinsonian-drugs.html" }
+             { "id": "antiparkinsonian-drugs", "title": "ANTIPARKINSONIAN DRUGS", "file": "topics/pharmacology/antiparkinsonian-drugs.html" },
+                { "id": "sedatives-hypnotics", "title": "Sedative And Hypnotic DRUGS", "file": "topics/pharmacology/sedatives-hypnotics.html" },
+                   { "id": "miscellaneous-cns", "title": "Miscellaneous CNS", "file": "topics/pharmacology/miscellaneous-cns.html" }
              
              
              ] },
@@ -108,7 +113,59 @@ window.AlpotusRegistry = {
             { "name": "Chemotherapy", "topics": [{ "id": "beta-lactams", "title": "Beta Lactams Antibiotics ", "file": "topics/pharmacology/beta-lactams.html" },
             { "id": "cephalosporins", "title": "Cephalosporins  ", "file": "topics/pharmacology/cephalosporins.html" },
              { "id": "aminoglycosides", "title": "Aminoglycosides  ", "file": "topics/pharmacology/aminoglycosides.html" },
-                { "id": "antituberculosis-drugs", "title": "Antituberculosis Drugs", "file": "topics/pharmacology/tb.html" }] }
+                { "id": "antituberculosis-drugs", "title": "Antituberculosis Drugs", "file": "topics/pharmacology/tb.html" }] },
+                
+                
+                   { "name": "GIT", "topics": [
+                
+                { "id": "peptic-ulcer", "title": "Drugs for Peptic Ulcer",
+             "file": "topics/pharmacology/peptic-ulcer.html" },
+              { "id": "peptic-Ulcer-protectives", "title": "Ulcer protectives And H pylori",
+             "file": "topics/pharmacology/peptic-ulcer-hpylori.html" },
+             { "id": "laxatives", "title": "Laxatives",
+             "file": "topics/pharmacology/laxatives.html" },
+             { "id": "antidiarrheal-drugs", "title": "Antidiarrheal Drugs",
+             "file": "topics/pharmacology/antidiarrheal.html" }
+             
+             
+             
+             
+             
+             ]},
+             
+             { "name": "Renal", "topics": [
+                
+                { "id": "Diuretics", "title": "Diuretics",
+             "file": "topics/pharmacology/diuretics.html" }
+          
+             
+             
+             
+             ]},
+                 { "name": "Blood", "topics": [
+                
+                { "id": "iron", "title": "Iron Preparatios and Poisoning",
+             "file": "topics/pharmacology/iron-prep.html" },
+             { "id": "heparin-warfarin", "title": "Difference Between Heparin And Warfarin",
+             "file": "topics/pharmacology/heparin-warfarin.html" }
+             
+          
+             
+             
+             
+             ]},
+             
+             
+                 { "name": "Respiratory System", "topics": [
+                
+                { "id": "mucolytics", "title": "Mucolytics",
+             "file": "topics/pharmacology/mucolytics.html" }
+          
+             
+             
+             
+             ]}
+             
         ]
     },
 
